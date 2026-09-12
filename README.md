@@ -16,7 +16,7 @@ things that determined the answer.
 ## Quick start
 
 ```bash
-cargo test                      # 69 tests, no fixtures required
+cargo test                      # 74 tests, no fixtures required
 cargo run --release -- --data-dir ./data --instruments ES --preflight-only
 cargo run --release -- --data-dir ./data --instruments ES,NQ --session ny --tz-input utc
 ```
@@ -205,9 +205,59 @@ minutes** where the previous engine took hours. Three changes:
 Every CSV carries an `engine` column stamped with version and git revision, so a
 result set always names the code that produced it.
 
-## Caveat
+## Account terms
 
-The account terms in `all_apex()` — targets, drawdowns, ladders, consistency
-percentages, fees, and the evaluation duration — are transcribed, not verified.
-Every one of them feeds expected value directly. Check them against the firm's
-current published terms before trusting any output.
+Checked against published summaries in September 2026 and pinned by
+`types::tests::apex_terms_match_published_rules` and
+`topstep_terms_match_published_rules`. `--firm apex|topstep`.
+
+Four corrections came out of that check:
+
+| | Was | Is |
+|---|---|---|
+| Evaluation window | 30 **trading** days | 30 **calendar** days ≈ 21 sessions |
+| Consistency rule in the evaluation | applied | Apex applies it only when funded |
+| Profit split | 100% forever | 100% of first $25k per account, then 90/10 |
+| Qualifying days / consistency | 5 / 50% | correct for Apex 4.0 — but both changed on 1 March 2026 |
+
+The first two pull in opposite directions. Net effect on the synthetic
+fixture, one instrument, `fixed_1` only:
+
+```
+Apex, 21 sessions (correct)    mean EV $345/attempt    mean pass 20.2%
+Apex, 30 sessions (old)        mean EV $480/attempt    mean pass 24.1%
+```
+
+So the old window inflated expected value by about 39%.
+
+**Apex runs two rule sets.** Accounts bought before 1 March 2026 stay on the
+legacy rules — 30% consistency, seven qualifying days, safety net observed only
+for the first three payouts — with no conversion path. The table models 4.0. If
+your accounts predate that, the constants are wrong for you.
+
+**Topstep is not a re-parameterised Apex.** Three mechanics differ in kind, and
+two are not reproduced here:
+
+- The Daily Loss Limit is an optional add-on and breaching it is *not* a rule
+  violation in the Combine, so it is modelled as absent.
+- The combine consistency target (best day ≤ 50% of the profit target) *raises
+  the target* rather than failing the account. Modelled as a pass condition,
+  which is stricter than the real rule.
+- Payout caps are 50% of balance up to a tier cap; only the tier cap is
+  modelled.
+
+Treat Topstep output as indicative, not as a like-for-like comparison.
+
+### What could not be verified
+
+No primary source was reachable — `apextraderfunding.com`,
+`support.apextraderfunding.com` and `topstep.com` are all blocked by the network
+policy of the environment this was built in. Everything above comes from
+third-party summaries, several of which contradicted each other on the
+consistency percentage (30% vs 50%) and qualifying days (5 vs 7 vs 8); those
+conflicts resolve to the March 2026 rule change, but that is an inference.
+Confirm against your own account dashboard before trusting any output.
+
+Still unverified: per-account PA contract limits (`pa_start`/`pa_max`), the
+qualifying-day minimum profit (`qmin`), whether a daily loss limit applies to
+funded intraday-trailing accounts, and Topstep's per-tier payout caps.

@@ -209,11 +209,13 @@ pub fn parse_variants(s: &str) -> Vec<(EntryMode, BiasMode, ExitMode)> {
 
 /// One evaluation/funded account product.
 ///
-/// Every field here feeds expected value directly. They are transcribed from
-/// the firm's published terms and are NOT independently verified by this code —
-/// check them against current terms before trusting any output.
+/// Every field feeds expected value directly. Values were checked against
+/// published summaries in September 2026 (see `README.md` for sources and for
+/// what could not be verified), but firms change terms frequently and both
+/// Apex and Topstep run parallel legacy rule sets. Confirm against your own
+/// account dashboard before trusting output.
 #[derive(Clone, Debug)]
-pub struct Apex {
+pub struct Account {
     pub key: String,
     pub name: String,
     /// Evaluation profit target.
@@ -253,29 +255,171 @@ pub struct Apex {
     pub pamo: f64,
     /// Per-round-turn commission.
     pub comm: f64,
+
+    /// Whether the consistency rule applies during the *evaluation*.
+    ///
+    /// Apex applies it only in the funded account; the previous model enforced
+    /// it in both, which understated the pass rate. Topstep's combine target
+    /// does behave as a constraint on the evaluation.
+    pub eval_consistency: bool,
+    /// Maximum *calendar* days allowed to complete the evaluation (0 = untimed).
+    ///
+    /// This is the trap in the old model: Apex allows 30 calendar days, which is
+    /// about 21 trading days, but the simulator ran 30 *trading* days — roughly
+    /// 40% more opportunity than the product allows.
+    pub eval_calendar_days: i32,
+    /// Lifetime profit per account paid at 100% before the split applies.
+    pub split_full_up_to: f64,
+    /// Trader's share of profit beyond `split_full_up_to`.
+    pub split_after: f64,
 }
 
-pub fn all_apex() -> Vec<Apex> {
+/// Trading days per calendar month, used to convert a calendar-day evaluation
+/// window into the number of sessions actually available.
+pub const TRADING_DAYS_PER_CALENDAR_DAY: f64 = 21.0 / 30.44;
+
+impl Account {
+    /// Evaluation length in trading days, or `None` when untimed.
+    pub fn eval_trading_days(&self) -> Option<usize> {
+        if self.eval_calendar_days <= 0 {
+            return None;
+        }
+        Some(((self.eval_calendar_days as f64) * TRADING_DAYS_PER_CALENDAR_DAY).round() as usize)
+    }
+
+    /// Trader's take on `gross` of extracted profit, applying the split.
+    pub fn trader_share(&self, gross: f64) -> f64 {
+        if gross <= self.split_full_up_to {
+            gross
+        } else {
+            self.split_full_up_to + (gross - self.split_full_up_to) * self.split_after
+        }
+    }
+}
+
+/// Which firm's rule set to model.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum Firm {
+    /// Apex Trader Funding, "4.0" rules (accounts purchased from 1 March 2026).
+    Apex,
+    /// Topstep Trading Combine and Express Funded Account.
+    Topstep,
+}
+
+impl Firm {
+    pub fn parse(s: &str) -> Self {
+        match s.trim().to_lowercase().as_str() {
+            "apex" => Firm::Apex,
+            "topstep" => Firm::Topstep,
+            other => panic!("--firm must be apex or topstep, got '{other}'"),
+        }
+    }
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Firm::Apex => "apex",
+            Firm::Topstep => "topstep",
+        }
+    }
+    pub fn accounts(&self) -> Vec<Account> {
+        match self {
+            Firm::Apex => apex_accounts(),
+            Firm::Topstep => topstep_accounts(),
+        }
+    }
+}
+
+/// Apex Trader Funding, 4.0 rules.
+///
+/// Verified September 2026 against published summaries:
+///   * Profit target is 6% of balance: $3,000 / $6,000 / $9,000.
+///   * Safety net is balance + drawdown + $100, and on 4.0 accounts every
+///     payout must clear it (legacy accounts only observed it for the first
+///     three).
+///   * Evaluation runs **30 calendar days**, roughly 21 trading sessions.
+///   * The consistency rule applies only in the funded account, not the
+///     evaluation, and 4.0 relaxed it from 30% to 50%.
+///   * Five qualifying days per payout (4.0 reduced this from seven).
+///   * Six payouts per account, $500 minimum, 100% of the first $25,000 per
+///     account and 90% thereafter.
+pub fn apex_accounts() -> Vec<Account> {
+    let mk = |key: &str, name: &str, sb: f64, target: f64, dd: f64, dll: f64, is_eod: bool,
+              eval_cts: i32, fee: f64, pa_start: i32, pa_max: i32, ladder: [f64; 6],
+              qmin: f64, act: f64| Account {
+        key: key.into(), name: name.into(),
+        target, dd, dll, is_eod, eval_cts, fee,
+        pa_start, pa_max,
+        // Safety net = starting balance + drawdown + $100.
+        sn: sb + dd + 100.0,
+        sb, pa_dd: dd,
+        ladder, qmin, qdays: 5, cons: 0.50,
+        act, pamo: 85.0, comm: 4.50,
+        eval_consistency: false,
+        eval_calendar_days: 30,
+        split_full_up_to: 25_000.0,
+        split_after: 0.90,
+    };
     vec![
-        Apex { key: "eod50".into(), name: "EOD 50K".into(), target: 3000.0, dd: 2500.0, dll: 1000.0, is_eod: true, eval_cts: 6, fee: 34.90,
-               pa_max: 4, pa_start: 2, sn: 52600.0, sb: 50000.0, pa_dd: 2500.0, ladder: [1500.0, 1750.0, 2000.0, 2500.0, 2750.0, 3000.0],
-               qmin: 300.0, qdays: 5, cons: 0.5, act: 99.0, pamo: 85.0, comm: 4.50 },
-        Apex { key: "eod100".into(), name: "EOD 100K".into(), target: 6000.0, dd: 3000.0, dll: 2000.0, is_eod: true, eval_cts: 8, fee: 59.90,
-               pa_max: 6, pa_start: 3, sn: 103100.0, sb: 100000.0, pa_dd: 3000.0, ladder: [2000.0, 2500.0, 3000.0, 3500.0, 3750.0, 4000.0],
-               qmin: 300.0, qdays: 5, cons: 0.5, act: 99.0, pamo: 85.0, comm: 4.50 },
-        Apex { key: "eod150".into(), name: "EOD 150K".into(), target: 9000.0, dd: 5000.0, dll: 2500.0, is_eod: true, eval_cts: 12, fee: 79.90,
-               pa_max: 9, pa_start: 4, sn: 155100.0, sb: 150000.0, pa_dd: 5000.0, ladder: [2500.0, 3000.0, 3500.0, 4000.0, 4500.0, 5000.0],
-               qmin: 350.0, qdays: 5, cons: 0.5, act: 99.0, pamo: 85.0, comm: 4.50 },
-        Apex { key: "it50".into(), name: "IT 50K".into(), target: 3000.0, dd: 2500.0, dll: 0.0, is_eod: false, eval_cts: 6, fee: 24.90,
-               pa_max: 4, pa_start: 2, sn: 52600.0, sb: 50000.0, pa_dd: 2500.0, ladder: [1500.0, 1750.0, 2000.0, 2500.0, 2750.0, 3000.0],
-               qmin: 250.0, qdays: 5, cons: 0.5, act: 79.0, pamo: 85.0, comm: 4.50 },
-        Apex { key: "it100".into(), name: "IT 100K".into(), target: 6000.0, dd: 3000.0, dll: 0.0, is_eod: false, eval_cts: 8, fee: 39.90,
-               pa_max: 6, pa_start: 3, sn: 103100.0, sb: 100000.0, pa_dd: 3000.0, ladder: [2000.0, 2500.0, 3000.0, 3500.0, 3750.0, 4000.0],
-               qmin: 300.0, qdays: 5, cons: 0.5, act: 79.0, pamo: 85.0, comm: 4.50 },
-        Apex { key: "it150".into(), name: "IT 150K".into(), target: 9000.0, dd: 5000.0, dll: 0.0, is_eod: false, eval_cts: 12, fee: 59.90,
-               pa_max: 9, pa_start: 4, sn: 155100.0, sb: 150000.0, pa_dd: 5000.0, ladder: [2500.0, 3000.0, 3500.0, 4000.0, 4500.0, 5000.0],
-               qmin: 350.0, qdays: 5, cons: 0.5, act: 79.0, pamo: 85.0, comm: 4.50 },
+        mk("eod50",  "Apex EOD 50K",  50_000.0, 3_000.0, 2_500.0, 1_000.0, true,  6, 34.90, 2, 4,
+           [1500.0, 1750.0, 2000.0, 2500.0, 2750.0, 3000.0], 300.0, 99.0),
+        mk("eod100", "Apex EOD 100K", 100_000.0, 6_000.0, 3_000.0, 2_000.0, true,  8, 59.90, 3, 6,
+           [2000.0, 2500.0, 3000.0, 3500.0, 3750.0, 4000.0], 300.0, 99.0),
+        mk("eod150", "Apex EOD 150K", 150_000.0, 9_000.0, 5_000.0, 2_500.0, true, 12, 79.90, 4, 9,
+           [2500.0, 3000.0, 3500.0, 4000.0, 4500.0, 5000.0], 350.0, 99.0),
+        mk("it50",   "Apex IT 50K",   50_000.0, 3_000.0, 2_500.0, 0.0, false,  6, 24.90, 2, 4,
+           [1500.0, 1750.0, 2000.0, 2500.0, 2750.0, 3000.0], 250.0, 79.0),
+        mk("it100",  "Apex IT 100K",  100_000.0, 6_000.0, 3_000.0, 0.0, false,  8, 39.90, 3, 6,
+           [2000.0, 2500.0, 3000.0, 3500.0, 3750.0, 4000.0], 300.0, 79.0),
+        mk("it150",  "Apex IT 150K",  150_000.0, 9_000.0, 5_000.0, 0.0, false, 12, 59.90, 4, 9,
+           [2500.0, 3000.0, 3500.0, 4000.0, 4500.0, 5000.0], 350.0, 79.0),
     ]
+}
+
+/// Topstep Trading Combine and Express Funded Account.
+///
+/// Verified September 2026 against published summaries. Topstep is NOT a
+/// re-parameterised Apex — three mechanics differ in kind, and two of them this
+/// model does not reproduce:
+///   * Maximum Loss Limit is $2,000 / $3,000 / $4,500, end-of-day trailing,
+///     and it stops trailing once the account is $x above start.
+///   * The Daily Loss Limit is an optional add-on ($1k/$2k/$3k) and hitting it
+///     is NOT a rule violation in the Combine, so it is modelled as absent.
+///   * The combine consistency target (best day <= 50% of the profit target)
+///     RAISES the target rather than failing the account. Modelled here as a
+///     pass condition, which is stricter than the real rule.
+///   * Payouts take 90% from the first dollar on accounts opened after
+///     12 January 2026, and are capped at 50% of balance up to a tier cap.
+///     The tier caps are used as a flat ladder below; the 50%-of-balance
+///     component is not modelled.
+///   * Five winning days per payout on the standard path.
+/// Position limits are in minis: 5 / 10 / 15.
+pub fn topstep_accounts() -> Vec<Account> {
+    let mk = |key: &str, name: &str, sb: f64, target: f64, mll: f64, cts: i32,
+              fee: f64, act: f64, cap: f64, qmin: f64| Account {
+        key: key.into(), name: name.into(),
+        target, dd: mll, dll: 0.0, is_eod: true, eval_cts: cts, fee,
+        pa_start: cts, pa_max: cts,
+        // Topstep has no Apex-style safety net; the trailing stop freezes once
+        // the account is the drawdown amount above its start.
+        sn: sb + mll,
+        sb, pa_dd: mll,
+        ladder: [cap; 6],
+        qmin, qdays: 5, cons: 0.50,
+        act, pamo: 0.0, comm: 4.50,
+        eval_consistency: true,
+        eval_calendar_days: 0, // the Combine is untimed while the fee is paid
+        split_full_up_to: 0.0,
+        split_after: 0.90,
+    };
+    vec![
+        mk("ts50",  "Topstep 50K",  50_000.0, 3_000.0, 2_000.0,  5, 49.0, 149.0, 2_000.0, 200.0),
+        mk("ts100", "Topstep 100K", 100_000.0, 6_000.0, 3_000.0, 10, 99.0, 149.0, 4_000.0, 300.0),
+        mk("ts150", "Topstep 150K", 150_000.0, 9_000.0, 4_500.0, 15, 199.0, 149.0, 6_000.0, 400.0),
+    ]
+}
+
+/// Backwards-compatible alias for the Apex set.
+pub fn all_apex() -> Vec<Account> {
+    apex_accounts()
 }
 
 // ---------------------------------------------------------------------------
@@ -392,6 +536,111 @@ mod tests {
         assert_eq!(parse_variants("all").len(), 8);
         assert_eq!(parse_variants("wick/nobias/fixedrr").len(), 1);
         assert!(std::panic::catch_unwind(|| parse_variants("wick/nobais/fixedrr")).is_err());
+    }
+
+
+    /// The published account terms, pinned so an edit cannot drift from them
+    /// silently. Checked September 2026; see README for sources.
+    #[test]
+    fn apex_terms_match_published_rules() {
+        let a = apex_accounts();
+        assert_eq!(a.len(), 6);
+        for ax in &a {
+            // Profit target is 6% of the starting balance.
+            assert!((ax.target - ax.sb * 0.06).abs() < 1e-9, "{} target {}", ax.key, ax.target);
+            // Safety net is balance + drawdown + $100.
+            assert!((ax.sn - (ax.sb + ax.dd + 100.0)).abs() < 1e-9, "{} safety net {}", ax.key, ax.sn);
+            // 4.0: five qualifying days, 50% consistency, six payouts, $85/month.
+            assert_eq!(ax.qdays, 5, "{}", ax.key);
+            assert!((ax.cons - 0.50).abs() < 1e-9, "{}", ax.key);
+            assert_eq!(ax.ladder.len(), 6, "{}", ax.key);
+            assert!((ax.pamo - 85.0).abs() < 1e-9, "{}", ax.key);
+            // No consistency rule during the evaluation.
+            assert!(!ax.eval_consistency, "{} must not gate the evaluation on consistency", ax.key);
+            // 30 calendar days, which is about 21 sessions -- not 30 sessions.
+            assert_eq!(ax.eval_calendar_days, 30, "{}", ax.key);
+            assert_eq!(ax.eval_trading_days(), Some(21), "{}", ax.key);
+            // 100% of the first $25,000 per account, 90% after.
+            assert!((ax.split_full_up_to - 25_000.0).abs() < 1e-9, "{}", ax.key);
+            assert!((ax.split_after - 0.90).abs() < 1e-9, "{}", ax.key);
+            // Half contracts until the safety net.
+            assert!(ax.pa_start < ax.pa_max, "{}", ax.key);
+        }
+        let named = |k: &str| a.iter().find(|x| x.key == k).unwrap().clone();
+        assert_eq!(named("eod50").sn, 52_600.0);
+        assert_eq!(named("eod100").sn, 103_100.0);
+        assert_eq!(named("eod150").sn, 155_100.0);
+        assert_eq!(named("it50").eval_cts, 6);
+        assert_eq!(named("it100").eval_cts, 8);
+        assert_eq!(named("it150").eval_cts, 12);
+        // Intraday-trailing products carry no daily loss limit; EOD ones do.
+        assert!(a.iter().filter(|x| !x.is_eod).all(|x| x.dll == 0.0));
+        assert!(a.iter().filter(|x| x.is_eod).all(|x| x.dll > 0.0));
+    }
+
+    #[test]
+    fn topstep_terms_match_published_rules() {
+        let t = topstep_accounts();
+        assert_eq!(t.len(), 3);
+        let named = |k: &str| t.iter().find(|x| x.key == k).unwrap().clone();
+        // Same profit targets as Apex, different maximum loss limits.
+        for (k, sb, target, mll, cts) in [
+            ("ts50", 50_000.0, 3_000.0, 2_000.0, 5),
+            ("ts100", 100_000.0, 6_000.0, 3_000.0, 10),
+            ("ts150", 150_000.0, 9_000.0, 4_500.0, 15),
+        ] {
+            let a = named(k);
+            assert_eq!(a.sb, sb);
+            assert_eq!(a.target, target);
+            assert_eq!(a.dd, mll, "{k} maximum loss limit");
+            assert_eq!(a.eval_cts, cts, "{k} position limit in minis");
+            // The daily loss limit is an optional add-on and breaching it is not
+            // a rule violation, so it is modelled as absent.
+            assert_eq!(a.dll, 0.0, "{k}");
+            // 90/10 from the first dollar.
+            assert_eq!(a.split_full_up_to, 0.0, "{k}");
+            assert!((a.split_after - 0.90).abs() < 1e-9, "{k}");
+            // The combine is untimed while the subscription is paid.
+            assert_eq!(a.eval_trading_days(), None, "{k}");
+            // No monthly fee on the funded account; the cost is the combine.
+            assert_eq!(a.pamo, 0.0, "{k}");
+            assert_eq!(a.act, 149.0, "{k}");
+        }
+        assert_eq!(named("ts50").fee, 49.0);
+        assert_eq!(named("ts100").fee, 99.0);
+        assert_eq!(named("ts150").fee, 199.0);
+    }
+
+    /// Apex's evaluation runs 30 calendar days. Treating that as 30 trading days
+    /// hands the simulator about 40% more sessions than the product allows.
+    #[test]
+    fn calendar_days_convert_to_fewer_trading_days() {
+        let ax = apex_accounts()[0].clone();
+        let sessions = ax.eval_trading_days().unwrap();
+        assert_eq!(sessions, 21);
+        assert!(
+            (30 - sessions) as f64 / sessions as f64 > 0.4,
+            "the old 30-trading-day window was {sessions} sessions too generous"
+        );
+    }
+
+    #[test]
+    fn profit_split_applies_beyond_the_full_share() {
+        let apex = apex_accounts()[0].clone();
+        assert_eq!(apex.trader_share(10_000.0), 10_000.0, "under the threshold, all of it");
+        assert_eq!(apex.trader_share(25_000.0), 25_000.0);
+        // $35k gross -> $25k + 90% of the next $10k.
+        assert_eq!(apex.trader_share(35_000.0), 34_000.0);
+
+        let ts = topstep_accounts()[0].clone();
+        assert_eq!(ts.trader_share(10_000.0), 9_000.0, "Topstep splits from dollar one");
+    }
+
+    #[test]
+    fn firm_selector_parses_and_rejects() {
+        assert_eq!(Firm::parse("apex").accounts().len(), 6);
+        assert_eq!(Firm::parse("Topstep").accounts().len(), 3);
+        assert!(std::panic::catch_unwind(|| Firm::parse("ftmo")).is_err());
     }
 
     #[test]

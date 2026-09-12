@@ -26,13 +26,22 @@ pub struct Args {
     /// saving, so the format is declared and then verified rather than guessed.
     #[arg(long, default_value = "utc")] pub tz_input: String,
 
+    /// Which firm's rule set to model: apex | topstep.
+    #[arg(long, default_value = "apex")] pub firm: String,
+
     // ---- Monte Carlo ----
     #[arg(long, default_value = "10000")] pub n_sims: usize,
     #[arg(long, default_value = "2000")] pub n_funded_sims: usize,
     #[arg(long, default_value = "5")] pub block_days: usize,
-    /// Maximum trading days allowed to reach the evaluation target.
-    /// Set to match the product's rules; raise it if the evaluation is untimed.
-    #[arg(long, default_value = "30")] pub eval_max_days: usize,
+    /// Override the evaluation length, in TRADING days.
+    ///
+    /// 0 uses the product's own window: Apex allows 30 *calendar* days, which is
+    /// about 21 sessions. The previous engine ran 30 trading days against that
+    /// same rule, giving roughly 40% more opportunity than the product allows.
+    #[arg(long, default_value = "0")] pub eval_max_days: usize,
+    /// Cap on evaluation length when the product is untimed (Topstep's combine
+    /// runs as long as the subscription is paid).
+    #[arg(long, default_value = "120")] pub eval_untimed_cap: usize,
     /// Trading days of funded account to simulate.
     #[arg(long, default_value = "120")] pub funded_max_days: usize,
     /// Treat the daily loss limit as a rule breach that fails the account,

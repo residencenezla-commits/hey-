@@ -177,7 +177,7 @@ pub fn preflight(args: &Args) {
     }
 
     println!("\n  Cost-model crossover (months held = 6):");
-    for ax in all_apex() {
+    for ax in Firm::parse(&args.firm).accounts() {
         let x = crate::ev::legacy_error_crossover(&ax, 6.0);
         println!(
             "    {:<7} superseded formula flips sign at pass rate {:.1}%  (err at pr=0: ${:.0}, at pr=1: ${:.0})",
@@ -292,10 +292,18 @@ pub fn run(args: &Args) {
     }
     fs::create_dir_all(&args.output).expect("cannot create --output directory");
 
+    // The evaluation window comes from the product unless overridden. All
+    // accounts in a firm's set share one, so take it from the first.
+    let firm_for_days = Firm::parse(&args.firm);
+    let product_days = firm_for_days.accounts()[0]
+        .eval_trading_days()
+        .unwrap_or(args.eval_untimed_cap);
+    let eval_days = if args.eval_max_days > 0 { args.eval_max_days } else { product_days };
+
     let mc_cfg = McConfig {
         n_challenge_sims: args.n_sims,
         n_funded_sims: args.n_funded_sims,
-        eval_max_days: args.eval_max_days,
+        eval_max_days: eval_days,
         funded_max_days: args.funded_max_days,
         block_days: args.block_days,
         dll_is_breach: args.dll_is_breach,
@@ -309,7 +317,8 @@ pub fn run(args: &Args) {
 
     let tz = TzInput::parse(&args.tz_input);
     let variants = parse_variants(&args.entry_variants);
-    let accounts = all_apex();
+    let firm = Firm::parse(&args.firm);
+    let accounts = firm.accounts();
 
     // The engine applies one commission to every account. Reading the field and
     // checking it keeps it live: editing an account's commission now fails
@@ -332,7 +341,7 @@ pub fn run(args: &Args) {
     } else {
         (rgs.clone(), rgs.clone())
     };
-    let acct_sel: Vec<Apex> = if args.signal_only {
+    let acct_sel: Vec<Account> = if args.signal_only {
         accounts.iter().filter(|a| a.key == "it150").cloned().collect()
     } else {
         accounts.clone()
@@ -351,8 +360,14 @@ pub fn run(args: &Args) {
     println!("  Timestamps:      {}", tz.as_str());
     println!("  Walk-forward:    {}y outer ({}y inner train, {}y inner validate), 1y test",
              args.outer_train_years, args.inner_train_years, args.outer_train_years - args.inner_train_years);
-    println!("  Evaluation:      up to {} trading days, daily-limit-is-breach={}",
-             args.eval_max_days, args.dll_is_breach);
+    println!("  Firm:            {}", firm.as_str());
+    println!("  Evaluation:      up to {} trading days{}, daily-limit-is-breach={}",
+             eval_days,
+             match firm.accounts()[0].eval_calendar_days {
+                 0 => " (product is untimed; capped)".to_string(),
+                 d => format!(" (product allows {d} calendar days)"),
+             },
+             args.dll_is_breach);
     println!("  Funded:          {} trading days", args.funded_max_days);
     println!("  Risk geometry:   {} eval x {} funded{}",
              rg_evals.len(), rg_fundeds.len(),
@@ -517,7 +532,7 @@ fn evaluate_cell(
     ev_params: &EvParams,
     rg_evals: &[usize],
     rg_fundeds: &[usize],
-    accounts: &[Apex],
+    accounts: &[Account],
 ) -> (Vec<FoldRecord>, Vec<DailyPnlRow>) {
     let (em, bm, xm) = cell.variant;
     let mut folds: Vec<FoldRecord> = Vec::new();

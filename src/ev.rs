@@ -17,7 +17,7 @@
 //! rate, which sits inside the range these strategies actually produce, so no
 //! constant correction recovers it.
 
-use crate::types::Apex;
+use crate::types::Account;
 
 #[derive(Clone, Copy, Debug)]
 pub struct EvParams {
@@ -73,7 +73,7 @@ const LEGACY_MONTHS: f64 = 2.0;
 
 /// Compute expected value for one configuration on one account product.
 pub fn evaluate(
-    ax: &Apex,
+    ax: &Account,
     pass_rate: f64,
     gross_ext: f64,
     p_ext_zero: f64,
@@ -81,7 +81,10 @@ pub fn evaluate(
     p: &EvParams,
 ) -> EvBreakdown {
     let haircut = p.payout_haircut.clamp(0.0, 1.0);
-    let net_ext = gross_ext * haircut;
+    // The trader's share first, then the realisation haircut. Simulated
+    // extraction is gross account profit; the split decides what is actually
+    // paid out, and the previous model assumed 100% of it forever.
+    let net_ext = ax.trader_share(gross_ext) * haircut;
     let months = months_held.max(1.0);
     let funded_costs = ax.act + ax.pamo * months;
 
@@ -119,13 +122,13 @@ pub fn evaluate(
 /// Closed-form error of the superseded cost term, for a given account and
 /// holding period. Exposed so the correction can be checked against the
 /// published account constants rather than inferred from output.
-pub fn legacy_cost_error(ax: &Apex, pass_rate: f64, months: f64) -> f64 {
+pub fn legacy_cost_error(ax: &Account, pass_rate: f64, months: f64) -> f64 {
     ax.act * (pass_rate - 1.0) + ax.pamo * (pass_rate * months - LEGACY_MONTHS)
 }
 
 /// Pass rate at which the superseded formula changes from understating expected
 /// value to overstating it.
-pub fn legacy_error_crossover(ax: &Apex, months: f64) -> f64 {
+pub fn legacy_error_crossover(ax: &Account, months: f64) -> f64 {
     (ax.act + ax.pamo * LEGACY_MONTHS) / (ax.act + ax.pamo * months)
 }
 
@@ -134,7 +137,7 @@ mod tests {
     use super::*;
     use crate::types::all_apex;
 
-    fn acct(key: &str) -> Apex {
+    fn acct(key: &str) -> Account {
         all_apex().into_iter().find(|a| a.key == key).unwrap()
     }
 

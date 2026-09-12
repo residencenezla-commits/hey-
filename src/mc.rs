@@ -16,7 +16,7 @@
 //!   discarding every path that would have passed later — which penalises
 //!   low-variance configurations specifically.
 
-use crate::types::{calc_cts, Apex, RawTrade};
+use crate::types::{calc_cts, Account, RawTrade};
 use rand::rngs::StdRng;
 use rand::{Rng, SeedableRng};
 use rayon::prelude::*;
@@ -74,7 +74,7 @@ pub struct ChallengeResult {
 #[allow(clippy::too_many_arguments)]
 pub fn mc_challenge(
     train_by_day: &[Vec<RawTrade>],
-    ax: &Apex,
+    ax: &Account,
     rg: usize,
     cfg: &McConfig,
     pv: f64,
@@ -157,6 +157,11 @@ pub fn mc_challenge(
                 }
 
                 if eq >= ax.target {
+                    // Apex applies no consistency rule during the evaluation;
+                    // Topstep's combine target does constrain it.
+                    if !ax.eval_consistency {
+                        return (true, (day + 1) as u32);
+                    }
                     let sum: f64 = dp.iter().sum();
                     let mx = dp.iter().cloned().fold(f64::NEG_INFINITY, f64::max);
                     if sum > 0.0 && mx / sum <= ax.cons {
@@ -204,7 +209,7 @@ impl FundedDist {
 #[allow(clippy::too_many_arguments)]
 pub fn mc_funded(
     train_by_day: &[Vec<RawTrade>],
-    ax: &Apex,
+    ax: &Account,
     rg: usize,
     cfg: &McConfig,
     pv: f64,
@@ -395,7 +400,7 @@ mod tests {
             dll_is_breach: true,
         }
     }
-    fn acct(key: &str) -> Apex {
+    fn acct(key: &str) -> Account {
         all_apex().into_iter().find(|a| a.key == key).unwrap()
     }
     fn days_of(pnl: f64, n: usize) -> Vec<Vec<RawTrade>> {
