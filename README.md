@@ -16,7 +16,7 @@ things that determined the answer.
 ## Quick start
 
 ```bash
-cargo test                      # 74 tests, no fixtures required
+cargo test                      # 76 tests, no fixtures required
 cargo run --release -- --data-dir ./data --instruments ES --preflight-only
 cargo run --release -- --data-dir ./data --instruments ES,NQ --session ny --tz-input utc
 ```
@@ -207,57 +207,76 @@ result set always names the code that produced it.
 
 ## Account terms
 
-Checked against published summaries in September 2026 and pinned by
-`types::tests::apex_terms_match_published_rules` and
-`topstep_terms_match_published_rules`. `--firm apex|topstep`.
+Read off both firms' own pricing pages in September 2026 and pinned by
+`types::tests::apex_50k_matches_the_funding_page` and
+`topstep_matches_the_pricing_page`. `--list-accounts` prints the table with each
+row's verification status; `--firm apex|topstep` and `--accounts <keys>` select.
 
-Four corrections came out of that check:
+### What the pages corrected
 
 | | Was | Is |
 |---|---|---|
-| Evaluation window | 30 **trading** days | 30 **calendar** days ≈ 21 sessions |
-| Consistency rule in the evaluation | applied | Apex applies it only when funded |
-| Profit split | 100% forever | 100% of first $25k per account, then 90/10 |
-| Qualifying days / consistency | 5 / 50% | correct for Apex 4.0 — but both changed on 1 March 2026 |
+| Apex 50K max drawdown | $2,500 | **$2,000** |
+| Apex evaluation window | 30 trading days | 30 calendar days ≈ 21 sessions, expires, no resets |
+| Apex consistency in the evaluation | applied | funded account only |
+| Apex profit split | 100% forever | 100% of first $25k per account, then 90/10 |
+| Apex evaluation price | one number | four paths, single and five-pack |
+| Topstep consistency target | 50% | **55%** |
+| Topstep purchase | one price | Standard + activation, or no-activation at a higher monthly |
+| Topstep daily loss limit | absent | absent by default, $1k/$2k/$3k under Responsible Trading Advantage |
 
-The first two pull in opposite directions. Net effect on the synthetic
-fixture, one instrument, `fixed_1` only:
+### Purchase path is a decision variable, not a constant
+
+Apex sells the same 50K evaluation four ways, and Topstep sells each size four
+ways. Both are modelled as separate accounts so the engine picks rather than
+being told. On the synthetic fixture:
 
 ```
-Apex, 21 sessions (correct)    mean EV $345/attempt    mean pass 20.2%
-Apex, 30 sessions (old)        mean EV $480/attempt    mean pass 24.1%
+apex_50_it_std      mean EV $620   pass 36.9%     $24.90 single / $19.00 in a five-pack
+apex_50_it_noact    mean EV $615   pass 36.4%     $49.00, no activation fee
+apex_50_eod_std     mean EV  $-30  pass 23.4%     $55.00 / $49.00
+apex_50_eod_noact   mean EV  $-71  pass 24.0%    $119.00 / $109.00
 ```
 
-So the old window inflated expected value by about 39%.
+The Intraday Trail products dominate here — the $1,000 daily loss limit on the
+EOD products costs about thirteen points of pass rate, and pass rate enters
+expected value linearly.
 
-**Apex runs two rule sets.** Accounts bought before 1 March 2026 stay on the
-legacy rules — 30% consistency, seven qualifying days, safety net observed only
-for the first three payouts — with no conversion path. The table models 4.0. If
-your accounts predate that, the constants are wrong for you.
+On Topstep the Responsible Trading Advantage toggle is the same trade in the
+other direction: it buys DOUBLE payout caps for accepting a daily loss limit.
+It raises the *best* configuration's value at 150K ($2,529 against $2,384) while
+lowering the average, and at 50K it is clearly negative. That is exactly the
+asymmetry you would expect — doubling a cap only pays when there is enough
+extraction to hit it.
 
-**Topstep is not a re-parameterised Apex.** Three mechanics differ in kind, and
-two are not reproduced here:
+**Five-packs matter.** At a 25% pass rate you expect four attempts per funded
+account, and Apex prices a five-pack at $19.00 a seat against $24.90 single.
+`Account::cost_for_attempts` picks the cheaper of singles or whole packs, and
+`ev_per_attempt` is charged the effective price rather than the list price.
 
-- The Daily Loss Limit is an optional add-on and breaching it is *not* a rule
-  violation in the Combine, so it is modelled as absent.
-- The combine consistency target (best day ≤ 50% of the profit target) *raises
-  the target* rather than failing the account. Modelled as a pass condition,
-  which is stricter than the real rule.
-- Payout caps are 50% of balance up to a tier cap; only the tier cap is
-  modelled.
+### What is still inferred
 
-Treat Topstep output as indicative, not as a like-for-like comparison.
+Apex's 100K and 150K rows carry **inferred** terms — the captured pages covered
+50K only, and the 50K drawdown ($2,000) does not follow a pattern that predicts
+the others. Their prices are scaled from 50K, which is a guess. The engine
+refuses to run them without `--allow-unverified`.
 
-### What could not be verified
+Also unverified for every Apex size, because the Performance Account panel was
+collapsed on the captured pages: the safety net, the PA drawdown and contract
+limits, the payout ladder, the qualifying-day rules, the consistency percentage,
+the Standard-path activation fee, and the monthly PA fee. These drive the funded
+half of expected value.
 
-No primary source was reachable — `apextraderfunding.com`,
-`support.apextraderfunding.com` and `topstep.com` are all blocked by the network
-policy of the environment this was built in. Everything above comes from
-third-party summaries, several of which contradicted each other on the
-consistency percentage (30% vs 50%) and qualifying days (5 vs 7 vs 8); those
-conflicts resolve to the March 2026 rule change, but that is an inference.
-Confirm against your own account dashboard before trusting any output.
+**Apex runs two rule sets.** Accounts bought before 1 March 2026 stay on legacy
+rules — 30% consistency, seven qualifying days, safety net observed only for the
+first three payouts — with no conversion path. The table models 4.0.
 
-Still unverified: per-account PA contract limits (`pa_start`/`pa_max`), the
-qualifying-day minimum profit (`qmin`), whether a daily loss limit applies to
-funded intraday-trailing accounts, and Topstep's per-tier payout caps.
+### Topstep mechanics not reproduced
+
+- The daily loss limit is not an account-closing violation; it is modelled as a
+  hard constraint, which is stricter than the product.
+- The consistency target raises the profit target rather than failing the
+  account; also modelled as a hard constraint.
+- Payout caps are 50% of balance up to the tier cap; only the tier cap is used.
+
+Treat Topstep output as indicative rather than like-for-like against Apex.

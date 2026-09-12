@@ -272,6 +272,15 @@ pub struct Account {
     pub split_full_up_to: f64,
     /// Trader's share of profit beyond `split_full_up_to`.
     pub split_after: f64,
+    /// Price of a single evaluation.
+    pub fee_pack1: f64,
+    /// Per-evaluation price when bought as a five-pack. Apex discounts these
+    /// materially, which matters directly: at a 25% pass rate you expect four
+    /// attempts per funded account.
+    pub fee_pack5: f64,
+    /// True when every field was read off the firm's own pricing page.
+    /// False means the values are inferred and the engine warns before using them.
+    pub verified: bool,
 }
 
 /// Trading days per calendar month, used to convert a calendar-day evaluation
@@ -285,6 +294,19 @@ impl Account {
             return None;
         }
         Some(((self.eval_calendar_days as f64) * TRADING_DAYS_PER_CALENDAR_DAY).round() as usize)
+    }
+
+    /// Cheapest way to buy `n` expected evaluation attempts.
+    ///
+    /// Singles, or whole five-packs, whichever costs less. A five-pack is only
+    /// worth it once the expected attempt count justifies the unused seats.
+    pub fn cost_for_attempts(&self, n: f64) -> f64 {
+        if !n.is_finite() || n <= 0.0 {
+            return 0.0;
+        }
+        let singles = n * self.fee_pack1;
+        let packs = (n / 5.0).ceil() * 5.0 * self.fee_pack5;
+        singles.min(packs)
     }
 
     /// Trader's take on `gross` of extracted profit, applying the split.
@@ -328,93 +350,165 @@ impl Firm {
     }
 }
 
-/// Apex Trader Funding, 4.0 rules.
+/// Apex Trader Funding.
 ///
-/// Verified September 2026 against published summaries:
-///   * Profit target is 6% of balance: $3,000 / $6,000 / $9,000.
-///   * Safety net is balance + drawdown + $100, and on 4.0 accounts every
-///     payout must clear it (legacy accounts only observed it for the first
-///     three).
-///   * Evaluation runs **30 calendar days**, roughly 21 trading sessions.
-///   * The consistency rule applies only in the funded account, not the
-///     evaluation, and 4.0 relaxed it from 30% to 50%.
-///   * Five qualifying days per payout (4.0 reduced this from seven).
-///   * Six payouts per account, $500 minimum, 100% of the first $25,000 per
-///     account and 90% thereafter.
+/// The 50K rules and all four 50K price points were read directly off the
+/// funding-path page in September 2026 and are marked `verified`. Every 50K
+/// variant shares: 1 minimum day to pass, 6 mini / 60 micro contracts, a $3,000
+/// profit target, a **$2,000** maximum drawdown, and an evaluation that is a
+/// one-time purchase active for 30 days with no rebill and no resets.
+///
+/// Intraday Trail carries no daily loss limit; EOD Trail carries $1,000.
+///
+/// The 100K and 150K entries are NOT verified — their drawdowns in particular
+/// do not follow from the 50K figure, and the funded-account rules (safety net,
+/// activation fee, monthly fee, payout ladder, PA drawdown and contract limits)
+/// were not visible on the pages captured. The engine warns before using them.
 pub fn apex_accounts() -> Vec<Account> {
-    let mk = |key: &str, name: &str, sb: f64, target: f64, dd: f64, dll: f64, is_eod: bool,
-              eval_cts: i32, fee: f64, pa_start: i32, pa_max: i32, ladder: [f64; 6],
-              qmin: f64, act: f64| Account {
-        key: key.into(), name: name.into(),
-        target, dd, dll, is_eod, eval_cts, fee,
-        pa_start, pa_max,
-        // Safety net = starting balance + drawdown + $100.
-        sn: sb + dd + 100.0,
-        sb, pa_dd: dd,
-        ladder, qmin, qdays: 5, cons: 0.50,
-        act, pamo: 85.0, comm: 4.50,
-        eval_consistency: false,
-        eval_calendar_days: 30,
-        split_full_up_to: 25_000.0,
-        split_after: 0.90,
-    };
-    vec![
-        mk("eod50",  "Apex EOD 50K",  50_000.0, 3_000.0, 2_500.0, 1_000.0, true,  6, 34.90, 2, 4,
-           [1500.0, 1750.0, 2000.0, 2500.0, 2750.0, 3000.0], 300.0, 99.0),
-        mk("eod100", "Apex EOD 100K", 100_000.0, 6_000.0, 3_000.0, 2_000.0, true,  8, 59.90, 3, 6,
-           [2000.0, 2500.0, 3000.0, 3500.0, 3750.0, 4000.0], 300.0, 99.0),
-        mk("eod150", "Apex EOD 150K", 150_000.0, 9_000.0, 5_000.0, 2_500.0, true, 12, 79.90, 4, 9,
-           [2500.0, 3000.0, 3500.0, 4000.0, 4500.0, 5000.0], 350.0, 99.0),
-        mk("it50",   "Apex IT 50K",   50_000.0, 3_000.0, 2_500.0, 0.0, false,  6, 24.90, 2, 4,
-           [1500.0, 1750.0, 2000.0, 2500.0, 2750.0, 3000.0], 250.0, 79.0),
-        mk("it100",  "Apex IT 100K",  100_000.0, 6_000.0, 3_000.0, 0.0, false,  8, 39.90, 3, 6,
-           [2000.0, 2500.0, 3000.0, 3500.0, 3750.0, 4000.0], 300.0, 79.0),
-        mk("it150",  "Apex IT 150K",  150_000.0, 9_000.0, 5_000.0, 0.0, false, 12, 59.90, 4, 9,
-           [2500.0, 3000.0, 3500.0, 4000.0, 4500.0, 5000.0], 350.0, 79.0),
-    ]
+    // (key, name, is_eod, no_activation_path, fee1, fee5)
+    let variants: [(&str, bool, bool, f64, f64); 4] = [
+        ("it_std",     false, false, 24.90, 19.00),
+        ("eod_std",    true,  false, 55.00, 49.00),
+        ("it_noact",   false, true,  49.00, 49.00),
+        ("eod_noact",  true,  true, 119.00, 109.00),
+    ];
+    // (size key, starting balance, target, eval drawdown, daily loss limit,
+    //  contracts, ladder, qualifying-day minimum, verified)
+    let sizes: [(&str, f64, f64, f64, f64, i32, [f64; 6], f64, bool); 3] = [
+        ("50",  50_000.0,  3_000.0, 2_000.0, 1_000.0,  6,
+         [1500.0, 1750.0, 2000.0, 2500.0, 2750.0, 3000.0], 300.0, true),
+        ("100", 100_000.0, 6_000.0, 3_000.0, 2_000.0,  8,
+         [2000.0, 2500.0, 3000.0, 3500.0, 3750.0, 4000.0], 300.0, false),
+        ("150", 150_000.0, 9_000.0, 5_000.0, 2_500.0, 12,
+         [2500.0, 3000.0, 3500.0, 4000.0, 4500.0, 5000.0], 350.0, false),
+    ];
+
+    let mut out = Vec::new();
+    for (size_key, sb, target, dd, dll, cts, ladder, qmin, size_verified) in sizes {
+        for (vkey, is_eod, no_act, fee1, fee5) in variants {
+            // Scale factor purely for the price of the larger sizes, which was
+            // not captured. Marked unverified along with the rest of the size.
+            let scale = sb / 50_000.0;
+            let (f1, f5) = if size_key == "50" { (fee1, fee5) } else { (fee1 * scale, fee5 * scale) };
+            out.push(Account {
+                key: format!("apex_{size_key}_{vkey}"),
+                name: format!("Apex {size_key}K {}", if is_eod { "EOD" } else { "Intraday" }),
+                target,
+                dd,
+                dll: if is_eod { dll } else { 0.0 },
+                is_eod,
+                eval_cts: cts,
+                fee: f1,
+                fee_pack1: f1,
+                fee_pack5: f5,
+                // Half contracts until the safety net; "Scaling: Built-in for PA".
+                pa_start: (cts / 2).max(1),
+                pa_max: cts,
+                // UNVERIFIED: the funded-account safety net was not on the page.
+                sn: sb + dd + 100.0,
+                sb,
+                pa_dd: dd,
+                ladder,
+                qmin,
+                qdays: 5,
+                cons: 0.50,
+                // UNVERIFIED: the Standard path carries a PA activation fee whose
+                // amount was not shown; the No Activation Fee path has none.
+                act: if no_act { 0.0 } else { 99.0 },
+                pamo: 85.0,
+                comm: 4.50,
+                // Apex applies no consistency rule during the evaluation.
+                eval_consistency: false,
+                // One-time purchase, active 30 days, expires, no resets.
+                eval_calendar_days: 30,
+                split_full_up_to: 25_000.0,
+                split_after: 0.90,
+                verified: size_verified,
+            });
+        }
+    }
+    out
 }
 
 /// Topstep Trading Combine and Express Funded Account.
 ///
-/// Verified September 2026 against published summaries. Topstep is NOT a
-/// re-parameterised Apex — three mechanics differ in kind, and two of them this
-/// model does not reproduce:
-///   * Maximum Loss Limit is $2,000 / $3,000 / $4,500, end-of-day trailing,
-///     and it stops trailing once the account is $x above start.
-///   * The Daily Loss Limit is an optional add-on ($1k/$2k/$3k) and hitting it
-///     is NOT a rule violation in the Combine, so it is modelled as absent.
-///   * The combine consistency target (best day <= 50% of the profit target)
-///     RAISES the target rather than failing the account. Modelled here as a
-///     pass condition, which is stricter than the real rule.
-///   * Payouts take 90% from the first dollar on accounts opened after
-///     12 January 2026, and are capped at 50% of balance up to a tier cap.
-///     The tier caps are used as a flat ladder below; the 50%-of-balance
-///     component is not modelled.
-///   * Five winning days per payout on the standard path.
-/// Position limits are in minis: 5 / 10 / 15.
+/// Read off the pricing page in September 2026. Two dimensions are real
+/// purchase decisions and both are modelled as separate accounts:
+///
+///   * **Fee path.** Standard is $49/$99/$199 a month with a $149 Express
+///     Funded activation fee; No Activation Fee is $95/$149/$229 a month with
+///     none. Which wins depends on pass rate and how long the funded account
+///     is held, so the engine is left to decide rather than told.
+///   * **Responsible Trading Advantage.** Opting in adds a daily loss limit of
+///     $1,000/$2,000/$3,000 and DOUBLES the payout caps. That is a genuine
+///     trade for this objective: a daily limit suppresses the variance that
+///     helps during a capped-downside evaluation, and doubles what can be
+///     extracted afterwards.
+///
+/// Shared: profit target $3,000/$6,000/$9,000, consistency target **55%**,
+/// Max Loss Limit (the "One Rule") $2,000/$3,000/$4,500 end-of-day trailing,
+/// contracts 5/10/15 mini. The monthly fee recurs, unlike Apex's one-time
+/// evaluation purchase.
+///
+/// Not modelled: the daily loss limit is not an account-closing violation, and
+/// the consistency target raises the profit target rather than failing the
+/// account — both are treated here as hard constraints, which is stricter than
+/// the real product. Payout caps are 50% of balance up to the tier cap; only
+/// the tier cap is used.
 pub fn topstep_accounts() -> Vec<Account> {
-    let mk = |key: &str, name: &str, sb: f64, target: f64, mll: f64, cts: i32,
-              fee: f64, act: f64, cap: f64, qmin: f64| Account {
-        key: key.into(), name: name.into(),
-        target, dd: mll, dll: 0.0, is_eod: true, eval_cts: cts, fee,
-        pa_start: cts, pa_max: cts,
-        // Topstep has no Apex-style safety net; the trailing stop freezes once
-        // the account is the drawdown amount above its start.
-        sn: sb + mll,
-        sb, pa_dd: mll,
-        ladder: [cap; 6],
-        qmin, qdays: 5, cons: 0.50,
-        act, pamo: 0.0, comm: 4.50,
-        eval_consistency: true,
-        eval_calendar_days: 0, // the Combine is untimed while the fee is paid
-        split_full_up_to: 0.0,
-        split_after: 0.90,
-    };
-    vec![
-        mk("ts50",  "Topstep 50K",  50_000.0, 3_000.0, 2_000.0,  5, 49.0, 149.0, 2_000.0, 200.0),
-        mk("ts100", "Topstep 100K", 100_000.0, 6_000.0, 3_000.0, 10, 99.0, 149.0, 4_000.0, 300.0),
-        mk("ts150", "Topstep 150K", 150_000.0, 9_000.0, 4_500.0, 15, 199.0, 149.0, 6_000.0, 400.0),
-    ]
+    // (size, balance, target, max loss limit, contracts, std fee, noact fee,
+    //  daily loss limit under RTA, base payout cap, qualifying-day minimum)
+    let sizes: [(&str, f64, f64, f64, i32, f64, f64, f64, f64, f64); 3] = [
+        ("50",  50_000.0,  3_000.0, 2_000.0,  5,  49.0,  95.0, 1_000.0, 2_000.0, 200.0),
+        ("100", 100_000.0, 6_000.0, 3_000.0, 10,  99.0, 149.0, 2_000.0, 4_000.0, 300.0),
+        ("150", 150_000.0, 9_000.0, 4_500.0, 15, 199.0, 229.0, 3_000.0, 6_000.0, 400.0),
+    ];
+    let mut out = Vec::new();
+    for (sk, sb, target, mll, cts, fee_std, fee_noact, rta_dll, cap, qmin) in sizes {
+        for no_act in [false, true] {
+            for rta in [false, true] {
+                let fee = if no_act { fee_noact } else { fee_std };
+                let payout_cap = if rta { cap * 2.0 } else { cap };
+                out.push(Account {
+                    key: format!(
+                        "ts_{sk}_{}{}",
+                        if no_act { "noact" } else { "std" },
+                        if rta { "_rta" } else { "" }
+                    ),
+                    name: format!("Topstep {sk}K{}", if rta { " +RTA" } else { "" }),
+                    target,
+                    dd: mll,
+                    dll: if rta { rta_dll } else { 0.0 },
+                    is_eod: true,
+                    eval_cts: cts,
+                    fee,
+                    fee_pack1: fee,
+                    fee_pack5: fee,
+                    pa_start: cts,
+                    pa_max: cts,
+                    // The trailing stop freezes once the account is the maximum
+                    // loss limit above its starting balance.
+                    sn: sb + mll,
+                    sb,
+                    pa_dd: mll,
+                    ladder: [payout_cap; 6],
+                    qmin,
+                    qdays: 5,
+                    cons: 0.55,
+                    act: if no_act { 0.0 } else { 149.0 },
+                    // The combine fee recurs monthly while the account is open.
+                    pamo: fee,
+                    comm: 4.50,
+                    eval_consistency: true,
+                    eval_calendar_days: 0, // untimed while the subscription is paid
+                    split_full_up_to: 0.0,
+                    split_after: 0.90,
+                    verified: true,
+                });
+            }
+        }
+    }
+    out
 }
 
 /// Backwards-compatible alias for the Apex set.
@@ -539,117 +633,155 @@ mod tests {
     }
 
 
-    /// The published account terms, pinned so an edit cannot drift from them
-    /// silently. Checked September 2026; see README for sources.
+    /// Apex 50K, read directly off the funding-path page. Pinned so an edit
+    /// cannot drift from the screenshots.
     #[test]
-    fn apex_terms_match_published_rules() {
+    fn apex_50k_matches_the_funding_page() {
         let a = apex_accounts();
-        assert_eq!(a.len(), 6);
-        for ax in &a {
-            // Profit target is 6% of the starting balance.
-            assert!((ax.target - ax.sb * 0.06).abs() < 1e-9, "{} target {}", ax.key, ax.target);
-            // Safety net is balance + drawdown + $100.
-            assert!((ax.sn - (ax.sb + ax.dd + 100.0)).abs() < 1e-9, "{} safety net {}", ax.key, ax.sn);
-            // 4.0: five qualifying days, 50% consistency, six payouts, $85/month.
-            assert_eq!(ax.qdays, 5, "{}", ax.key);
-            assert!((ax.cons - 0.50).abs() < 1e-9, "{}", ax.key);
-            assert_eq!(ax.ladder.len(), 6, "{}", ax.key);
-            assert!((ax.pamo - 85.0).abs() < 1e-9, "{}", ax.key);
+        let g = |k: &str| a.iter().find(|x| x.key == k).unwrap().clone();
+
+        for k in ["apex_50_it_std", "apex_50_eod_std", "apex_50_it_noact", "apex_50_eod_noact"] {
+            let x = g(k);
+            assert!(x.verified, "{k}");
+            assert_eq!(x.sb, 50_000.0, "{k}");
+            assert_eq!(x.target, 3_000.0, "{k}");
+            // The page says $2,000, not the 6%-of-balance figure the target uses.
+            assert_eq!(x.dd, 2_000.0, "{k} maximum drawdown");
+            assert_eq!(x.eval_cts, 6, "{k} contracts");
+            // One-time purchase, active 30 days, expires, no resets.
+            assert_eq!(x.eval_calendar_days, 30, "{k}");
+            assert_eq!(x.eval_trading_days(), Some(21), "{k}");
             // No consistency rule during the evaluation.
-            assert!(!ax.eval_consistency, "{} must not gate the evaluation on consistency", ax.key);
-            // 30 calendar days, which is about 21 sessions -- not 30 sessions.
-            assert_eq!(ax.eval_calendar_days, 30, "{}", ax.key);
-            assert_eq!(ax.eval_trading_days(), Some(21), "{}", ax.key);
-            // 100% of the first $25,000 per account, 90% after.
-            assert!((ax.split_full_up_to - 25_000.0).abs() < 1e-9, "{}", ax.key);
-            assert!((ax.split_after - 0.90).abs() < 1e-9, "{}", ax.key);
-            // Half contracts until the safety net.
-            assert!(ax.pa_start < ax.pa_max, "{}", ax.key);
+            assert!(!x.eval_consistency, "{k}");
         }
-        let named = |k: &str| a.iter().find(|x| x.key == k).unwrap().clone();
-        assert_eq!(named("eod50").sn, 52_600.0);
-        assert_eq!(named("eod100").sn, 103_100.0);
-        assert_eq!(named("eod150").sn, 155_100.0);
-        assert_eq!(named("it50").eval_cts, 6);
-        assert_eq!(named("it100").eval_cts, 8);
-        assert_eq!(named("it150").eval_cts, 12);
-        // Intraday-trailing products carry no daily loss limit; EOD ones do.
-        assert!(a.iter().filter(|x| !x.is_eod).all(|x| x.dll == 0.0));
-        assert!(a.iter().filter(|x| x.is_eod).all(|x| x.dll > 0.0));
+
+        // Intraday Trail carries no daily loss limit; EOD Trail carries $1,000.
+        assert_eq!(g("apex_50_it_std").dll, 0.0);
+        assert_eq!(g("apex_50_it_noact").dll, 0.0);
+        assert_eq!(g("apex_50_eod_std").dll, 1_000.0);
+        assert_eq!(g("apex_50_eod_noact").dll, 1_000.0);
+
+        // The four price points, coupon prices, single and five-pack.
+        for (k, one, five) in [
+            ("apex_50_it_std", 24.90, 19.00),
+            ("apex_50_eod_std", 55.00, 49.00),
+            ("apex_50_it_noact", 49.00, 49.00),
+            ("apex_50_eod_noact", 119.00, 109.00),
+        ] {
+            let x = g(k);
+            assert!((x.fee_pack1 - one).abs() < 1e-9, "{k} single price {}", x.fee_pack1);
+            assert!((x.fee_pack5 - five).abs() < 1e-9, "{k} pack price {}", x.fee_pack5);
+        }
+
+        // Only the No Activation Fee path escapes the activation charge.
+        assert_eq!(g("apex_50_it_noact").act, 0.0);
+        assert_eq!(g("apex_50_eod_noact").act, 0.0);
+        assert!(g("apex_50_it_std").act > 0.0);
+    }
+
+    /// The larger sizes were not captured and must stay flagged.
+    #[test]
+    fn apex_larger_sizes_are_marked_inferred() {
+        let a = apex_accounts();
+        assert!(a.iter().filter(|x| x.sb == 50_000.0).all(|x| x.verified));
+        assert!(a.iter().filter(|x| x.sb > 50_000.0).all(|x| !x.verified),
+                "100K and 150K terms were not on the captured pages");
+    }
+
+    /// Five-packs are cheaper per seat, so a repeated player pays the pack price.
+    #[test]
+    fn pack_pricing_beats_singles_once_retries_are_expected() {
+        let x = apex_accounts().into_iter().find(|a| a.key == "apex_50_it_std").unwrap();
+        // One attempt: a five-pack wastes four seats.
+        assert!((x.cost_for_attempts(1.0) - 24.90).abs() < 1e-9);
+        // Five attempts: the pack wins.
+        assert!((x.cost_for_attempts(5.0) - 95.00).abs() < 1e-9);
+        assert!(x.cost_for_attempts(5.0) < 5.0 * x.fee_pack1);
+        // Four attempts, which is what a 25% pass rate implies.
+        assert!(x.cost_for_attempts(4.0) <= 4.0 * x.fee_pack1);
+        assert_eq!(x.cost_for_attempts(0.0), 0.0);
+        assert_eq!(x.cost_for_attempts(f64::INFINITY), 0.0);
     }
 
     #[test]
-    fn topstep_terms_match_published_rules() {
+    fn topstep_matches_the_pricing_page() {
         let t = topstep_accounts();
-        assert_eq!(t.len(), 3);
-        let named = |k: &str| t.iter().find(|x| x.key == k).unwrap().clone();
-        // Same profit targets as Apex, different maximum loss limits.
-        for (k, sb, target, mll, cts) in [
-            ("ts50", 50_000.0, 3_000.0, 2_000.0, 5),
-            ("ts100", 100_000.0, 6_000.0, 3_000.0, 10),
-            ("ts150", 150_000.0, 9_000.0, 4_500.0, 15),
-        ] {
-            let a = named(k);
-            assert_eq!(a.sb, sb);
-            assert_eq!(a.target, target);
-            assert_eq!(a.dd, mll, "{k} maximum loss limit");
-            assert_eq!(a.eval_cts, cts, "{k} position limit in minis");
-            // The daily loss limit is an optional add-on and breaching it is not
-            // a rule violation, so it is modelled as absent.
-            assert_eq!(a.dll, 0.0, "{k}");
-            // 90/10 from the first dollar.
-            assert_eq!(a.split_full_up_to, 0.0, "{k}");
-            assert!((a.split_after - 0.90).abs() < 1e-9, "{k}");
+        let g = |k: &str| t.iter().find(|x| x.key == k).unwrap().clone();
+        assert_eq!(t.len(), 12, "3 sizes x 2 fee paths x 2 RTA states");
+
+        for x in &t {
+            // The consistency target is 55%, not 50%.
+            assert!((x.cons - 0.55).abs() < 1e-9, "{} consistency", x.key);
+            assert!(x.verified, "{}", x.key);
             // The combine is untimed while the subscription is paid.
-            assert_eq!(a.eval_trading_days(), None, "{k}");
-            // No monthly fee on the funded account; the cost is the combine.
-            assert_eq!(a.pamo, 0.0, "{k}");
-            assert_eq!(a.act, 149.0, "{k}");
+            assert_eq!(x.eval_trading_days(), None, "{}", x.key);
+            // 90/10 from the first dollar.
+            assert_eq!(x.split_full_up_to, 0.0, "{}", x.key);
         }
-        assert_eq!(named("ts50").fee, 49.0);
-        assert_eq!(named("ts100").fee, 99.0);
-        assert_eq!(named("ts150").fee, 199.0);
+
+        // Max Loss Limit, the "One Rule", and mini contract limits.
+        for (k, mll, cts) in [("ts_50_std", 2_000.0, 5), ("ts_100_std", 3_000.0, 10), ("ts_150_std", 4_500.0, 15)] {
+            assert_eq!(g(k).dd, mll, "{k}");
+            assert_eq!(g(k).eval_cts, cts, "{k}");
+        }
+
+        // Standard is cheaper monthly but carries the $149 activation.
+        assert_eq!(g("ts_50_std").fee, 49.0);
+        assert_eq!(g("ts_50_std").act, 149.0);
+        assert_eq!(g("ts_50_noact").fee, 95.0);
+        assert_eq!(g("ts_50_noact").act, 0.0);
+        assert_eq!(g("ts_150_std").fee, 199.0);
+        assert_eq!(g("ts_150_noact").fee, 229.0);
+
+        // Responsible Trading Advantage: accept a daily loss limit, get double
+        // payout caps.
+        assert_eq!(g("ts_50_std").dll, 0.0);
+        assert_eq!(g("ts_50_std_rta").dll, 1_000.0);
+        assert_eq!(g("ts_100_std_rta").dll, 2_000.0);
+        assert_eq!(g("ts_150_std_rta").dll, 3_000.0);
+        assert_eq!(g("ts_50_std_rta").ladder[0], 2.0 * g("ts_50_std").ladder[0]);
     }
 
-    /// Apex's evaluation runs 30 calendar days. Treating that as 30 trading days
-    /// hands the simulator about 40% more sessions than the product allows.
     #[test]
     fn calendar_days_convert_to_fewer_trading_days() {
         let ax = apex_accounts()[0].clone();
-        let sessions = ax.eval_trading_days().unwrap();
-        assert_eq!(sessions, 21);
+        assert_eq!(ax.eval_trading_days(), Some(21));
         assert!(
-            (30 - sessions) as f64 / sessions as f64 > 0.4,
-            "the old 30-trading-day window was {sessions} sessions too generous"
+            (30 - 21) as f64 / 21.0 > 0.4,
+            "the old 30-trading-day window was far too generous against a 30-calendar-day rule"
         );
     }
 
     #[test]
     fn profit_split_applies_beyond_the_full_share() {
         let apex = apex_accounts()[0].clone();
-        assert_eq!(apex.trader_share(10_000.0), 10_000.0, "under the threshold, all of it");
+        assert_eq!(apex.trader_share(10_000.0), 10_000.0);
         assert_eq!(apex.trader_share(25_000.0), 25_000.0);
-        // $35k gross -> $25k + 90% of the next $10k.
         assert_eq!(apex.trader_share(35_000.0), 34_000.0);
-
         let ts = topstep_accounts()[0].clone();
         assert_eq!(ts.trader_share(10_000.0), 9_000.0, "Topstep splits from dollar one");
     }
 
     #[test]
     fn firm_selector_parses_and_rejects() {
-        assert_eq!(Firm::parse("apex").accounts().len(), 6);
-        assert_eq!(Firm::parse("Topstep").accounts().len(), 3);
+        assert_eq!(Firm::parse("apex").accounts().len(), 12);
+        assert_eq!(Firm::parse("Topstep").accounts().len(), 12);
         assert!(std::panic::catch_unwind(|| Firm::parse("ftmo")).is_err());
     }
 
     #[test]
-    fn apex_commission_is_wired_not_dead() {
+    fn commission_is_wired_not_dead() {
         // Every account must carry a usable commission; the engine reads it
         // rather than hard-coding a constant.
-        for a in all_apex() {
+        for a in all_apex().into_iter().chain(topstep_accounts()) {
             assert!(a.comm > 0.0, "{} has no commission", a.key);
-            assert!(a.act > 0.0 && a.pamo > 0.0, "{} missing funded-phase costs", a.key);
+            assert!(a.fee_pack1 > 0.0, "{} has no evaluation price", a.key);
+            assert!(a.act >= 0.0, "{}", a.key);
+            // An account with no activation fee must be paying for it elsewhere:
+            // a higher evaluation price, or a recurring monthly charge.
+            if a.act == 0.0 {
+                assert!(a.fee_pack1 > 0.0 || a.pamo > 0.0, "{} has no costs at all", a.key);
+            }
         }
     }
 }

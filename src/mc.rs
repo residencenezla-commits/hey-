@@ -432,7 +432,7 @@ mod tests {
     /// as blown, including when the breach comes from a tail-capped loss.
     #[test]
     fn intraday_drawdown_breach_is_detected() {
-        let ax = acct("it50"); // is_eod = false, dd = 2500, no daily loss limit
+        let ax = acct("apex_50_it_std"); // is_eod = false, dd = 2500, no daily loss limit
         // One trade a day, each losing more than the whole drawdown allowance.
         let losers = days_of(-4000.0, 8);
         let r = mc_challenge(&losers, &ax, 0, &cfg(), 20.0, 0.5, 0.5, f64::INFINITY, 7);
@@ -448,7 +448,7 @@ mod tests {
     /// every day cannot pass; treated as a cap, it survives to trade again.
     #[test]
     fn daily_loss_limit_as_breach_is_stricter_than_as_cap() {
-        let ax = acct("eod50"); // dll = 1000, dd = 2500, target = 3000
+        let ax = acct("apex_50_eod_std"); // dll = 1000, dd = 2500, target = 3000
         let mut sequence = days_of(-1200.0, 6); // trips the 1000 limit every day
         sequence.push(vec![RawTrade { pnl_1ct: 4000.0, risk_1ct: 10.0, dir: 0, day_idx: 6 }]);
 
@@ -469,7 +469,7 @@ mod tests {
     /// still available, plus later ones. The old hard-coded 30 discarded those.
     #[test]
     fn longer_evaluation_window_never_lowers_pass_rate() {
-        let ax = acct("eod50");
+        let ax = acct("apex_50_eod_std");
         // Small positive drift: needs many days to reach a 3000 target.
         let grind = days_of(120.0, 40);
         let mut short = cfg();
@@ -484,7 +484,7 @@ mod tests {
 
     #[test]
     fn same_seed_reproduces_exactly() {
-        let ax = acct("it150");
+        let ax = acct("apex_150_it_std");
         let d = days_of(250.0, 12);
         let a = mc_challenge(&d, &ax, 2, &cfg(), 20.0, 0.5, 0.5, f64::INFINITY, 42);
         let b = mc_challenge(&d, &ax, 2, &cfg(), 20.0, 0.5, 0.5, f64::INFINITY, 42);
@@ -519,7 +519,7 @@ mod tests {
 
     #[test]
     fn funded_reports_holding_period_for_the_fee_model() {
-        let ax = acct("it150");
+        let ax = acct("apex_150_it_std");
         let d = days_of(400.0, 20);
         let f = mc_funded(&d, &ax, 0, &cfg(), 20.0, 0.5, 0.5, f64::INFINITY, 9);
         assert!(f.mean_days_held > 0.0);
@@ -534,7 +534,7 @@ mod tests {
 
     #[test]
     fn a_losing_strategy_extracts_nothing_and_blows_up() {
-        let ax = acct("it50");
+        let ax = acct("apex_50_it_std");
         let d = days_of(-300.0, 15);
         let f = mc_funded(&d, &ax, 0, &cfg(), 20.0, 0.5, 0.5, f64::INFINITY, 4);
         assert_eq!(f.mean_ext, 0.0);

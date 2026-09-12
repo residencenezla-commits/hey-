@@ -158,6 +158,41 @@ pub fn load_whitelist(path: &str) -> Option<HashSet<String>> {
     Some(set)
 }
 
+
+/// Accounts for a firm, narrowed by a comma-separated key list.
+pub fn select_accounts(firm: &Firm, spec: &str) -> Vec<Account> {
+    let all = firm.accounts();
+    if spec.trim().eq_ignore_ascii_case("all") {
+        return all;
+    }
+    let wanted: Vec<&str> = spec.split(',').map(|s| s.trim()).filter(|s| !s.is_empty()).collect();
+    let mut out = Vec::new();
+    for w in &wanted {
+        match all.iter().find(|a| a.key == *w) {
+            Some(a) => out.push(a.clone()),
+            None => panic!(
+                "unknown account '{w}' for firm {}. Known: {}",
+                firm.as_str(),
+                all.iter().map(|a| a.key.as_str()).collect::<Vec<_>>().join(", ")
+            ),
+        }
+    }
+    assert!(!out.is_empty(), "--accounts selected nothing");
+    out
+}
+
+/// Print the account table with the fields that drive expected value.
+pub fn print_accounts(firm: &Firm) {
+    println!("\n{:<18}{:>10}{:>10}{:>8}{:>7}{:>9}{:>9}{:>8}  {}",
+             "key", "balance", "target", "dd", "dll", "fee x1", "fee x5", "act", "terms");
+    for a in firm.accounts() {
+        println!("{:<18}{:>10.0}{:>10.0}{:>8.0}{:>7.0}{:>9.2}{:>9.2}{:>8.0}  {}",
+                 a.key, a.sb, a.target, a.dd, a.dll, a.fee_pack1, a.fee_pack5, a.act,
+                 if a.verified { "verified" } else { "INFERRED" });
+    }
+    println!();
+}
+
 // ---------------------------------------------------------------------------
 // Preflight
 // ---------------------------------------------------------------------------
@@ -318,7 +353,24 @@ pub fn run(args: &Args) {
     let tz = TzInput::parse(&args.tz_input);
     let variants = parse_variants(&args.entry_variants);
     let firm = Firm::parse(&args.firm);
-    let accounts = firm.accounts();
+    let accounts = select_accounts(&firm, &args.accounts);
+
+    if args.list_accounts {
+        print_accounts(&firm);
+        return;
+    }
+    let unverified: Vec<&str> = accounts.iter().filter(|a| !a.verified).map(|a| a.key.as_str()).collect();
+    if !unverified.is_empty() {
+        eprintln!(
+            "\n  WARNING: {} of {} selected accounts carry terms that were NOT read off the\n               firm's own page and are inferred: {}\n               Their drawdowns and funded-account rules drive pass rate, which enters expected\n               value linearly. Verify them, or narrow with --accounts.",
+            unverified.len(), accounts.len(), unverified.join(", ")
+        );
+        if !args.allow_unverified {
+            eprintln!("  Refusing to run. Pass --allow-unverified to proceed anyway.\n");
+            return;
+        }
+        eprintln!("  Proceeding because --allow-unverified was given.\n");
+    }
 
     // The engine applies one commission to every account. Reading the field and
     // checking it keeps it live: editing an account's commission now fails
@@ -342,7 +394,7 @@ pub fn run(args: &Args) {
         (rgs.clone(), rgs.clone())
     };
     let acct_sel: Vec<Account> = if args.signal_only {
-        accounts.iter().filter(|a| a.key == "it150").cloned().collect()
+        accounts.iter().filter(|a| a.key == "apex_150_it_std").cloned().collect()
     } else {
         accounts.clone()
     };
@@ -1177,7 +1229,7 @@ mod tests {
             exit_mode: "fixedrr".into(), window: cfg as i32, rr: 1.0, direction: "long".into(),
             lux_tper: 1.0, filter_mode: "none".into(), hurst_min: 0.0, entropy_max: 0.0,
             vol_regime: "all".into(), rg_eval: "fixed_1".into(), rg_funded: "fixed_1".into(),
-            account: "it50".into(), test_year: year,
+            account: "apex_50_it_std".into(), test_year: year,
             n_trades: 50, n_days_traded: 40, total_period_days: 252, coverage_pct: 15.0,
             inner_train_ev: 1.0, inner_val_ev: 1.0, shrinkage_ratio: 1.0,
             realized_monthly_ev_1ct: 10.0, realized_total_pnl: 100.0, realized_avg_trade: 2.0,

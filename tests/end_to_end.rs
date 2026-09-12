@@ -104,6 +104,9 @@ fn base_args(data: &Path, out: &Path) -> Vec<String> {
         "--entry-variants", "wick/nobias/fixedrr",
         "--no-feature-filters",
         "--risk-geos", "fixed_1,cppi",
+        // Only the verified 50K products; the larger sizes are flagged inferred
+        // and the engine refuses them without --allow-unverified.
+        "--accounts", "apex_50_it_std,apex_50_eod_std",
         "--n-sims", "200",
         "--n-funded-sims", "100",
         "--outer-train-years", "3",
@@ -206,7 +209,7 @@ fn expected_value_columns_reconcile_with_the_cost_model() {
 
     let (header, rows) = read_csv(&out.join("v11_ny_fold_detail_ES.csv"));
     assert!(!rows.is_empty(), "no fold records produced");
-    let accounts = orb_vol::types::all_apex();
+    let accounts = orb_vol::types::apex_accounts();
     let (c_acct, c_pr) = (col(&header, "account"), col(&header, "mc_pass_rate"));
     let c_ext = col(&header, "mc_mean_ext");
     let c_months = col(&header, "mc_months_held");
@@ -224,13 +227,22 @@ fn expected_value_columns_reconcile_with_the_cost_model() {
         let legacy: f64 = r[c_legacy].parse().unwrap();
         let err: f64 = r[c_err].parse().unwrap();
 
-        let expect_ev = pr * (ext - (ax.act + ax.pamo * months)) - ax.fee;
+        // Extraction is gross account profit; the split decides what is paid,
+        // and a repeated player pays the pack price, not the single price.
+        let net = ax.trader_share(ext);
+        let attempts = if pr > 0.0 { 1.0 / pr } else { f64::INFINITY };
+        let effective_fee = if attempts.is_finite() {
+            ax.cost_for_attempts(attempts) / attempts
+        } else {
+            ax.fee_pack1
+        };
+        let expect_ev = pr * (net - (ax.act + ax.pamo * months)) - effective_fee;
         assert!((ev - expect_ev).abs() < 0.05, "{} ev {ev} vs {expect_ev}", ax.key);
 
         let expect_legacy = pr * ext - (ax.fee + ax.act + ax.pamo * 2.0);
         assert!((legacy - expect_legacy).abs() < 0.05, "{} legacy {legacy} vs {expect_legacy}", ax.key);
 
-        let closed_form = orb_vol::ev::legacy_cost_error(ax, pr, months);
+        let closed_form = orb_vol::ev::legacy_cost_error(ax, pr, months) + (effective_fee - ax.fee);
         assert!((err - closed_form).abs() < 0.05, "{} error {err} vs closed form {closed_form}", ax.key);
 
         // A configuration that never passes costs exactly one evaluation fee.

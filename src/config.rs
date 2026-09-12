@@ -28,6 +28,15 @@ pub struct Args {
 
     /// Which firm's rule set to model: apex | topstep.
     #[arg(long, default_value = "apex")] pub firm: String,
+    /// Comma-separated account keys, or "all". Each account costs a full pair
+    /// of simulations per fold, so narrowing here is the cheapest way to cut
+    /// runtime. Run --list-accounts to see the keys.
+    #[arg(long, default_value = "all")] pub accounts: String,
+    /// Print the account table with its verification status, then exit.
+    #[arg(long, default_value = "false")] pub list_accounts: bool,
+    /// Proceed even when the selection includes accounts whose terms were not
+    /// read off the firm's own page.
+    #[arg(long, default_value = "false")] pub allow_unverified: bool,
 
     // ---- Monte Carlo ----
     #[arg(long, default_value = "10000")] pub n_sims: usize,

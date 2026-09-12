@@ -43,8 +43,10 @@ pub struct EvBreakdown {
     pub months_held: f64,
     /// Activation plus platform fees, incurred only when funded.
     pub funded_costs: f64,
-    /// Evaluation purchase price, incurred on every attempt.
+    /// List price of one evaluation.
     pub eval_fee: f64,
+    /// Price actually borne per attempt, once five-packs are taken into account.
+    pub effective_fee: f64,
     /// The ranking metric: value of buying one evaluation.
     pub ev_per_attempt: f64,
     /// Value per funded account obtained, including the cost of failed attempts.
@@ -88,10 +90,18 @@ pub fn evaluate(
     let months = months_held.max(1.0);
     let funded_costs = ax.act + ax.pamo * months;
 
-    let ev_per_attempt = pass_rate * (net_ext - funded_costs) - ax.fee;
     let expected_attempts = if pass_rate > 0.0 { 1.0 / pass_rate } else { f64::INFINITY };
+    // Buying evaluations in five-packs is materially cheaper per seat, and at a
+    // 25% pass rate you expect four attempts per funded account — so the pack
+    // price, not the single price, is what a repeated player actually pays.
+    let effective_fee = if expected_attempts.is_finite() {
+        ax.cost_for_attempts(expected_attempts) / expected_attempts
+    } else {
+        ax.fee_pack1
+    };
+    let ev_per_attempt = pass_rate * (net_ext - funded_costs) - effective_fee;
     let ev_per_funded = if pass_rate > 0.0 {
-        net_ext - funded_costs - ax.fee / pass_rate
+        net_ext - funded_costs - ax.cost_for_attempts(expected_attempts)
     } else {
         f64::NAN
     };
@@ -106,6 +116,7 @@ pub fn evaluate(
         months_held: months,
         funded_costs,
         eval_fee: ax.fee,
+        effective_fee,
         ev_per_attempt,
         ev_per_funded,
         expected_attempts,
@@ -113,15 +124,19 @@ pub fn evaluate(
         legacy_error: legacy_ev - ev_per_attempt,
         n_parallel: n,
         // Every account pays its fee up front; a funded one also pays activation.
-        bankroll_at_risk: n as f64 * (ax.fee + pass_rate * ax.act),
+        bankroll_at_risk: n as f64 * (effective_fee + pass_rate * ax.act),
         ev_total: n as f64 * ev_per_attempt,
         p_total_zero: p_ext_zero,
     }
 }
 
-/// Closed-form error of the superseded cost term, for a given account and
-/// holding period. Exposed so the correction can be checked against the
-/// published account constants rather than inferred from output.
+/// Closed-form error of the superseded *cost term*, for a given account and
+/// holding period.
+///
+/// This is the activation- and monthly-fee part only. The full `legacy_error`
+/// column additionally carries the difference between the single evaluation
+/// price the old formula charged and the effective price a repeated player
+/// actually pays once five-packs are taken into account.
 pub fn legacy_cost_error(ax: &Account, pass_rate: f64, months: f64) -> f64 {
     ax.act * (pass_rate - 1.0) + ax.pamo * (pass_rate * months - LEGACY_MONTHS)
 }
@@ -150,7 +165,9 @@ mod tests {
             for &pr in &[0.0, 0.05, 0.25, 0.4228, 0.4417, 0.6, 0.9, 1.0] {
                 for &months in &[1.0, 2.0, 6.0] {
                     let b = evaluate(&ax, pr, 8000.0, 0.3, months, &p);
-                    let expect = legacy_cost_error(&ax, pr, months);
+                    // The cost-term error, plus the evaluation-price difference
+                    // that no longer cancels now that packs are priced in.
+                    let expect = legacy_cost_error(&ax, pr, months) + (b.effective_fee - ax.fee);
                     assert!(
                         (b.legacy_error - expect).abs() < 1e-9,
                         "{} pr={pr} M={months}: {} vs {}",
@@ -163,58 +180,63 @@ mod tests {
         }
     }
 
-    /// The evaluation fee cancels, so all six products collapse onto two curves.
+    /// The evaluation fee cancels from the error, so accounts collapse onto one
+    /// curve per activation-fee path regardless of price or drawdown type.
     #[test]
     fn evaluation_fee_cancels_from_the_error() {
         let m = 6.0;
-        let eod: Vec<f64> = ["eod50", "eod100", "eod150"]
-            .iter()
-            .map(|k| legacy_cost_error(&acct(k), 0.25, m))
-            .collect();
-        let it: Vec<f64> = ["it50", "it100", "it150"]
-            .iter()
-            .map(|k| legacy_cost_error(&acct(k), 0.25, m))
-            .collect();
-        assert!(eod.windows(2).all(|w| (w[0] - w[1]).abs() < 1e-9), "{eod:?}");
-        assert!(it.windows(2).all(|w| (w[0] - w[1]).abs() < 1e-9), "{it:?}");
-        assert!((eod[0] - it[0]).abs() > 1.0, "EOD and IT should differ by their activation fee");
+        let std_path: Vec<f64> = ["apex_50_it_std", "apex_50_eod_std", "apex_100_it_std", "apex_150_eod_std"]
+            .iter().map(|k| legacy_cost_error(&acct(k), 0.25, m)).collect();
+        let no_act: Vec<f64> = ["apex_50_it_noact", "apex_50_eod_noact", "apex_150_eod_noact"]
+            .iter().map(|k| legacy_cost_error(&acct(k), 0.25, m)).collect();
+        assert!(std_path.windows(2).all(|w| (w[0] - w[1]).abs() < 1e-9), "{std_path:?}");
+        assert!(no_act.windows(2).all(|w| (w[0] - w[1]).abs() < 1e-9), "{no_act:?}");
+        assert!((std_path[0] - no_act[0]).abs() > 1.0, "the two paths differ by the activation fee");
     }
 
-    /// The published numbers quoted in the review.
+    /// The superseded cost term changes sign inside the pass-rate band these
+    /// strategies actually produce, so no constant correction recovers it.
     #[test]
     fn crossover_and_endpoints_are_as_reported() {
         let m = 6.0;
-        let eod = acct("eod50");
-        let it = acct("it50");
-        assert!((legacy_error_crossover(&eod, m) - 0.4417).abs() < 5e-4);
-        assert!((legacy_error_crossover(&it, m) - 0.4228).abs() < 5e-4);
-        assert!((legacy_cost_error(&eod, 0.0, m) - (-269.0)).abs() < 1e-9);
-        assert!((legacy_cost_error(&it, 0.0, m) - (-249.0)).abs() < 1e-9);
-        assert!((legacy_cost_error(&eod, 1.0, m) - 340.0).abs() < 1e-9);
-        assert!((legacy_cost_error(&it, 1.0, m) - 340.0).abs() < 1e-9);
-        // Sign really does change inside the observed 5.4%-64.2% band.
-        assert!(legacy_cost_error(&eod, 0.054, m) < 0.0);
-        assert!(legacy_cost_error(&eod, 0.642, m) > 0.0);
+        let std_path = acct("apex_50_eod_std");   // activation $99, monthly $85
+        let no_act = acct("apex_50_eod_noact");   // no activation fee
+
+        // 609*pr - 269, zero at 44.2%.
+        assert!((legacy_error_crossover(&std_path, m) - 0.4417).abs() < 5e-4);
+        assert!((legacy_cost_error(&std_path, 0.0, m) - (-269.0)).abs() < 1e-9);
+        assert!((legacy_cost_error(&std_path, 1.0, m) - 340.0).abs() < 1e-9);
+
+        // 510*pr - 170, zero at 33.3%.
+        assert!((legacy_error_crossover(&no_act, m) - 1.0 / 3.0).abs() < 5e-4);
+        assert!((legacy_cost_error(&no_act, 0.0, m) - (-170.0)).abs() < 1e-9);
+        assert!((legacy_cost_error(&no_act, 1.0, m) - 340.0).abs() < 1e-9);
+
+        // Both crossovers sit inside the observed 5.4%-64.2% band.
+        for ax in [&std_path, &no_act] {
+            assert!(legacy_cost_error(ax, 0.054, m) < 0.0);
+            assert!(legacy_cost_error(ax, 0.642, m) > 0.0);
+        }
     }
 
     /// A configuration that never passes is worth exactly minus the fee — no
     /// activation or platform fees are incurred on an account never funded.
     #[test]
     fn a_failing_config_costs_exactly_one_fee() {
-        let ax = acct("eod150");
+        let ax = acct("apex_150_eod_std");
         let b = evaluate(&ax, 0.0, 0.0, 1.0, 6.0, &EvParams::default());
-        assert!((b.ev_per_attempt + ax.fee).abs() < 1e-9, "got {}", b.ev_per_attempt);
+        assert!((b.ev_per_attempt + ax.fee_pack1).abs() < 1e-9, "got {}", b.ev_per_attempt);
         assert!(b.ev_per_funded.is_nan());
         assert!(b.expected_attempts.is_infinite());
     }
 
     #[test]
     fn ev_per_funded_accounts_for_failed_attempts() {
-        let ax = acct("it100");
+        let ax = acct("apex_100_it_std");
         let b = evaluate(&ax, 0.25, 9000.0, 0.2, 6.0, &EvParams::default());
         // Four attempts expected per funded account.
         assert!((b.expected_attempts - 4.0).abs() < 1e-9);
-        let expect = 9000.0 - (ax.act + ax.pamo * 6.0) - ax.fee / 0.25;
+        let expect = 9000.0 - (ax.act + ax.pamo * 6.0) - ax.cost_for_attempts(4.0);
         assert!((b.ev_per_funded - expect).abs() < 1e-9);
         // And the per-attempt figure is consistent with it.
         assert!((b.ev_per_attempt - 0.25 * b.ev_per_funded).abs() < 1e-9);
@@ -222,7 +244,7 @@ mod tests {
 
     #[test]
     fn payout_haircut_reduces_value_but_not_cost() {
-        let ax = acct("eod100");
+        let ax = acct("apex_100_eod_std");
         let full = evaluate(&ax, 0.5, 10_000.0, 0.2, 6.0, &EvParams::default());
         let cut = evaluate(
             &ax, 0.5, 10_000.0, 0.2, 6.0,
@@ -237,7 +259,7 @@ mod tests {
     /// outlay, and does not reduce the chance of extracting nothing.
     #[test]
     fn parallel_accounts_do_not_diversify() {
-        let ax = acct("it50");
+        let ax = acct("apex_50_it_std");
         let one = evaluate(&ax, 0.4, 6000.0, 0.35, 6.0, &EvParams::default());
         let twenty = evaluate(
             &ax, 0.4, 6000.0, 0.35, 6.0,
@@ -253,7 +275,7 @@ mod tests {
 
     #[test]
     fn longer_holding_period_costs_more() {
-        let ax = acct("eod50");
+        let ax = acct("apex_50_eod_std");
         let short = evaluate(&ax, 0.5, 9000.0, 0.2, 2.0, &EvParams::default());
         let long = evaluate(&ax, 0.5, 9000.0, 0.2, 6.0, &EvParams::default());
         assert!(long.funded_costs > short.funded_costs);
