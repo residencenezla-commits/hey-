@@ -1,0 +1,6 @@
+target/
+
+# Engine output — fold detail CSVs run to hundreds of MB on a full grid.
+v*_results*/
+*.csv
+*.log

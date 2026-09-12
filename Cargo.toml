@@ -1,0 +1,30 @@
+[package]
+name = "orb_vol"
+version = "11.0.0"
+edition = "2021"
+build = "build.rs"
+description = "Opening-range-breakout engine evaluated on prop-firm evaluation and payout expected value"
+
+[lib]
+name = "orb_vol"
+path = "src/lib.rs"
+
+[[bin]]
+name = "orb_vol"
+path = "src/main.rs"
+
+[dependencies]
+chrono = "0.4"
+chrono-tz = "0.8"
+clap = { version = "4", features = ["derive"] }
+rand = "0.8"
+rayon = "1.8"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+debug = 1
+
+[profile.test]
+opt-level = 2
