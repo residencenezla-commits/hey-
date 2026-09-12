@@ -16,7 +16,7 @@ things that determined the answer.
 ## Quick start
 
 ```bash
-cargo test                      # 67 tests, no fixtures required
+cargo test                      # 69 tests, no fixtures required
 cargo run --release -- --data-dir ./data --instruments ES --preflight-only
 cargo run --release -- --data-dir ./data --instruments ES,NQ --session ny --tz-input utc
 ```
@@ -143,6 +143,24 @@ actual rule.
   `RESULTS.CSV`); `--block-days 0` is rejected instead of hanging; `Apex.comm` is
   read and validated instead of being dead; ranked output is deterministic
   regardless of hash iteration order.
+
+### The search width is now checked against a null
+
+A full split-geometry sweep gates over a million configurations with no
+multiple-comparison correction, so the number that pass is meaningless on its
+own. `--null-permutations` shuffles fold outcomes across configurations within
+each (test year, account) stratum — destroying the configuration-to-result
+mapping while preserving each stratum's distribution — and re-applies the gates.
+The summary reports both counts:
+
+```
+Multiple testing: 1,265,670 configurations were gated. Under outcomes shuffled
+across configurations within each (year, account), 49 pass by chance.
+2734 observed vs 49 expected by chance.
+```
+
+If the observed count is not clearly above the null, the passing set is not
+distinguishable from noise at that search width, and the summary says so.
 
 ## Preflight
 

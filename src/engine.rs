@@ -14,6 +14,7 @@ use crate::mc::{config_seed, mc_challenge, mc_funded, ChallengeResult, FundedDis
 use crate::session::{index_sessions, rebuild_session_days, resolve_session};
 use crate::stats::{mean_of, median, realized_stats, sorted_copy};
 use crate::types::*;
+use rand::{Rng, SeedableRng};
 use rayon::prelude::*;
 use std::collections::{HashMap, HashSet};
 use std::fs;
@@ -483,14 +484,18 @@ pub fn run(args: &Args) {
         println!("\nNo fold records produced. Nothing to aggregate.");
         return;
     }
-    write_fold_csv(&all_folds, &format!("{}/v11_{session_tag}_fold_detail.csv", args.output), &stamp);
+    if insts.len() > 1 {
+        write_fold_csv(&all_folds, &format!("{}/v11_{session_tag}_fold_detail.csv", args.output), &stamp);
+    } else {
+        println!("  (single instrument: the per-instrument fold detail is the complete set)");
+    }
 
     let agg = aggregate(&all_folds, args);
-    write_ranked(&agg, &format!("{}/v11_{session_tag}_full_ranked.csv", args.output), &stamp);
+    write_ranked(&agg, &format!("{}/v11_{session_tag}_full_ranked.csv", args.output), &stamp, args.max_ranked_rows);
     let ready: Vec<&Aggregated> = agg.iter().filter(|a| a.deploy_ready).collect();
     write_ranked_refs(&ready, &format!("{}/v11_{session_tag}_deploy_ready.csv", args.output), &stamp);
 
-    summarize(&agg, &ready, args, t0);
+    summarize(&agg, &ready, &all_folds, args, t0);
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -839,6 +844,131 @@ fn aggregate(folds: &[FoldRecord], args: &Args) -> Vec<Aggregated> {
     out
 }
 
+
+// ---------------------------------------------------------------------------
+// Permutation null
+// ---------------------------------------------------------------------------
+
+/// The gate-relevant outcome of one fold, independent of which configuration
+/// produced it.
+#[derive(Clone, Copy)]
+struct Outcome {
+    ev: f64,
+    pass: f64,
+    blowup: f64,
+    p5: f64,
+    is_bear: bool,
+}
+
+/// Count configurations clearing every gate, given a grouping and a set of
+/// per-fold outcomes.
+fn count_passers(group_of: &[u32], outcomes: &[Outcome], n_groups: usize, args: &Args) -> usize {
+    let mut evs: Vec<Vec<f64>> = vec![Vec::new(); n_groups];
+    let mut worst_pass = vec![f64::INFINITY; n_groups];
+    let mut blow_sum = vec![0.0f64; n_groups];
+    let mut p5_sum = vec![0.0f64; n_groups];
+    let mut bear_sum = vec![0.0f64; n_groups];
+    let mut bear_n = vec![0usize; n_groups];
+
+    for (i, o) in outcomes.iter().enumerate() {
+        let g = group_of[i] as usize;
+        evs[g].push(o.ev);
+        if o.pass < worst_pass[g] {
+            worst_pass[g] = o.pass;
+        }
+        blow_sum[g] += o.blowup;
+        p5_sum[g] += o.p5;
+        if o.is_bear {
+            bear_sum[g] += o.ev;
+            bear_n[g] += 1;
+        }
+    }
+
+    let mut passers = 0usize;
+    for g in 0..n_groups {
+        let n = evs[g].len();
+        if n == 0 || n < args.e1_min_folds {
+            continue;
+        }
+        if !(worst_pass[g] >= args.e2_min_worst_pass) {
+            continue;
+        }
+        if !(blow_sum[g] / n as f64 <= args.e3_max_blowup) {
+            continue;
+        }
+        if !(p5_sum[g] / n as f64 >= args.e4_min_p5_ext) {
+            continue;
+        }
+        if evs[g].iter().filter(|v| **v > 0.0).count() < args.e5_min_positive_ev_folds {
+            continue;
+        }
+        if bear_n[g] == 0 || !(bear_sum[g] / bear_n[g] as f64 >= args.e6_min_bear_ev) {
+            continue;
+        }
+        passers += 1;
+    }
+    passers
+}
+
+/// Estimate how many configurations clear the gates purely by chance.
+///
+/// Outcomes are shuffled across configurations within each (test year, account)
+/// stratum. That destroys the mapping from configuration to result while leaving
+/// the distribution of results in each stratum untouched, so the passer count
+/// under the shuffle is a direct estimate of the false-positive count at this
+/// search width.
+fn permutation_null(folds: &[FoldRecord], args: &Args, n_perm: usize) -> Option<(f64, f64)> {
+    if n_perm == 0 || folds.is_empty() {
+        return None;
+    }
+    let mut group_ids: HashMap<String, u32> = HashMap::new();
+    let mut group_of: Vec<u32> = Vec::with_capacity(folds.len());
+    let mut strata: HashMap<(i32, String), Vec<usize>> = HashMap::new();
+    let mut outcomes: Vec<Outcome> = Vec::with_capacity(folds.len());
+
+    for (i, r) in folds.iter().enumerate() {
+        let key = format!(
+            "{}|{}/{}/{}|{}|{:.2}|{}|{:.2}|{}|{:.3}|{:.3}|{}|{}|{}|{}",
+            r.instrument, r.entry_mode, r.bias_mode, r.exit_mode, r.window, r.rr, r.direction,
+            r.lux_tper, r.filter_mode, r.hurst_min, r.entropy_max, r.vol_regime,
+            r.rg_eval, r.rg_funded, r.account
+        );
+        let next = group_ids.len() as u32;
+        let g = *group_ids.entry(key).or_insert(next);
+        group_of.push(g);
+        strata.entry((r.test_year, r.account.clone())).or_default().push(i);
+        outcomes.push(Outcome {
+            ev: r.ev_per_attempt,
+            pass: r.mc_pass_rate,
+            blowup: r.mc_blowup_rate,
+            p5: r.mc_p5_ext,
+            is_bear: r.test_year == args.bear_year,
+        });
+    }
+    let n_groups = group_ids.len();
+
+    let mut counts: Vec<f64> = Vec::with_capacity(n_perm);
+    let mut rng = rand::rngs::StdRng::seed_from_u64(args.rng_seed ^ 0x5045_524D);
+    for _ in 0..n_perm {
+        let mut shuffled = outcomes.clone();
+        for idx in strata.values() {
+            // Fisher-Yates within the stratum.
+            for k in (1..idx.len()).rev() {
+                let j = rng.gen_range(0..=k);
+                shuffled.swap(idx[k], idx[j]);
+            }
+        }
+        counts.push(count_passers(&group_of, &shuffled, n_groups, args) as f64);
+    }
+    let mean = counts.iter().sum::<f64>() / counts.len() as f64;
+    let sd = if counts.len() > 1 {
+        (counts.iter().map(|c| (c - mean).powi(2)).sum::<f64>() / counts.len() as f64).sqrt()
+    } else {
+        f64::NAN
+    };
+    Some((mean, sd))
+}
+
 // ---------------------------------------------------------------------------
 // Output
 // ---------------------------------------------------------------------------
@@ -880,7 +1010,16 @@ fn write_fold_csv(records: &[FoldRecord], path: &str, stamp: &str) {
             num(r.legacy_ev, 2), num(r.legacy_error, 2),
         );
     }
-    println!("  wrote {} rows to {path}", records.len());
+    let _ = w.flush();
+    let mb = fs::metadata(path).map(|m| m.len() as f64 / 1e6).unwrap_or(0.0);
+    println!("  wrote {} rows to {path} ({mb:.0} MB)", records.len());
+    if mb > 200.0 {
+        println!(
+            "    NOTE: a full split-geometry sweep produces one row per \
+             (config x fold x eval geometry x funded geometry x account). \
+             Narrow with --risk-geos or --entry-variants if this is unwieldy."
+        );
+    }
 }
 
 fn write_daily_pnl(rows: &[DailyPnlRow], out_dir: &str, session_tag: &str, sym: &str, stamp: &str) {
@@ -921,8 +1060,15 @@ fn rank_row(i: usize, a: &Aggregated, stamp: &str) -> String {
     )
 }
 
-fn write_ranked(agg: &[Aggregated], path: &str, stamp: &str) {
-    let refs: Vec<&Aggregated> = agg.iter().collect();
+fn write_ranked(agg: &[Aggregated], path: &str, stamp: &str, cap: usize) {
+    let n = if cap == 0 { agg.len() } else { cap.min(agg.len()) };
+    if n < agg.len() {
+        println!(
+            "  NOTE: writing the top {n} of {} ranked configurations (--max-ranked-rows)",
+            agg.len()
+        );
+    }
+    let refs: Vec<&Aggregated> = agg.iter().take(n).collect();
     write_ranked_refs(&refs, path, stamp);
 }
 
@@ -939,7 +1085,7 @@ fn write_ranked_refs(agg: &[&Aggregated], path: &str, stamp: &str) {
     println!("  wrote {} rows to {path}", agg.len());
 }
 
-fn summarize(agg: &[Aggregated], ready: &[&Aggregated], args: &Args, t0: Instant) {
+fn summarize(agg: &[Aggregated], ready: &[&Aggregated], all_folds: &[FoldRecord], args: &Args, t0: Instant) {
     println!("\n{}", "=".repeat(78));
     println!("SUMMARY — ranked on expected value per evaluation attempt");
     println!("{}", "=".repeat(78));
@@ -969,6 +1115,22 @@ fn summarize(agg: &[Aggregated], ready: &[&Aggregated], args: &Args, t0: Instant
         }
     }
 
+    if let Some((mean, sd)) = permutation_null(all_folds, args, args.null_permutations) {
+        let observed = ready.len() as f64;
+        println!(
+            "\n  Multiple testing: {} configurations were gated. Under outcomes shuffled\n               across configurations within each (year, account), {mean:.0}{} pass by chance.",
+            agg.len(),
+            if sd.is_finite() { format!(" +/- {sd:.0}") } else { String::new() }
+        );
+        if observed <= mean * 1.5 {
+            println!(
+                "  {observed:.0} observed vs {mean:.0} expected by chance — this passing set is\n                   not distinguishable from noise at this search width."
+            );
+        } else {
+            println!("  {observed:.0} observed vs {mean:.0} expected by chance.");
+        }
+    }
+
     let with_error: Vec<f64> = agg.iter().map(|a| a.avg_legacy_error).filter(|v| v.is_finite()).collect();
     if !with_error.is_empty() {
         let s = sorted_copy(&with_error);
@@ -991,6 +1153,82 @@ fn summarize(agg: &[Aggregated], ready: &[&Aggregated], args: &Args, t0: Instant
 #[cfg(test)]
 mod tests {
     use super::*;
+    use clap::Parser;
+
+
+    fn fold(cfg: usize, year: i32, ev: f64, pass: f64) -> FoldRecord {
+        FoldRecord {
+            instrument: "ES".into(), entry_mode: "wick".into(), bias_mode: "nobias".into(),
+            exit_mode: "fixedrr".into(), window: cfg as i32, rr: 1.0, direction: "long".into(),
+            lux_tper: 1.0, filter_mode: "none".into(), hurst_min: 0.0, entropy_max: 0.0,
+            vol_regime: "all".into(), rg_eval: "fixed_1".into(), rg_funded: "fixed_1".into(),
+            account: "it50".into(), test_year: year,
+            n_trades: 50, n_days_traded: 40, total_period_days: 252, coverage_pct: 15.0,
+            inner_train_ev: 1.0, inner_val_ev: 1.0, shrinkage_ratio: 1.0,
+            realized_monthly_ev_1ct: 10.0, realized_total_pnl: 100.0, realized_avg_trade: 2.0,
+            realized_win_rate: 0.5, realized_pf: 1.1, realized_max_dd_1ct: 50.0,
+            realized_worst_trade: -30.0, avg_hurst_used: 0.5,
+            mc_pass_rate: pass, mc_avg_days_to_pass: 12.0, mc_mean_ext: 5000.0,
+            mc_median_ext: 4000.0, mc_p5_ext: 100.0, mc_p_ext_zero: 0.1, mc_p_ext_10k: 0.2,
+            mc_blowup_rate: 0.1, mc_max_pa_dd_p95: 900.0, mc_months_held: 6.0,
+            ev_per_attempt: ev, ev_per_funded: ev * 4.0, expected_attempts: 4.0,
+            bankroll_at_risk: 50.0, ev_total_parallel: ev, legacy_ev: ev, legacy_error: 0.0,
+        }
+    }
+
+    /// With outcomes that are pure noise, roughly as many configurations clear
+    /// the gates under the shuffled null as in the real data — which is the
+    /// whole point of reporting the null next to the observed count.
+    #[test]
+    fn permutation_null_matches_observed_when_there_is_no_signal() {
+        use rand::{Rng, SeedableRng};
+        let mut rng = rand::rngs::StdRng::seed_from_u64(3);
+        let mut args = Args::parse_from(["orb_vol", "--data-dir", "x", "--instruments", "ES"]);
+        args.e1_min_folds = 3;
+        args.e2_min_worst_pass = 0.20;
+        args.e5_min_positive_ev_folds = 3;
+        args.bear_year = 2022;
+        args.null_permutations = 4;
+
+        let mut folds = Vec::new();
+        for cfg in 0..400 {
+            for year in 2020..=2023 {
+                folds.push(fold(cfg, year, rng.gen::<f64>() * 400.0 - 150.0, rng.gen::<f64>()));
+            }
+        }
+        let observed = aggregate(&folds, &args).iter().filter(|a| a.deploy_ready).count() as f64;
+        let (mean, _) = permutation_null(&folds, &args, 4).expect("null computed");
+        assert!(observed > 0.0, "fixture produced no passers to compare against");
+        let ratio = observed / mean.max(1.0);
+        assert!(
+            (0.4..2.5).contains(&ratio),
+            "noise-only data: {observed} observed vs {mean} under the null (ratio {ratio:.2})"
+        );
+    }
+
+    /// When one configuration really is better, the observed count exceeds the
+    /// null — the check must not flag genuine signal as noise.
+    #[test]
+    fn permutation_null_falls_below_observed_when_signal_is_real() {
+        let mut args = Args::parse_from(["orb_vol", "--data-dir", "x", "--instruments", "ES"]);
+        args.e1_min_folds = 3;
+        args.e2_min_worst_pass = 0.20;
+        args.e5_min_positive_ev_folds = 3;
+        args.bear_year = 2022;
+
+        let mut folds = Vec::new();
+        for cfg in 0..200 {
+            let good = cfg < 60;
+            for year in 2020..=2023 {
+                let (ev, pass) = if good { (300.0, 0.8) } else { (-200.0, 0.05) };
+                folds.push(fold(cfg, year, ev, pass));
+            }
+        }
+        let observed = aggregate(&folds, &args).iter().filter(|a| a.deploy_ready).count() as f64;
+        let (mean, _) = permutation_null(&folds, &args, 4).expect("null computed");
+        assert!(observed >= 55.0, "expected the 60 good configs to pass, got {observed}");
+        assert!(mean < observed * 0.6, "null {mean} should sit well below observed {observed}");
+    }
 
     #[test]
     fn risk_geo_selection_parses_and_rejects() {

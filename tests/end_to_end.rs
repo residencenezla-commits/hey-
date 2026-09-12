@@ -176,7 +176,7 @@ fn runs_are_reproducible_from_the_seed() {
         argv.extend(["--rng-seed".into(), "1234".into()]);
         orb_vol::engine::run(&Args::parse_from(argv));
     }
-    for name in ["v11_ny_fold_detail.csv", "v11_ny_full_ranked.csv", "v11_ny_daily_pnl_ES.csv"] {
+    for name in ["v11_ny_fold_detail_ES.csv", "v11_ny_full_ranked.csv", "v11_ny_daily_pnl_ES.csv"] {
         let (x, y) = (fs::read(a.join(name)).unwrap(), fs::read(b.join(name)).unwrap());
         assert_eq!(x, y, "{name} differs between two identically seeded runs");
         assert!(x.len() > 200, "{name} is suspiciously small");
@@ -187,9 +187,9 @@ fn runs_are_reproducible_from_the_seed() {
     let mut argv = base_args(&data, &c);
     argv.extend(["--rng-seed".into(), "9999".into()]);
     orb_vol::engine::run(&Args::parse_from(argv));
-    let different = fs::read(c.join("v11_ny_fold_detail.csv")).unwrap();
+    let different = fs::read(c.join("v11_ny_fold_detail_ES.csv")).unwrap();
     assert_ne!(
-        fs::read(a.join("v11_ny_fold_detail.csv")).unwrap(),
+        fs::read(a.join("v11_ny_fold_detail_ES.csv")).unwrap(),
         different,
         "changing the seed changed nothing — the simulation is not actually seeded"
     );
@@ -204,7 +204,7 @@ fn expected_value_columns_reconcile_with_the_cost_model() {
     let out = data.join("out");
     orb_vol::engine::run(&Args::parse_from(base_args(&data, &out)));
 
-    let (header, rows) = read_csv(&out.join("v11_ny_fold_detail.csv"));
+    let (header, rows) = read_csv(&out.join("v11_ny_fold_detail_ES.csv"));
     assert!(!rows.is_empty(), "no fold records produced");
     let accounts = orb_vol::types::all_apex();
     let (c_acct, c_pr) = (col(&header, "account"), col(&header, "mc_pass_rate"));
@@ -251,7 +251,7 @@ fn risk_geometry_is_swept_per_phase() {
     let out = data.join("out");
     orb_vol::engine::run(&Args::parse_from(base_args(&data, &out)));
 
-    let (header, rows) = read_csv(&out.join("v11_ny_fold_detail.csv"));
+    let (header, rows) = read_csv(&out.join("v11_ny_fold_detail_ES.csv"));
     let (ce, cf) = (col(&header, "rg_eval"), col(&header, "rg_funded"));
     let mixed = rows.iter().filter(|r| r[ce] != r[cf]).count();
     let diagonal = rows.iter().filter(|r| r[ce] == r[cf]).count();

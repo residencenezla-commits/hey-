@@ -103,6 +103,19 @@ pub struct Args {
     #[arg(long, default_value = "-100.0")] pub e6_min_bear_ev: f64,
     #[arg(long, default_value = "2022")] pub bear_year: i32,
 
+    /// Cap rows written to the ranked CSV (0 = unlimited). A full split-geometry
+    /// sweep aggregates over a million configurations; writing them all produces
+    /// files in the hundreds of megabytes.
+    #[arg(long, default_value = "100000")] pub max_ranked_rows: usize,
+    /// Permutation nulls used to estimate how many configurations clear the
+    /// gates by chance. 0 disables the check.
+    ///
+    /// The gates are applied to a search space of roughly a million
+    /// configurations with no multiple-comparison correction, so the number that
+    /// pass is only meaningful against the number that would pass on shuffled
+    /// outcomes.
+    #[arg(long, default_value = "1")] pub null_permutations: usize,
+
     /// Restrict to one risk geometry and account, to look at the signal alone.
     #[arg(long, default_value = "false")] pub signal_only: bool,
     /// Print the diagnostic preflight (estimator spreads, cost-model crossover)
