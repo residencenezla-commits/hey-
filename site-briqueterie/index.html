@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Briqueterie DPR Axxam</title>
+<meta name="description" content="SARL DPR Axxam, briqueterie algérienne du Groupe Djennadi : fabrication de produits rouges en terre cuite, de la carrière au four.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brique:#b4472b; --brique-fonce:#7d2a17; --argile:#d98b5f; --sable:#f3e6d8;
+  --creme:#fbf6f0; --encre:#2a1d17; --gris:#6b5a51; --four:#ff8a3d;
+  --fond:var(--creme); --texte:var(--encre); --carte:#fff; --ligne:#ead9c8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--fond:#1b1411;--texte:#f3e6d8;--carte:#261c18;--ligne:#3b2d27;--gris:#c9b3a5}
+}
+:root[data-theme="dark"]{--fond:#1b1411;--texte:#f3e6d8;--carte:#261c18;--ligne:#3b2d27;--gris:#c9b3a5}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;background:var(--fond);color:var(--texte);line-height:1.6;overflow-x:hidden}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;line-height:1.15}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+section{padding:96px 0}
+.eyebrow{font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brique);font-weight:600}
+h2{font-size:clamp(2rem,4vw,3rem);margin:.4em 0 .5em}
+.lead{font-size:1.1rem;color:var(--gris);max-width:62ch}
+
+/* Navigation */
+header{position:fixed;inset:0 0 auto;z-index:50;transition:background .3s,box-shadow .3s}
+header.solide{background:rgba(42,29,23,.92);backdrop-filter:blur(8px);box-shadow:0 2px 20px rgba(0,0,0,.25)}
+nav{display:flex;align-items:center;justify-content:space-between;height:72px;color:#fff}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:Fraunces,serif;font-weight:800;font-size:1.25rem}
+.logo i{display:grid;grid-template-columns:repeat(2,14px);gap:2px}
+.logo i b{height:8px;background:var(--brique)}.logo i b:nth-child(2n){background:var(--argile)}
+.menu{display:flex;gap:28px;list-style:none}
+.menu a{text-decoration:none;font-size:.95rem;opacity:.9}
+.menu a:hover{opacity:1;color:var(--argile)}
+.burger{display:none;background:none;border:0;color:#fff;font-size:1.6rem;cursor:pointer}
+
+/* Façade dynamique */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;color:#fff;overflow:hidden;background:#2a1d17;padding:0}
+.facade{position:absolute;inset:-40px;display:flex;flex-direction:column;gap:6px;transform:rotate(-4deg) scale(1.1)}
+.rang{display:flex;gap:6px;flex-shrink:0}
+.rang:nth-child(odd){margin-left:-60px}
+.b{width:120px;height:44px;flex-shrink:0;border-radius:3px;background:var(--brique);opacity:0;transform:translateY(-30px);
+   animation:pose .6s cubic-bezier(.2,.8,.3,1.2) forwards;box-shadow:inset 0 -4px 0 rgba(0,0,0,.18),inset 0 2px 0 rgba(255,255,255,.08)}
+@keyframes pose{to{opacity:1;transform:none}}
+.hero::after{content:"";position:absolute;inset:0;background:
+  radial-gradient(ellipse at 70% 110%,rgba(255,138,61,.55),transparent 55%),
+  linear-gradient(100deg,rgba(27,16,12,.95) 0%,rgba(27,16,12,.75) 45%,rgba(27,16,12,.2) 100%)}
+.hero .wrap{position:relative;z-index:2;width:100%}
+.hero h1{font-size:clamp(2.6rem,7vw,5.4rem);max-width:12ch}
+.hero h1 em{font-style:normal;color:var(--argile)}
+.hero p{font-size:clamp(1.05rem,2vw,1.3rem);max-width:46ch;margin:1.2em 0 2em;opacity:.9}
+.btns{display:flex;gap:14px;flex-wrap:wrap}
+.btn{display:inline-block;padding:14px 26px;border-radius:999px;text-decoration:none;font-weight:600;transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.plein{background:var(--brique);color:#fff}.btn.plein:hover{background:var(--four)}
+.btn.vide{border:1.5px solid rgba(255,255,255,.6);color:#fff}
+.chiffres{display:flex;gap:48px;margin-top:64px;flex-wrap:wrap}
+.chiffres div strong{display:block;font-family:Fraunces,serif;font-size:2.4rem;color:var(--argile)}
+.chiffres div>span{font-size:.85rem;opacity:.75}
+.descendre{position:absolute;bottom:28px;left:50%;z-index:2;color:#fff;opacity:.7;animation:flotte 2s infinite;text-decoration:none;font-size:1.4rem}
+@keyframes flotte{50%{transform:translateY(8px)}}
+
+/* Qui sommes-nous */
+.duo{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:center}
+.groupe{background:var(--carte);border:1px solid var(--ligne);border-radius:18px;padding:32px;position:relative}
+.groupe h3{font-size:1.5rem;margin-bottom:.4em}
+.groupe .sigle{display:flex;gap:10px;margin:20px 0}
+.groupe .sigle span{flex:1;text-align:center;padding:14px 6px;border-radius:10px;background:var(--sable);color:var(--brique-fonce)}
+.groupe .sigle b{display:block;font-family:Fraunces,serif;font-size:2rem;line-height:1}
+.groupe .sigle small{font-size:.75rem}
+.valeurs{list-style:none;display:grid;gap:12px;margin-top:24px}
+.valeurs li{padding-left:28px;position:relative}
+.valeurs li::before{content:"";position:absolute;left:0;top:.45em;width:16px;height:9px;background:var(--brique);border-radius:2px}
+
+/* De la carrière au four */
+.parcours{background:var(--encre);color:var(--sable)}
+.parcours .lead{color:#c9b3a5}
+.etapes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;counter-reset:e}
+.etape{background:#33241d;border-radius:16px;padding:28px;position:relative;overflow:hidden;border-top:4px solid var(--brique)}
+.etape::before{counter-increment:e;content:"0" counter(e);font-family:Fraunces,serif;font-size:3.2rem;color:rgba(217,139,95,.25);position:absolute;right:18px;top:6px}
+.etape .ico{font-size:2rem}
+.etape h3{font-size:1.3rem;margin:.5em 0 .3em;color:#fff}
+.etape p{font-size:.95rem;color:#c9b3a5}
+.etape.feu{background:linear-gradient(160deg,#5a2312,#2a1d17);border-top-color:var(--four)}
+.temp{display:inline-block;margin-top:10px;font-weight:600;color:var(--four)}
+
+/* Produits */
+.produits{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:40px}
+.produit{background:var(--carte);border:1px solid var(--ligne);border-radius:16px;padding:24px;transition:transform .25s,box-shadow .25s}
+.produit:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(125,42,23,.15)}
+.produit svg{width:100%;height:110px;margin-bottom:16px}
+.produit h3{font-size:1.25rem}
+.produit p{color:var(--gris);font-size:.93rem;margin-top:.3em}
+
+/* Énergie */
+.energie{background:linear-gradient(180deg,var(--fond),var(--sable))}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .energie{background:linear-gradient(180deg,var(--fond),#2a1d17)}}
+.atouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:40px}
+.atout{background:var(--carte);border-radius:16px;padding:26px;border:1px solid var(--ligne)}
+.atout strong{display:block;font-family:Fraunces,serif;font-size:1.25rem;margin:.4em 0 .2em;color:var(--brique)}
+.atout p{font-size:.93rem;color:var(--gris)}
+.mur-coupe{margin-top:48px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;background:var(--carte);border-radius:18px;padding:32px;border:1px solid var(--ligne)}
+.jauge{height:16px;border-radius:99px;background:var(--ligne);overflow:hidden;margin:8px 0 18px}
+.jauge i{display:block;height:100%;width:0;border-radius:99px;transition:width 1.6s cubic-bezier(.2,.8,.3,1)}
+.visible .jauge i{width:var(--w)}
+
+/* Vue aérienne & carte */
+.carte-grille{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
+.aerien{position:relative;border-radius:18px;overflow:hidden;min-height:380px;background:
+  repeating-linear-gradient(45deg,#c9a184 0 22px,#bf9276 22px 44px)}
+.aerien img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 8s ease}
+.aerien:hover img{transform:scale(1.08)}
+.aerien .legende{position:absolute;left:0;right:0;bottom:0;padding:18px 22px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.7))}
+.aerien .vide{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:#5a2312;padding:24px;font-weight:500}
+.map{border-radius:18px;overflow:hidden;min-height:380px;border:1px solid var(--ligne)}
+.map iframe{width:100%;height:100%;min-height:380px;border:0;display:block}
+
+/* Contact */
+.contact{background:var(--brique);color:#fff}
+.contact .eyebrow{color:var(--sable)}
+.contact-grille{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.coord{list-style:none;display:grid;gap:18px;margin-top:24px}
+.coord li{display:flex;gap:14px;align-items:flex-start}
+.coord li span:first-child{font-size:1.3rem}
+form{background:#fff;color:var(--encre);border-radius:18px;padding:28px;display:grid;gap:14px}
+form input,form textarea,form select{width:100%;padding:12px 14px;border:1px solid #e3d3c4;border-radius:10px;font:inherit;background:#fffaf5}
+form button{border:0;cursor:pointer;font:inherit}
+footer{background:#1b1411;color:#c9b3a5;padding:32px 0;font-size:.9rem}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* Apparition au défilement */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s}
+.reveal.visible{opacity:1;transform:none}
+
+@media (max-width:900px){
+  .duo,.carte-grille,.contact-grille,.mur-coupe{grid-template-columns:1fr}
+  .etapes{grid-template-columns:1fr 1fr}
+  section{padding:72px 0}
+}
+@media (max-width:720px){
+  .wrap{padding:0 16px}
+  .menu{position:fixed;top:72px;left:0;right:0;flex-direction:column;gap:0;background:#2a1d17;padding:8px 16px 20px;display:none}
+  .menu.ouvert{display:flex}
+  .menu a{display:block;padding:12px 0;border-bottom:1px solid #3b2d27}
+  .burger{display:block}
+  .etapes{grid-template-columns:1fr}
+  .chiffres{gap:28px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.b{opacity:1;transform:none}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header id="haut">
+  <nav class="wrap">
+    <a href="#accueil" class="logo"><i><b></b><b></b><b></b><b></b></i>DPR Axxam</a>
+    <button class="burger" aria-label="Menu" onclick="document.querySelector('.menu').classList.toggle('ouvert')">☰</button>
+    <ul class="menu">
+      <li><a href="#societe">La société</a></li>
+      <li><a href="#fabrication">Fabrication</a></li>
+      <li><a href="#produits">Produits</a></li>
+      <li><a href="#energie">Énergie</a></li>
+      <li><a href="#site">Notre site</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- ============ FAÇADE DYNAMIQUE ============ -->
+<section class="hero" id="accueil">
+  <div class="facade" id="facade" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="eyebrow" style="color:var(--argile)">Briqueterie · Algérie</p>
+    <h1>La <em>force</em> de la terre</h1>
+    <p>SARL DPR Axxam fabrique des produits rouges en terre cuite pour bâtir des habitations solides, saines et économes en énergie, de la carrière au four.</p>
+    <div class="btns">
+      <a href="#produits" class="btn plein">Nos produits</a>
+      <a href="#contact" class="btn vide">Demander un devis</a>
+    </div>
+    <div class="chiffres">
+      <div><strong>100 %</strong><span>argile naturelle</span></div>
+      <div><strong><span class="compteur" data-fin="1000">0</span> °C</strong><span>cuisson au four (env.)</span></div>
+      <div><strong>1</strong><span>groupe : Djennadi</span></div>
+    </div>
+  </div>
+  <a href="#societe" class="descendre" aria-label="Descendre">↓</a>
+</section>
+
+<!-- ============ QUI SOMMES-NOUS ============ -->
+<section id="societe">
+  <div class="wrap duo">
+    <div class="reveal">
+      <p class="eyebrow">Qui sommes-nous</p>
+      <h2>Le bien de l'habitat, brique après brique</h2>
+      <p class="lead">La SARL DPR Axxam est une briqueterie algérienne spécialisée dans la fabrication de produits rouges : briques creuses, briques pleines et hourdis en terre cuite. « Axxam » signifie <strong>la maison</strong> : c'est notre raison d'être.</p>
+      <ul class="valeurs">
+        <li>Une matière première locale, extraite de notre propre carrière</li>
+        <li>Une chaîne de production maîtrisée de bout en bout</li>
+        <li>Des produits contrôlés, réguliers et conformes aux usages du bâtiment</li>
+        <li>Un service de proximité pour les particuliers, entrepreneurs et revendeurs</li>
+      </ul>
+    </div>
+    <div class="groupe reveal">
+      <p class="eyebrow">Membre du Groupe Djennadi</p>
+      <h3>DPR : Djennadi Pièces de Rechange</h3>
+      <p style="color:var(--gris)">Notre nom vient de l'activité historique du groupe, spécialisé dans les pièces détachées. Cette culture de la mécanique et de la maintenance garantit un outil industriel entretenu et une production continue.</p>
+      <div class="sigle">
+        <span><b>D</b><small>Djennadi</small></span>
+        <span><b>P</b><small>Pièces</small></span>
+        <span><b>R</b><small>de Rechange</small></span>
+      </div>
+      <p style="font-size:.9rem;color:var(--gris)">Pièces détachées + briqueterie : deux métiers, une même exigence de fiabilité.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DE LA CARRIÈRE AU FOUR ============ -->
+<section class="parcours" id="fabrication">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow" style="color:var(--argile)">Notre savoir-faire</p>
+      <h2>De la carrière au four</h2>
+      <p class="lead">Chaque brique suit un parcours précis. La terre devient matériau de construction grâce à l'eau, à la forme et au feu.</p>
+    </div>
+    <div class="etapes">
+      <div class="etape reveal"><div class="ico">⛰️</div><h3>Extraction</h3><p>L'argile est prélevée dans notre carrière, sélectionnée puis stockée pour s'homogénéiser.</p></div>
+      <div class="etape reveal"><div class="ico">⚙️</div><h3>Préparation</h3><p>Broyage, dosage et malaxage avec de l'eau pour obtenir une pâte homogène et plastique.</p></div>
+      <div class="etape reveal"><div class="ico">🧱</div><h3>Façonnage</h3><p>La pâte passe dans l'étireuse et la filière qui donne la forme et les alvéoles de chaque produit.</p></div>
+      <div class="etape reveal"><div class="ico">💨</div><h3>Séchage</h3><p>Les produits crus perdent progressivement leur humidité en séchoir pour éviter fissures et déformations.</p></div>
+      <div class="etape feu reveal"><div class="ico">🔥</div><h3>Cuisson</h3><p>Le passage au four transforme définitivement l'argile en terre cuite résistante et durable.</p><span class="temp">≈ 900 à 1 000 °C</span></div>
+      <div class="etape reveal"><div class="ico">📦</div><h3>Contrôle et expédition</h3><p>Tri, contrôle qualité, palettisation puis livraison sur vos chantiers.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRODUITS ============ -->
+<section id="produits">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">Gamme produits rouges</p>
+      <h2>Des produits pour chaque ouvrage</h2>
+      <p class="lead">Murs porteurs, cloisons, planchers : nos produits en terre cuite couvrent l'essentiel du gros œuvre. Dimensions et fiches techniques sur demande.</p>
+    </div>
+    <div class="produits">
+      <article class="produit reveal">
+        <svg viewBox="0 0 200 110"><rect x="20" y="15" width="160" height="80" rx="4" fill="#b4472b"/><g fill="#7d2a17"><rect x="34" y="28" width="30" height="22" rx="2"/><rect x="85" y="28" width="30" height="22" rx="2"/><rect x="136" y="28" width="30" height="22" rx="2"/><rect x="34" y="60" width="30" height="22" rx="2"/><rect x="85" y="60" width="30" height="22" rx="2"/><rect x="136" y="60" width="30" height="22" rx="2"/></g></svg>
+        <h3>Brique creuse 8 trous</h3><p>Le standard des cloisons et murs de remplissage. Légère et facile à poser.</p>
+      </article>
+      <article class="produit reveal">
+        <svg viewBox="0 0 200 110"><rect x="20" y="10" width="160" height="90" rx="4" fill="#b4472b"/><g fill="#7d2a17"><rect x="32" y="20" width="28" height="18" rx="2"/><rect x="72" y="20" width="28" height="18" rx="2"/><rect x="112" y="20" width="28" height="18" rx="2"/><rect x="152" y="20" width="18" height="18" rx="2"/><rect x="32" y="46" width="28" height="18" rx="2"/><rect x="72" y="46" width="28" height="18" rx="2"/><rect x="112" y="46" width="28" height="18" rx="2"/><rect x="152" y="46" width="18" height="18" rx="2"/><rect x="32" y="72" width="28" height="18" rx="2"/><rect x="72" y="72" width="28" height="18" rx="2"/><rect x="112" y="72" width="28" height="18" rx="2"/><rect x="152" y="72" width="18" height="18" rx="2"/></g></svg>
+        <h3>Brique creuse 12 trous</h3><p>Plus épaisse, pour les murs extérieurs : meilleure isolation et inertie thermique.</p>
+      </article>
+      <article class="produit reveal">
+        <svg viewBox="0 0 200 110"><path d="M20 40 L180 40 L180 95 L20 95 Z" fill="#b4472b"/><path d="M10 40 L30 30 L170 30 L190 40 Z" fill="#d98b5f"/><g fill="#7d2a17"><rect x="34" y="52" width="36" height="32" rx="2"/><rect x="82" y="52" width="36" height="32" rx="2"/><rect x="130" y="52" width="36" height="32" rx="2"/></g></svg>
+        <h3>Hourdis</h3><p>Entrevous en terre cuite pour planchers à poutrelles : allège la dalle et isole.</p>
+      </article>
+      <article class="produit reveal">
+        <svg viewBox="0 0 200 110"><rect x="20" y="30" width="160" height="56" rx="4" fill="#b4472b"/><rect x="20" y="30" width="160" height="10" rx="4" fill="#d98b5f"/></svg>
+        <h3>Brique pleine</h3><p>Robuste et esthétique, pour les ouvrages porteurs, murets et parements.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ÉCONOMIE D'ÉNERGIE ============ -->
+<section class="energie" id="energie">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">Confort et économie d'énergie</p>
+      <h2>Une maison qui consomme moins, naturellement</h2>
+      <p class="lead">Les économies d'énergie commencent dès le choix des murs. Les alvéoles de la brique emprisonnent l'air et la terre cuite stocke la chaleur : la maison reste fraîche en été et garde sa chaleur en hiver, avec moins de climatisation et de chauffage.</p>
+    </div>
+    <div class="atouts">
+      <div class="atout reveal"><span style="font-size:1.8rem">🌡️</span><strong>Inertie thermique</strong><p>La masse de la terre cuite amortit les écarts de température entre le jour et la nuit.</p></div>
+      <div class="atout reveal"><span style="font-size:1.8rem">🫧</span><strong>Isolation par alvéoles</strong><p>L'air immobile dans les trous de la brique freine le passage de la chaleur.</p></div>
+      <div class="atout reveal"><span style="font-size:1.8rem">🌿</span><strong>Matériau naturel et sain</strong><p>Argile, eau et feu. Pas de composés toxiques, un mur qui respire et régule l'humidité.</p></div>
+      <div class="atout reveal"><span style="font-size:1.8rem">🛡️</span><strong>Durable et incombustible</strong><p>La terre cuite ne brûle pas, ne pourrit pas et traverse les générations.</p></div>
+    </div>
+    <div class="mur-coupe reveal">
+      <div>
+        <h3 style="font-size:1.5rem">Pourquoi la brique fait la différence</h3>
+        <p style="color:var(--gris);margin-top:.5em">Comparaison indicative du confort thermique perçu entre un mur plein en béton et un mur en brique creuse de terre cuite d'épaisseur comparable.</p>
+      </div>
+      <div>
+        <small>Mur en brique creuse de terre cuite</small>
+        <div class="jauge"><i style="--w:85%;background:var(--brique)"></i></div>
+        <small>Mur en parpaing ou béton plein</small>
+        <div class="jauge"><i style="--w:45%;background:#9a8b82"></i></div>
+        <small style="color:var(--gris)">Illustration qualitative, sans valeur de mesure.</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VUE AÉRIENNE & GOOGLE MAPS ============ -->
+<section id="site">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">Notre site de production</p>
+      <h2>La briqueterie vue du ciel</h2>
+      <p class="lead">Carrière, ateliers, séchoirs et four : découvrez notre site en photo aérienne et trouvez-nous sur Google Maps.</p>
+    </div>
+    <div class="carte-grille">
+      <figure class="aerien reveal">
+        <div class="vide">Photo aérienne de la briqueterie<br><small>Placez votre image dans <code>images/vue-aerienne.jpg</code></small></div>
+        <!-- Remplacez par votre photo aérienne (drone) de la briqueterie -->
+        <img src="images/vue-aerienne.jpg" alt="Vue aérienne de la briqueterie DPR Axxam" onerror="this.remove()">
+        <figcaption class="legende"><strong>Briqueterie DPR Axxam</strong><br><small>De la carrière au four, sur un même site</small></figcaption>
+      </figure>
+      <div class="map reveal">
+        <!-- Remplacez q=... par les coordonnées GPS exactes de la briqueterie, ex. q=36.6800,4.8500 ; t=k = vue satellite -->
+        <iframe title="Localisation de la briqueterie sur Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://maps.google.com/maps?q=El%20Kseur%2C%20B%C3%A9ja%C3%AFa%2C%20Alg%C3%A9rie&t=k&z=14&output=embed"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="contact" id="contact">
+  <div class="wrap contact-grille">
+    <div class="reveal">
+      <p class="eyebrow">Contact</p>
+      <h2>Un projet de construction ?</h2>
+      <p style="opacity:.9;max-width:44ch">Particuliers, entreprises du bâtiment, revendeurs : demandez nos prix, disponibilités et conditions de livraison.</p>
+      <ul class="coord">
+        <li><span>📍</span><span>SARL DPR Axxam, briqueterie<br><em>[Adresse complète à compléter]</em>, Algérie</span></li>
+        <li><span>📞</span><span><em>[+213 XX XX XX XX]</em></span></li>
+        <li><span>✉️</span><span><em>[contact@dpr-axxam.dz]</em></span></li>
+        <li><span>🕗</span><span>Dimanche au jeudi, 8 h à 16 h 30</span></li>
+      </ul>
+    </div>
+    <form class="reveal" onsubmit="event.preventDefault();envoyer(this)">
+      <input name="nom" placeholder="Nom et prénom / Entreprise" required>
+      <input name="tel" type="tel" placeholder="Téléphone" required>
+      <select name="produit"><option>Brique 8 trous</option><option>Brique 12 trous</option><option>Hourdis</option><option>Brique pleine</option><option>Autre</option></select>
+      <textarea name="message" rows="4" placeholder="Quantité, lieu de livraison, délai…"></textarea>
+      <button class="btn plein" type="submit">Envoyer ma demande</button>
+      <small id="retour" style="color:var(--gris)"></small>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="annee"></span> SARL DPR Axxam · Groupe Djennadi</span>
+    <span>Briqueterie · Produits rouges en terre cuite · Algérie</span>
+  </div>
+</footer>
+
+<script>
+// Façade dynamique : un mur de briques qui se pose rang par rang
+(function(){
+  const f=document.getElementById('facade');
+  const rangs=Math.ceil((window.innerHeight+200)/50), cols=Math.ceil((window.innerWidth+400)/126);
+  const teintes=['#b4472b','#a63f26','#c0583a','#9c3a22','#c96a45','#8f341f'];
+  for(let r=rangs-1;r>=0;r--){
+    const row=document.createElement('div');row.className='rang';
+    for(let c=0;c<cols;c++){
+      const b=document.createElement('div');b.className='b';
+      b.style.background=teintes[(r*7+c*3)%teintes.length];
+      b.style.animationDelay=((rangs-r)*0.09+Math.random()*0.25).toFixed(2)+'s';
+      row.appendChild(b);
+    }
+    f.prepend(row);
+  }
+  // léger parallaxe
+  addEventListener('scroll',()=>{f.style.transform=`rotate(-4deg) scale(1.1) translateY(${scrollY*0.25}px)`},{passive:true});
+})();
+
+// En-tête opaque au défilement
+const h=document.getElementById('haut');
+addEventListener('scroll',()=>h.classList.toggle('solide',scrollY>40),{passive:true});
+document.querySelectorAll('.menu a').forEach(a=>a.addEventListener('click',()=>document.querySelector('.menu').classList.remove('ouvert')));
+
+// Apparition des sections
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// Compteur de température
+document.querySelectorAll('.compteur').forEach(el=>{
+  const fin=+el.dataset.fin,t0=performance.now();
+  (function tick(t){const p=Math.min((t-t0)/2200,1);el.textContent=Math.round(fin*(1-Math.pow(1-p,3))).toLocaleString('fr-FR');if(p<1)requestAnimationFrame(tick)})(t0);
+});
+
+// Formulaire : ouvre le client e-mail (à remplacer par un vrai service d'envoi si besoin)
+function envoyer(f){
+  const d=new FormData(f);
+  const corps=`Nom : ${d.get('nom')}\nTéléphone : ${d.get('tel')}\nProduit : ${d.get('produit')}\n\n${d.get('message')||''}`;
+  location.href=`mailto:contact@dpr-axxam.dz?subject=${encodeURIComponent('Demande de devis')}&body=${encodeURIComponent(corps)}`;
+  document.getElementById('retour').textContent='Merci ! Votre messagerie va s\'ouvrir pour envoyer la demande.';
+}
+document.getElementById('annee').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
