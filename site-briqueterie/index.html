@@ -103,6 +103,10 @@ nav{display:flex;align-items:center;justify-content:space-between;height:72px;co
 .produit svg{width:100%;height:110px;margin-bottom:16px}
 .produit h3{font-size:1.25rem}
 .produit p{color:var(--gris);font-size:.93rem;margin-top:.3em}
+.produit p.format{color:var(--brique);font-weight:600;font-size:.85rem}
+.badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.badges span{display:grid;padding:12px 16px;border-radius:12px;background:var(--carte);border:1px solid var(--ligne);font-size:.8rem;color:var(--gris);max-width:220px}
+.badges b{font-family:Fraunces,serif;font-size:1.3rem;color:var(--brique)}
 
 /* Énergie */
 .energie{background:linear-gradient(180deg,var(--fond),var(--sable))}
@@ -111,10 +115,42 @@ nav{display:flex;align-items:center;justify-content:space-between;height:72px;co
 .atout{background:var(--carte);border-radius:16px;padding:26px;border:1px solid var(--ligne)}
 .atout strong{display:block;font-family:Fraunces,serif;font-size:1.25rem;margin:.4em 0 .2em;color:var(--brique)}
 .atout p{font-size:.93rem;color:var(--gris)}
-.mur-coupe{margin-top:48px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;background:var(--carte);border-radius:18px;padding:32px;border:1px solid var(--ligne)}
-.jauge{height:16px;border-radius:99px;background:var(--ligne);overflow:hidden;margin:8px 0 18px}
-.jauge i{display:block;height:100%;width:0;border-radius:99px;transition:width 1.6s cubic-bezier(.2,.8,.3,1)}
-.visible .jauge i{width:var(--w)}
+
+.energie{--g-brique:#b4472b;--g-beton:#3d74b0}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.kpi{background:var(--carte);border:1px solid var(--ligne);border-radius:16px;padding:24px}
+.kpi b{display:block;font-family:Fraunces,serif;font-size:2.6rem;line-height:1.1;color:var(--brique)}
+.kpi span{font-size:.92rem;color:var(--gris)}
+.graph{margin-top:24px;background:var(--carte);border:1px solid var(--ligne);border-radius:18px;padding:28px}
+.graph h3{font-size:1.3rem}
+.graph figcaption p{color:var(--gris);font-size:.9rem}
+.legende-g{display:flex;flex-wrap:wrap;gap:18px;margin:14px 0 6px;font-size:.85rem;color:var(--gris)}
+.legende-g span{display:flex;align-items:center;gap:8px}
+.legende-g i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.legende-g i.ref{width:0;height:14px;border-left:2px dashed var(--texte);border-radius:0}
+.barres{position:relative;display:grid;gap:14px;margin-top:18px}
+.barre{display:grid;grid-template-columns:minmax(150px,280px) 1fr;align-items:center;gap:14px;outline:none}
+.barre .nom{font-size:.9rem}
+.piste{position:relative;height:28px;display:flex;align-items:center}
+.piste::after{content:"";position:absolute;left:calc(8021 / 11000 * 100%);top:-2px;bottom:-2px;border-left:2px dashed var(--texte);opacity:.5;pointer-events:none}
+.piste i{display:flex;justify-content:flex-end;align-items:center;overflow:hidden;height:24px;width:0;border-radius:0 4px 4px 0;transition:width 1.4s cubic-bezier(.2,.8,.3,1)}
+.barre[data-t=brique] i{background:var(--g-brique)}.barre[data-t=beton] i{background:var(--g-beton)}
+.visible .piste i{width:calc(var(--v) / 11000 * 100%)}
+.piste em{font-style:normal;font-weight:600;font-size:.82rem;margin-right:8px;white-space:nowrap;color:#fff}
+.barre:hover i,.barre:focus i{filter:brightness(1.12)}
+.infobulle{position:absolute;pointer-events:none;background:var(--encre);color:#fff;font-size:.82rem;padding:8px 10px;border-radius:8px;opacity:0;transition:opacity .15s;max-width:240px;z-index:3}
+.source{margin-top:18px;font-size:.78rem;color:var(--gris)}
+.comparaison{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px}
+.photo{background:var(--carte);border:1px solid var(--ligne);border-radius:16px;overflow:hidden}
+.photo img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover}
+.photo figcaption{padding:16px 18px;font-size:.92rem;color:var(--gris)}
+.tag{display:inline-block;margin-right:8px;padding:2px 10px;border-radius:99px;color:#fff;font-size:.8rem}
+.tag.beton{background:var(--g-beton)}.tag.brique{background:var(--g-brique)}
+.atout span{font-size:1.8rem}
+.loi{display:flex;gap:18px;margin-top:24px;padding:26px;border-radius:18px;background:var(--encre);color:var(--sable)}
+.loi-ico{font-size:2rem}
+.loi h3{font-size:1.3rem;margin-bottom:.3em;color:#fff}
+.loi p{font-size:.95rem;color:#e3cfc1}
 
 /* Vue aérienne & carte */
 .carte-grille{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
@@ -145,7 +181,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .reveal.visible{opacity:1;transform:none}
 
 @media (max-width:900px){
-  .duo,.carte-grille,.contact-grille,.mur-coupe{grid-template-columns:1fr}
+  .duo,.carte-grille,.contact-grille,.comparaison{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr}
   .etapes{grid-template-columns:1fr 1fr}
   section{padding:72px 0}
 }
@@ -157,6 +194,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .burger{display:block}
   .etapes{grid-template-columns:1fr}
   .chiffres{gap:28px}
+  .barre{grid-template-columns:1fr;gap:4px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.b{opacity:1;transform:none}.reveal{opacity:1;transform:none}}
 </style>
@@ -190,9 +228,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <a href="#contact" class="btn vide">Demander un devis</a>
     </div>
     <div class="chiffres">
-      <div><strong>100 %</strong><span>argile naturelle</span></div>
-      <div><strong><span class="compteur" data-fin="1000">0</span> °C</strong><span>cuisson au four (env.)</span></div>
-      <div><strong>3</strong><span>sociétés · DPR Groupe</span></div>
+      <div><strong>2018</strong><span>en service depuis</span></div>
+      <div><strong><span class="compteur" data-fin="140000">0</span> t</strong><span>capacité installée par an</span></div>
+      <div><strong><span class="compteur" data-fin="112">0</span></strong><span>collaborateurs</span></div>
     </div>
   </div>
   <a href="#societe" class="descendre" aria-label="Descendre">↓</a>
@@ -204,18 +242,23 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="reveal">
       <p class="eyebrow">Qui sommes-nous</p>
       <h2>Le bien de l'habitat, brique après brique</h2>
-      <p class="lead">La SARL DPR Axxam est une briqueterie implantée dans la ZAC Helouane à Ighzer Amokrane (Béjaïa), spécialisée dans la fabrication industrielle de produits en argile : briques creuses, briques pleines et hourdis en terre cuite. « Axxam » signifie <strong>la maison</strong> : c'est notre raison d'être.</p>
+      <p class="lead">La SARL DPR Axxam est une briqueterie implantée dans la ZAC Helouane à Ighzer Amokrane (Béjaïa), en service depuis 2018 et spécialisée dans la fabrication industrielle de produits en argile : briques creuses 8 trous et 12 trous, et hourdis en terre cuite. « Axxam » signifie <strong>la maison</strong> : c'est notre raison d'être.</p>
       <ul class="valeurs">
         <li>Une matière première locale, extraite de notre propre carrière</li>
         <li>Une chaîne de production maîtrisée de bout en bout</li>
         <li>Des produits contrôlés, réguliers et conformes aux usages du bâtiment</li>
         <li>Un service de proximité pour les particuliers, entrepreneurs et revendeurs</li>
       </ul>
+      <div class="badges">
+        <span><b>140 000 t/an</b>capacité installée</span>
+        <span><b>112</b>collaborateurs</span>
+        <span><b>ABA</b>membre de l'Association des Briquetiers Algériens</span>
+      </div>
     </div>
     <div class="groupe reveal">
       <p class="eyebrow">Membre de DPR Groupe</p>
       <h3>DPR : Djennadi Pièces de Rechange</h3>
-      <p style="color:var(--gris)">Le nom vient de l'activité historique du groupe, dirigé par M. Ahcene Djennadi depuis son siège de Tizi-Smaoun. Cette culture de la mécanique garantit un outil industriel entretenu et une production continue.</p>
+      <p style="color:var(--gris)">Le nom vient de l'activité historique du groupe, dirigé par M. Ahcene Djennadi depuis son siège de Tizi, commune de Smaoun. Cette culture de la mécanique garantit un outil industriel entretenu et une production continue.</p>
       <div class="sigle">
         <span><b>D</b><small>Djennadi</small></span>
         <span><b>P</b><small>Pièces</small></span>
@@ -255,24 +298,20 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="reveal">
       <p class="eyebrow">Gamme produits rouges</p>
       <h2>Des produits pour chaque ouvrage</h2>
-      <p class="lead">Murs porteurs, cloisons, planchers : nos produits en terre cuite couvrent l'essentiel du gros œuvre. Dimensions et fiches techniques sur demande.</p>
+      <p class="lead">Murs extérieurs, cloisons, planchers : trois produits en terre cuite pour l'enveloppe et les séparations du bâtiment. Formats courants indiqués ci-dessous ; fiches techniques sur demande.</p>
     </div>
     <div class="produits">
       <article class="produit reveal">
-        <svg viewBox="0 0 200 110"><rect x="20" y="15" width="160" height="80" rx="4" fill="#b4472b"/><g fill="#7d2a17"><rect x="34" y="28" width="30" height="22" rx="2"/><rect x="85" y="28" width="30" height="22" rx="2"/><rect x="136" y="28" width="30" height="22" rx="2"/><rect x="34" y="60" width="30" height="22" rx="2"/><rect x="85" y="60" width="30" height="22" rx="2"/><rect x="136" y="60" width="30" height="22" rx="2"/></g></svg>
-        <h3>Brique creuse 8 trous</h3><p>Le standard des cloisons et murs de remplissage. Légère et facile à poser.</p>
+        <svg viewBox="0 0 200 110"><rect x="20" y="15" width="160" height="80" rx="4" fill="#b4472b"/><g fill="#7d2a17"><rect x="32" y="28" width="28" height="24" rx="2"/><rect x="69" y="28" width="28" height="24" rx="2"/><rect x="106" y="28" width="28" height="24" rx="2"/><rect x="143" y="28" width="26" height="24" rx="2"/><rect x="32" y="60" width="28" height="24" rx="2"/><rect x="69" y="60" width="28" height="24" rx="2"/><rect x="106" y="60" width="28" height="24" rx="2"/><rect x="143" y="60" width="26" height="24" rx="2"/></g></svg>
+        <h3>Brique creuse 8 trous (B8)</h3><p class="format">Format courant 30 × 20 × 10 cm · 2 rangées d'alvéoles</p><p>Cloisons intérieures et paroi intérieure des doubles murs. Légère et rapide à poser.</p>
       </article>
       <article class="produit reveal">
         <svg viewBox="0 0 200 110"><rect x="20" y="10" width="160" height="90" rx="4" fill="#b4472b"/><g fill="#7d2a17"><rect x="32" y="20" width="28" height="18" rx="2"/><rect x="72" y="20" width="28" height="18" rx="2"/><rect x="112" y="20" width="28" height="18" rx="2"/><rect x="152" y="20" width="18" height="18" rx="2"/><rect x="32" y="46" width="28" height="18" rx="2"/><rect x="72" y="46" width="28" height="18" rx="2"/><rect x="112" y="46" width="28" height="18" rx="2"/><rect x="152" y="46" width="18" height="18" rx="2"/><rect x="32" y="72" width="28" height="18" rx="2"/><rect x="72" y="72" width="28" height="18" rx="2"/><rect x="112" y="72" width="28" height="18" rx="2"/><rect x="152" y="72" width="18" height="18" rx="2"/></g></svg>
-        <h3>Brique creuse 12 trous</h3><p>Plus épaisse, pour les murs extérieurs : meilleure isolation et inertie thermique.</p>
+        <h3>Brique creuse 12 trous (B12)</h3><p class="format">Format courant 30 × 20 × 15 cm · 3 rangées d'alvéoles</p><p>Murs extérieurs et paroi extérieure des doubles murs : plus d'épaisseur, plus d'isolation.</p>
       </article>
       <article class="produit reveal">
         <svg viewBox="0 0 200 110"><path d="M20 40 L180 40 L180 95 L20 95 Z" fill="#b4472b"/><path d="M10 40 L30 30 L170 30 L190 40 Z" fill="#d98b5f"/><g fill="#7d2a17"><rect x="34" y="52" width="36" height="32" rx="2"/><rect x="82" y="52" width="36" height="32" rx="2"/><rect x="130" y="52" width="36" height="32" rx="2"/></g></svg>
-        <h3>Hourdis</h3><p>Entrevous en terre cuite pour planchers à poutrelles : allège la dalle et isole.</p>
-      </article>
-      <article class="produit reveal">
-        <svg viewBox="0 0 200 110"><rect x="20" y="30" width="160" height="56" rx="4" fill="#b4472b"/><rect x="20" y="30" width="160" height="10" rx="4" fill="#d98b5f"/></svg>
-        <h3>Brique pleine</h3><p>Robuste et esthétique, pour les ouvrages porteurs, murets et parements.</p>
+        <h3>Hourdis (entrevous)</h3><p class="format">Format courant 53 × 20 × 16 cm</p><p>Planchers à poutrelles préfabriquées : sert de coffrage au béton, allège la dalle et isole.</p>
       </article>
     </div>
   </div>
@@ -283,26 +322,59 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   <div class="wrap">
     <div class="reveal">
       <p class="eyebrow">Confort et économie d'énergie</p>
-      <h2>Une maison qui consomme moins, naturellement</h2>
-      <p class="lead">Les économies d'énergie commencent dès le choix des murs. Les alvéoles de la brique emprisonnent l'air et la terre cuite stocke la chaleur : la maison reste fraîche en été et garde sa chaleur en hiver, avec moins de climatisation et de chauffage.</p>
+      <h2>Le béton pour l'ossature, la brique pour l'enveloppe</h2>
+      <p class="lead">En Algérie, le bâtiment consomme <strong>42 %</strong> de l'énergie du pays, devant le transport (33 %), l'industrie (19 %) et l'agriculture (7 %). De bons matériaux d'enveloppe peuvent réduire jusqu'à <strong>50 %</strong> la consommation d'un bâtiment. Les économies d'énergie commencent dès le choix des murs.</p>
     </div>
-    <div class="atouts">
-      <div class="atout reveal"><span style="font-size:1.8rem">🌡️</span><strong>Inertie thermique</strong><p>La masse de la terre cuite amortit les écarts de température entre le jour et la nuit.</p></div>
-      <div class="atout reveal"><span style="font-size:1.8rem">🫧</span><strong>Isolation par alvéoles</strong><p>L'air immobile dans les trous de la brique freine le passage de la chaleur.</p></div>
-      <div class="atout reveal"><span style="font-size:1.8rem">🌿</span><strong>Matériau naturel et sain</strong><p>Argile, eau et feu. Pas de composés toxiques, un mur qui respire et régule l'humidité.</p></div>
-      <div class="atout reveal"><span style="font-size:1.8rem">🛡️</span><strong>Durable et incombustible</strong><p>La terre cuite ne brûle pas, ne pourrit pas et traverse les générations.</p></div>
+
+    <div class="kpis">
+      <div class="kpi reveal"><b>−23 %</b><span>d'énergie de chauffage pour un logement en maçonnerie de briques, comparé au même logement en voiles béton ou coffrage tunnel</span></div>
+      <div class="kpi reveal"><b>−476 kg</b><span>de CO₂ par an et par appartement F3 (1 564 kg contre 2 040 kg)</span></div>
+      <div class="kpi reveal"><b>3,5 ×</b><span>moins conducteur : brique creuse λ = 0,49 W/m·K, béton armé λ = 1,75 W/m·K</span></div>
     </div>
-    <div class="mur-coupe reveal">
-      <div>
-        <h3 style="font-size:1.5rem">Pourquoi la brique fait la différence</h3>
-        <p style="color:var(--gris);margin-top:.5em">Comparaison indicative du confort thermique perçu entre un mur plein en béton et un mur en brique creuse de terre cuite d'épaisseur comparable.</p>
+
+    <figure class="graph reveal" aria-labelledby="graph-titre">
+      <figcaption>
+        <h3 id="graph-titre">Consommation annuelle de chauffage d'un appartement F3</h3>
+        <p>kWh par an, dernier étage, Alger · selon le système constructif des murs extérieurs</p>
+        <div class="legende-g"><span><i style="background:var(--g-brique)"></i>Murs en briques</span><span><i style="background:var(--g-beton)"></i>Murs en béton</span><span><i class="ref"></i>Référence réglementaire (8 021 kWh)</span></div>
+      </figcaption>
+      <div class="barres" id="barres">
+        <div class="barre" data-v="7630" data-t="brique" tabindex="0"><span class="nom">Maçonnerie porteuse chaînée en briques</span><span class="piste"><i><em>7 630</em></i></span></div>
+        <div class="barre" data-v="7819" data-t="brique" tabindex="0"><span class="nom">Poteaux-poutres + remplissage en briques</span><span class="piste"><i><em>7 819</em></i></span></div>
+        <div class="barre" data-v="9841" data-t="beton" tabindex="0"><span class="nom">Voiles en béton armé</span><span class="piste"><i><em>9 841</em></i></span></div>
+        <div class="barre" data-v="9952" data-t="beton" tabindex="0"><span class="nom">Coffrage tunnel (tout béton)</span><span class="piste"><i><em>9 952</em></i></span></div>
+        <div class="infobulle" id="infobulle" role="status"></div>
       </div>
+      <p class="source">Source : CNERIB (Centre National d'Études et de Recherches Intégrées du Bâtiment), étude comparative brique / béton réalisée pour l'Association des Briquetiers Algériens, mars 2019. Calcul selon le DTR C 3.2/4.</p>
+    </figure>
+
+    <div class="comparaison">
+      <figure class="photo reveal">
+        <img src="images/immeuble-tout-beton.jpg" alt="Immeubles d'habitation construits entièrement en béton, murs compris" loading="lazy">
+        <figcaption><b class="tag beton">Tout béton</b>Enveloppe et murs en béton : peu isolant, inconfortable, et coûteux à mettre aux normes thermiques après coup.</figcaption>
+      </figure>
+      <figure class="photo reveal">
+        <img src="images/immeuble-enveloppe-briques.jpg" alt="Immeuble d'habitation à ossature béton et enveloppe en briques de terre cuite" loading="lazy">
+        <figcaption><b class="tag brique">Ossature béton + enveloppe briques</b>Le béton assure la résistance aux séismes, la brique assure l'isolation thermique et acoustique et le confort.</figcaption>
+      </figure>
+    </div>
+
+    <div class="atouts">
+      <div class="atout reveal"><span>🌡️</span><strong>Isolation thermique</strong><p>Les alvéoles emprisonnent l'air : la maison reste fraîche l'été et garde la chaleur l'hiver.</p></div>
+      <div class="atout reveal"><span>🔇</span><strong>Isolation acoustique</strong><p>Des murs qui filtrent le bruit de la rue et des voisins.</p></div>
+      <div class="atout reveal"><span>💧</span><strong>Étanchéité</strong><p>Une enveloppe qui protège de la pluie et régule l'humidité.</p></div>
+      <div class="atout reveal"><span>🔥</span><strong>Résistance au feu</strong><p>Cuite à haute température, la terre cuite est incombustible.</p></div>
+      <div class="atout reveal"><span>❄️</span><strong>Résistance au gel</strong><p>Un matériau stable face aux écarts de température.</p></div>
+      <div class="atout reveal"><span>🏗️</span><strong>Résistance mécanique</strong><p>Des briques et hourdis conformes aux exigences des normes d'essai.</p></div>
+      <div class="atout reveal"><span>🌿</span><strong>Longévité et écologie</strong><p>Argile, eau et feu : un matériau naturel qui traverse les générations.</p></div>
+      <div class="atout reveal"><span>🏷️</span><strong>Disponibilité et prix</strong><p>Produit localement, disponible et économique.</p></div>
+    </div>
+
+    <div class="loi reveal">
+      <span class="loi-ico">⚖️</span>
       <div>
-        <small>Mur en brique creuse de terre cuite</small>
-        <div class="jauge"><i style="--w:85%;background:var(--brique)"></i></div>
-        <small>Mur en parpaing ou béton plein</small>
-        <div class="jauge"><i style="--w:45%;background:#9a8b82"></i></div>
-        <small style="color:var(--gris)">Illustration qualitative, sans valeur de mesure.</small>
+        <h3>Une obligation légale</h3>
+        <p>La <strong>loi n° 99-09 du 28 juillet 1999</strong> relative à la maîtrise de l'énergie, le décret exécutif n° 2000-90 et le DTR C 3.2/4 imposent aux maîtres d'ouvrage, bureaux d'études et entrepreneurs de respecter les normes d'isolation thermique des bâtiments neufs. Selon l'article 40, la non-conformité expose les bénéficiaires des travaux à des sanctions. Construire en briques, c'est construire conforme.</p>
       </div>
     </div>
   </div>
@@ -342,9 +414,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <p style="opacity:.9;max-width:44ch">Particuliers, entreprises du bâtiment, revendeurs : demandez nos prix, disponibilités et conditions de livraison.</p>
       <ul class="coord">
         <li><span>🏭</span><span><strong>Usine :</strong> ZAC Helouane, Ighzer Amokrane, Béjaïa, Algérie<br><a href="https://maps.app.goo.gl/KSQbXDJSuqDRDzpC9" target="_blank" rel="noopener">Voir sur Google Maps</a></span></li>
-        <li><span>🏢</span><span><strong>Siège social :</strong> Tizi-Smaoun, Béjaïa</span></li>
+        <li><span>🏢</span><span><strong>Siège social :</strong> Village Tizi, lieu-dit Tiassa, commune de Smaoun, Béjaïa</span></li>
         <li><span>👤</span><span>M. Ahcene Djennadi, gérant</span></li>
-        <li><span>📞</span><span><a href="tel:+213559904000">+213 5 59 90 40 00</a><br><a href="tel:+213770939394">+213 7 70 93 93 94</a><br><a href="tel:+21334192121">+213 34 19 21 21</a></span></li>
+        <li><span>📞</span><span><a href="tel:+213559904000">+213 5 59 90 40 00</a><br><a href="tel:+213770939394">+213 7 70 93 93 94</a><br><a href="tel:+21334192121">+213 34 19 21 21</a> (tél. et fax)</span></li>
         <li><span>✉️</span><span><a href="mailto:dpr.axxam2022@gmail.com">dpr.axxam2022@gmail.com</a></span></li>
         <li><span>🌐</span><span>www.dpraxxam.com</span></li>
       </ul>
@@ -352,7 +424,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <form class="reveal" onsubmit="event.preventDefault();envoyer(this)">
       <input name="nom" placeholder="Nom et prénom / Entreprise" required>
       <input name="tel" type="tel" placeholder="Téléphone" required>
-      <select name="produit"><option>Brique 8 trous</option><option>Brique 12 trous</option><option>Hourdis</option><option>Brique pleine</option><option>Autre</option></select>
+      <select name="produit"><option>Brique 8 trous</option><option>Brique 12 trous</option><option>Hourdis</option><option>Autre</option></select>
       <textarea name="message" rows="4" placeholder="Quantité, lieu de livraison, délai…"></textarea>
       <button class="btn plein" type="submit">Envoyer ma demande</button>
       <small id="retour" style="color:var(--gris)"></small>
@@ -401,6 +473,19 @@ document.querySelectorAll('.compteur').forEach(el=>{
   const fin=+el.dataset.fin,t0=performance.now();
   (function tick(t){const p=Math.min((t-t0)/2200,1);el.textContent=Math.round(fin*(1-Math.pow(1-p,3))).toLocaleString('fr-FR');if(p<1)requestAnimationFrame(tick)})(t0);
 });
+
+// Graphique : largeur des barres et infobulle
+document.querySelectorAll('.barre').forEach(b=>{
+  const v=+b.dataset.v; b.querySelector('i').style.setProperty('--v',v);
+  const ecart=Math.round((v-8021)/8021*100);
+  const txt=`${b.querySelector('.nom').textContent} : ${v.toLocaleString('fr-FR')} kWh/an (${ecart>0?'+':''}${ecart} % par rapport à la référence)`;
+  b.setAttribute('aria-label',txt);
+  const tip=document.getElementById('infobulle'), zone=document.getElementById('barres');
+  const montrer=()=>{tip.textContent=txt;const r=b.getBoundingClientRect(),z=zone.getBoundingClientRect();tip.style.left=Math.min(r.width-250,Math.max(0,r.width*0.35))+'px';tip.style.top=(r.top-z.top-40)+'px';tip.style.opacity=1};
+  b.addEventListener('mouseenter',montrer);b.addEventListener('focus',montrer);
+  b.addEventListener('mouseleave',()=>tip.style.opacity=0);b.addEventListener('blur',()=>tip.style.opacity=0);
+});
+document.querySelectorAll('.graph').forEach(g=>io.observe(g));
 
 // Formulaire : ouvre le client e-mail (à remplacer par un vrai service d'envoi si besoin)
 function envoyer(f){
