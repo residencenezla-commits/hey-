@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Briqueterie DPR Axxam</title>
-<meta name="description" content="SARL DPR Axxam, briqueterie algérienne du Groupe Djennadi : fabrication de produits rouges en terre cuite, de la carrière au four.">
+<meta name="description" content="SARL DPR Axxam (DPR Groupe) : fabrication industrielle de produits rouges en argile, briqueterie de la ZAC Helouane, Ighzer Amokrane, Béjaïa. De la carrière au four.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -75,6 +75,11 @@ nav{display:flex;align-items:center;justify-content:space-between;height:72px;co
 .groupe .sigle span{flex:1;text-align:center;padding:14px 6px;border-radius:10px;background:var(--sable);color:var(--brique-fonce)}
 .groupe .sigle b{display:block;font-family:Fraunces,serif;font-size:2rem;line-height:1}
 .groupe .sigle small{font-size:.75rem}
+.filiales{list-style:none;display:grid;gap:10px;margin-top:8px}
+.filiales li{display:grid;gap:2px;padding:12px 14px;border-radius:10px;border:1px solid var(--ligne);font-size:.9rem}
+.filiales li span{color:var(--gris)}
+.filiales li a{color:#2f6fbf;font-size:.85rem;text-decoration:none}
+.filiales li.actif{border-color:var(--brique);background:rgba(180,71,43,.06)}
 .valeurs{list-style:none;display:grid;gap:12px;margin-top:24px}
 .valeurs li{padding-left:28px;position:relative}
 .valeurs li::before{content:"";position:absolute;left:0;top:.45em;width:16px;height:9px;background:var(--brique);border-radius:2px}
@@ -160,7 +165,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <header id="haut">
   <nav class="wrap">
-    <a href="#accueil" class="logo"><i><b></b><b></b><b></b><b></b></i>DPR Axxam</a>
+    <a href="#accueil" class="logo" aria-label="DPR Axxam"><svg viewBox="0 0 150 46" width="120" height="37" aria-hidden="true"><path d="M8 20 L75 3 L142 20" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><path d="M128 16 V30" stroke="#fff" stroke-width="5"/><text x="6" y="42" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="30" fill="#fff" letter-spacing="-1">dpr</text><text x="62" y="41" font-family="Inter,Arial,sans-serif" font-weight="800" font-size="17" fill="#e8462e">AXXAM</text></svg></a>
     <button class="burger" aria-label="Menu" onclick="document.querySelector('.menu').classList.toggle('ouvert')">☰</button>
     <ul class="menu">
       <li><a href="#societe">La société</a></li>
@@ -177,9 +182,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 <section class="hero" id="accueil">
   <div class="facade" id="facade" aria-hidden="true"></div>
   <div class="wrap">
-    <p class="eyebrow" style="color:var(--argile)">Briqueterie · Algérie</p>
+    <p class="eyebrow" style="color:var(--argile)">Briqueterie · Béjaïa · Algérie</p>
     <h1>La <em>force</em> de la terre</h1>
-    <p>SARL DPR Axxam fabrique des produits rouges en terre cuite pour bâtir des habitations solides, saines et économes en énergie, de la carrière au four.</p>
+    <p>SARL DPR Axxam : fabrication industrielle de produits en argile pour bâtir des habitations solides, saines et économes en énergie, de la carrière au four.</p>
     <div class="btns">
       <a href="#produits" class="btn plein">Nos produits</a>
       <a href="#contact" class="btn vide">Demander un devis</a>
@@ -187,7 +192,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="chiffres">
       <div><strong>100 %</strong><span>argile naturelle</span></div>
       <div><strong><span class="compteur" data-fin="1000">0</span> °C</strong><span>cuisson au four (env.)</span></div>
-      <div><strong>1</strong><span>groupe : Djennadi</span></div>
+      <div><strong>3</strong><span>sociétés · DPR Groupe</span></div>
     </div>
   </div>
   <a href="#societe" class="descendre" aria-label="Descendre">↓</a>
@@ -199,7 +204,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="reveal">
       <p class="eyebrow">Qui sommes-nous</p>
       <h2>Le bien de l'habitat, brique après brique</h2>
-      <p class="lead">La SARL DPR Axxam est une briqueterie algérienne spécialisée dans la fabrication de produits rouges : briques creuses, briques pleines et hourdis en terre cuite. « Axxam » signifie <strong>la maison</strong> : c'est notre raison d'être.</p>
+      <p class="lead">La SARL DPR Axxam est une briqueterie implantée dans la ZAC Helouane à Ighzer Amokrane (Béjaïa), spécialisée dans la fabrication industrielle de produits en argile : briques creuses, briques pleines et hourdis en terre cuite. « Axxam » signifie <strong>la maison</strong> : c'est notre raison d'être.</p>
       <ul class="valeurs">
         <li>Une matière première locale, extraite de notre propre carrière</li>
         <li>Une chaîne de production maîtrisée de bout en bout</li>
@@ -208,15 +213,19 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       </ul>
     </div>
     <div class="groupe reveal">
-      <p class="eyebrow">Membre du Groupe Djennadi</p>
+      <p class="eyebrow">Membre de DPR Groupe</p>
       <h3>DPR : Djennadi Pièces de Rechange</h3>
-      <p style="color:var(--gris)">Notre nom vient de l'activité historique du groupe, spécialisé dans les pièces détachées. Cette culture de la mécanique et de la maintenance garantit un outil industriel entretenu et une production continue.</p>
+      <p style="color:var(--gris)">Le nom vient de l'activité historique du groupe, dirigé par M. Ahcene Djennadi depuis son siège de Tizi-Smaoun. Cette culture de la mécanique garantit un outil industriel entretenu et une production continue.</p>
       <div class="sigle">
         <span><b>D</b><small>Djennadi</small></span>
         <span><b>P</b><small>Pièces</small></span>
         <span><b>R</b><small>de Rechange</small></span>
       </div>
-      <p style="font-size:.9rem;color:var(--gris)">Pièces détachées + briqueterie : deux métiers, une même exigence de fiabilité.</p>
+      <ul class="filiales">
+        <li><strong>Super Quality Truck Parts</strong><span>Importation de pièces de rechange poids lourds et remorques · Tizi-Smaoun</span><a href="https://www.automecanique.com" target="_blank" rel="noopener">automecanique.com</a></li>
+        <li><strong>DPR Trailer</strong><span>Fabrication de semi-remorques · Tizi-Smaoun</span><a href="https://www.dprtrailer.com" target="_blank" rel="noopener">dprtrailer.com</a></li>
+        <li class="actif"><strong>DPR Axxam</strong><span>Briqueterie : produits en argile · ZAC Helouane, Ighzer Amokrane</span><a href="https://www.dpraxxam.com">dpraxxam.com</a></li>
+      </ul>
     </div>
   </div>
 </section>
@@ -315,9 +324,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <figcaption class="legende"><strong>Briqueterie DPR Axxam</strong><br><small>De la carrière au four, sur un même site</small></figcaption>
       </figure>
       <div class="map reveal">
-        <!-- Remplacez q=... par les coordonnées GPS exactes de la briqueterie, ex. q=36.6800,4.8500 ; t=k = vue satellite -->
+        <!-- Pour un repère exact, remplacez q=... par les coordonnées GPS de l'usine (ex. q=36.55,4.60) ; t=k = vue satellite -->
         <iframe title="Localisation de la briqueterie sur Google Maps" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-          src="https://maps.google.com/maps?q=El%20Kseur%2C%20B%C3%A9ja%C3%AFa%2C%20Alg%C3%A9rie&t=k&z=14&output=embed"></iframe>
+          src="https://maps.google.com/maps?q=ZAC%20Helouane%2C%20Ighzer%20Amokrane%2C%20B%C3%A9ja%C3%AFa%2C%20Alg%C3%A9rie&t=k&z=15&output=embed"></iframe>
       </div>
     </div>
   </div>
@@ -331,10 +340,12 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <h2>Un projet de construction ?</h2>
       <p style="opacity:.9;max-width:44ch">Particuliers, entreprises du bâtiment, revendeurs : demandez nos prix, disponibilités et conditions de livraison.</p>
       <ul class="coord">
-        <li><span>📍</span><span>SARL DPR Axxam, briqueterie<br><em>[Adresse complète à compléter]</em>, Algérie</span></li>
-        <li><span>📞</span><span><em>[+213 XX XX XX XX]</em></span></li>
-        <li><span>✉️</span><span><em>[contact@dpr-axxam.dz]</em></span></li>
-        <li><span>🕗</span><span>Dimanche au jeudi, 8 h à 16 h 30</span></li>
+        <li><span>🏭</span><span><strong>Usine :</strong> ZAC Helouane, Ighzer Amokrane, Béjaïa, Algérie</span></li>
+        <li><span>🏢</span><span><strong>Siège social :</strong> Tizi-Smaoun, Béjaïa</span></li>
+        <li><span>👤</span><span>M. Ahcene Djennadi, gérant</span></li>
+        <li><span>📞</span><span><a href="tel:+213559904000">+213 5 59 90 40 00</a><br><a href="tel:+213770939394">+213 7 70 93 93 94</a><br><a href="tel:+21334192121">+213 34 19 21 21</a></span></li>
+        <li><span>✉️</span><span><a href="mailto:dpr.axxam2022@gmail.com">dpr.axxam2022@gmail.com</a></span></li>
+        <li><span>🌐</span><span>www.dpraxxam.com</span></li>
       </ul>
     </div>
     <form class="reveal" onsubmit="event.preventDefault();envoyer(this)">
@@ -350,8 +361,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <footer>
   <div class="wrap">
-    <span>© <span id="annee"></span> SARL DPR Axxam · Groupe Djennadi</span>
-    <span>Briqueterie · Produits rouges en terre cuite · Algérie</span>
+    <span>© <span id="annee"></span> SARL DPR Axxam · DPR Groupe</span>
+    <span>ZAC Helouane, Ighzer Amokrane, Béjaïa · <a href="tel:+213559904000">+213 5 59 90 40 00</a></span>
   </div>
 </footer>
 
@@ -394,7 +405,7 @@ document.querySelectorAll('.compteur').forEach(el=>{
 function envoyer(f){
   const d=new FormData(f);
   const corps=`Nom : ${d.get('nom')}\nTéléphone : ${d.get('tel')}\nProduit : ${d.get('produit')}\n\n${d.get('message')||''}`;
-  location.href=`mailto:contact@dpr-axxam.dz?subject=${encodeURIComponent('Demande de devis')}&body=${encodeURIComponent(corps)}`;
+  location.href=`mailto:dpr.axxam2022@gmail.com?subject=${encodeURIComponent('Demande de devis')}&body=${encodeURIComponent(corps)}`;
   document.getElementById('retour').textContent='Merci ! Votre messagerie va s\'ouvrir pour envoyer la demande.';
 }
 document.getElementById('annee').textContent=new Date().getFullYear();
