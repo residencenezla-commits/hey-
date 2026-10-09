@@ -219,6 +219,28 @@ button.btn{font:inherit;font-weight:600;cursor:pointer;background:transparent}
 .curseur{display:grid;gap:6px;margin-top:16px;font-size:.8rem;color:var(--gris)}
 .curseur input{width:100%;accent-color:#6f8f4e}
 
+/* ABA */
+.aba{background:#1b1411;color:var(--sable)}
+.aba .lead{color:#c9b3a5}.aba .eyebrow{color:#e8462e}
+.aba-filtres{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 20px}
+.aba-filtres button{font:inherit;font-size:.88rem;padding:8px 16px;border-radius:99px;border:1.5px solid #4a372e;background:transparent;color:var(--sable);cursor:pointer}
+.aba-filtres button[aria-pressed=true]{background:#c0281f;border-color:#c0281f;color:#fff}
+.aba-grille{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.aba-carte[hidden]{display:none}
+.aba-carte button{all:unset;cursor:zoom-in;display:block;position:relative;border-radius:14px;overflow:hidden;aspect-ratio:3/4;background:#2a1d17;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.aba-carte button:focus-visible{outline:3px solid #e8462e;outline-offset:3px}
+.aba-carte img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.aba-carte button:hover img{transform:scale(1.05)}
+.aba-langue{position:absolute;top:10px;right:10px;font-size:.72rem;font-weight:600;padding:3px 9px;border-radius:99px;background:rgba(27,16,12,.8);color:#fff}
+.aba .source{color:#9c8579}
+.visionneuse{position:fixed;inset:0;z-index:90;background:rgba(10,6,5,.92);display:grid;grid-template-columns:56px 1fr 56px;align-items:center;padding:16px}
+.visionneuse[hidden]{display:none}
+.visionneuse figure{display:grid;justify-items:center;gap:10px}
+.visionneuse img{max-width:100%;max-height:82vh;border-radius:10px}
+.visionneuse figcaption{color:#e3cfc1;font-size:.9rem;text-align:center}
+.visionneuse button{background:none;border:0;color:#fff;font-size:2.4rem;cursor:pointer}
+.v-fermer{position:absolute;top:10px;right:16px;font-size:1.6rem!important}
+
 /* Simulateur de mur */
 .simulateur{display:grid;grid-template-columns:1fr 1.1fr;gap:28px;align-items:center;margin-top:24px;background:var(--carte);border:1px solid var(--ligne);border-radius:18px;padding:28px}
 .simulateur h3{font-size:1.4rem;margin:.2em 0 .3em}
@@ -282,6 +304,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .menu a{display:block;padding:12px 0;border-bottom:1px solid #3b2d27}
   .burger{display:block}
   .scene-info b{font-size:1.3rem}
+  .aba-grille{grid-template-columns:1fr 1fr;gap:10px}
+  .visionneuse{grid-template-columns:34px 1fr 34px;padding:8px}
   .resultat b{font-size:1.6rem}
   .chiffres{gap:28px}
   .barre{grid-template-columns:1fr;gap:4px}
@@ -302,6 +326,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <li><a href="#carriere">Carrière</a></li>
       <li><a href="#produits">Produits</a></li>
       <li><a href="#energie">Énergie</a></li>
+      <li><a href="#aba">ABA</a></li>
       <li><a href="#site">Notre site</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -347,7 +372,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <div class="badges">
         <span><b>140 000 t/an</b>capacité installée</span>
         <span><b>53</b>salariés</span>
-        <span><b>ABA</b>membre de l'Association des Briquetiers Algériens</span>
+        <a href="#aba" style="text-decoration:none"><span><b>ABA</b>membre de l'Association des Briqueteries Algériennes</span></a>
       </div>
     </div>
     <div class="groupe reveal">
@@ -593,6 +618,49 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </div>
 </section>
 
+<!-- ============ ASSOCIATION DES BRIQUETERIES ALGÉRIENNES ============ -->
+<section class="aba" id="aba">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">Membre de l'ABA</p>
+      <h2>Avec l'Association des Briqueteries Algériennes</h2>
+      <p class="lead">DPR Axxam est membre de l'ABA, qui rassemble les fabricants, ingénieurs, constructeurs et partenaires de la brique algérienne. Ensemble, nous faisons connaître la terre cuite : comment elle est fabriquée, pourquoi elle isole, comment bien construire avec elle.</p>
+    </div>
+    <div class="aba-filtres" role="group" aria-label="Filtrer les visuels">
+      <button type="button" data-f="tous" aria-pressed="true">Tous</button>
+      <button type="button" data-f="education" aria-pressed="false">ABA Éducation</button>
+      <button type="button" data-f="qualite" aria-pressed="false">Qualité</button>
+      <button type="button" data-f="campagne" aria-pressed="false">Campagne</button>
+    </div>
+    <ul class="aba-grille" id="abaGrille">
+        <li class="aba-carte" data-cat="qualite"><button type="button" data-i="0" aria-label="Agrandir : Pensée avec précision. Produite avec exigence."><img src="images/aba/aba-01-mini.jpg" data-grand="images/aba/aba-01.jpg" alt="Pensée avec précision. Produite avec exigence." loading="lazy" width="420" height="560"><span class="aba-langue">FR</span></button></li>
+        <li class="aba-carte" data-cat="campagne"><button type="button" data-i="1" aria-label="Agrandir : كل جدار يبدأ بخطوة أولى — Chaque mur commence par un premier pas"><img src="images/aba/aba-02-mini.jpg" data-grand="images/aba/aba-02.jpg" alt="كل جدار يبدأ بخطوة أولى — Chaque mur commence par un premier pas" loading="lazy" width="420" height="560"><span class="aba-langue">عربي</span></button></li>
+        <li class="aba-carte" data-cat="campagne"><button type="button" data-i="2" aria-label="Agrandir : Une industrie. Des compétences. Une même ambition."><img src="images/aba/aba-03-mini.jpg" data-grand="images/aba/aba-03.jpg" alt="Une industrie. Des compétences. Une même ambition." loading="lazy" width="420" height="560"><span class="aba-langue">FR</span></button></li>
+        <li class="aba-carte" data-cat="education"><button type="button" data-i="3" aria-label="Agrandir : لماذا يُستخدم الآجر في البناء؟ — Pourquoi utiliser la brique ?"><img src="images/aba/aba-04-mini.jpg" data-grand="images/aba/aba-04.jpg" alt="لماذا يُستخدم الآجر في البناء؟ — Pourquoi utiliser la brique ?" loading="lazy" width="420" height="560"><span class="aba-langue">عربي</span></button></li>
+        <li class="aba-carte" data-cat="qualite"><button type="button" data-i="4" aria-label="Agrandir : الجودة تبدأ من التفاصيل — La qualité commence par les détails"><img src="images/aba/aba-05-mini.jpg" data-grand="images/aba/aba-05.jpg" alt="الجودة تبدأ من التفاصيل — La qualité commence par les détails" loading="lazy" width="420" height="560"><span class="aba-langue">عربي</span></button></li>
+        <li class="aba-carte" data-cat="education"><button type="button" data-i="5" aria-label="Agrandir : كيف يصنع الآجر؟ — Comment fabrique-t-on la brique ?"><img src="images/aba/aba-06-mini.jpg" data-grand="images/aba/aba-06.jpg" alt="كيف يصنع الآجر؟ — Comment fabrique-t-on la brique ?" loading="lazy" width="420" height="560"><span class="aba-langue">عربي</span></button></li>
+        <li class="aba-carte" data-cat="education"><button type="button" data-i="6" aria-label="Agrandir : Les détails révèlent la qualité"><img src="images/aba/aba-07-mini.jpg" data-grand="images/aba/aba-07.jpg" alt="Les détails révèlent la qualité" loading="lazy" width="420" height="560"><span class="aba-langue">FR</span></button></li>
+        <li class="aba-carte" data-cat="education"><button type="button" data-i="7" aria-label="Agrandir : لماذا يحتوي الآجر على فراغات؟ — Pourquoi la brique a-t-elle des alvéoles ?"><img src="images/aba/aba-08-mini.jpg" data-grand="images/aba/aba-08.jpg" alt="لماذا يحتوي الآجر على فراغات؟ — Pourquoi la brique a-t-elle des alvéoles ?" loading="lazy" width="420" height="560"><span class="aba-langue">عربي</span></button></li>
+        <li class="aba-carte" data-cat="education"><button type="button" data-i="8" aria-label="Agrandir : Comprendre les matériaux pour mieux construire"><img src="images/aba/aba-09-mini.jpg" data-grand="images/aba/aba-09.jpg" alt="Comprendre les matériaux pour mieux construire" loading="lazy" width="420" height="560"><span class="aba-langue">FR</span></button></li>
+        <li class="aba-carte" data-cat="campagne"><button type="button" data-i="9" aria-label="Agrandir : De la terre à la construction"><img src="images/aba/aba-10-mini.jpg" data-grand="images/aba/aba-10.jpg" alt="De la terre à la construction" loading="lazy" width="420" height="560"><span class="aba-langue">FR</span></button></li>
+        <li class="aba-carte" data-cat="campagne"><button type="button" data-i="10" aria-label="Agrandir : Imaginer aujourd'hui les bâtiments de demain"><img src="images/aba/aba-11-mini.jpg" data-grand="images/aba/aba-11.jpg" alt="Imaginer aujourd'hui les bâtiments de demain" loading="lazy" width="420" height="560"><span class="aba-langue">FR</span></button></li>
+        <li class="aba-carte" data-cat="education"><button type="button" data-i="11" aria-label="Agrandir : Chaque bâtiment commence par une première brique"><img src="images/aba/aba-12-mini.jpg" data-grand="images/aba/aba-12.jpg" alt="Chaque bâtiment commence par une première brique" loading="lazy" width="420" height="560"><span class="aba-langue">FR</span></button></li>
+        <li class="aba-carte" data-cat="campagne"><button type="button" data-i="12" aria-label="Agrandir : Un héritage transmis, un avenir construit"><img src="images/aba/aba-13-mini.jpg" data-grand="images/aba/aba-13.jpg" alt="Un héritage transmis, un avenir construit" loading="lazy" width="420" height="560"><span class="aba-langue">FR</span></button></li>
+        <li class="aba-carte" data-cat="education"><button type="button" data-i="13" aria-label="Agrandir : Un mur bien pensé commence par de bons matériaux"><img src="images/aba/aba-14-mini.jpg" data-grand="images/aba/aba-14.jpg" alt="Un mur bien pensé commence par de bons matériaux" loading="lazy" width="420" height="560"><span class="aba-langue">FR</span></button></li>
+        <li class="aba-carte" data-cat="education"><button type="button" data-i="14" aria-label="Agrandir : Construire aujourd'hui en pensant demain"><img src="images/aba/aba-15-mini.jpg" data-grand="images/aba/aba-15.jpg" alt="Construire aujourd'hui en pensant demain" loading="lazy" width="420" height="560"><span class="aba-langue">FR</span></button></li>
+        <li class="aba-carte" data-cat="campagne"><button type="button" data-i="15" aria-label="Agrandir : Construire une maison, c'est construire des souvenirs"><img src="images/aba/aba-16-mini.jpg" data-grand="images/aba/aba-16.jpg" alt="Construire une maison, c'est construire des souvenirs" loading="lazy" width="420" height="560"><span class="aba-langue">FR</span></button></li>
+    </ul>
+    <p class="source">Visuels : Association des Briqueteries Algériennes (ABA).</p>
+  </div>
+</section>
+
+<div class="visionneuse" id="visionneuse" role="dialog" aria-modal="true" aria-label="Visuel de l'ABA" hidden>
+  <button type="button" class="v-fermer" aria-label="Fermer">✕</button>
+  <button type="button" class="v-prec" aria-label="Visuel précédent">‹</button>
+  <figure><img id="vImg" alt=""><figcaption id="vLeg"></figcaption></figure>
+  <button type="button" class="v-suiv" aria-label="Visuel suivant">›</button>
+</div>
+
 <!-- ============ VUE AÉRIENNE & GOOGLE MAPS ============ -->
 <section id="site">
   <div class="wrap">
@@ -793,6 +861,24 @@ addEventListener('scroll',()=>{const h=document.documentElement;prog.style.width
   lect.addEventListener('click',()=>{enLecture=!enLecture;majBouton();enLecture?demarrer():arreter()});
   new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting?demarrer():arreter()),{threshold:.3}).observe(box);
   majBouton();aller(0);
+})();
+
+// ABA : filtres et visionneuse
+(function(){
+  const cartes=[...document.querySelectorAll('.aba-carte')], v=document.getElementById('visionneuse'), img=document.getElementById('vImg'), leg=document.getElementById('vLeg');
+  let i=0, origine=null;
+  document.querySelectorAll('.aba-filtres button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.aba-filtres button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    cartes.forEach(c=>c.hidden=!(b.dataset.f==='tous'||c.dataset.cat===b.dataset.f));
+  }));
+  const visibles=()=>cartes.filter(c=>!c.hidden);
+  function montrer(c){const m=c.querySelector('img');img.src=m.dataset.grand;img.alt=m.alt;leg.textContent=m.alt;i=visibles().indexOf(c)}
+  function pas(d){const l=visibles();montrer(l[(i+d+l.length)%l.length])}
+  function fermer(){v.hidden=true;origine&&origine.focus()}
+  cartes.forEach(c=>c.querySelector('button').addEventListener('click',e=>{origine=e.currentTarget;montrer(c);v.hidden=false;v.querySelector('.v-fermer').focus()}));
+  v.querySelector('.v-fermer').onclick=fermer; v.querySelector('.v-prec').onclick=()=>pas(-1); v.querySelector('.v-suiv').onclick=()=>pas(1);
+  v.addEventListener('click',e=>{if(e.target===v)fermer()});
+  addEventListener('keydown',e=>{if(v.hidden)return;if(e.key==='Escape')fermer();if(e.key==='ArrowLeft')pas(-1);if(e.key==='ArrowRight')pas(1)});
 })();
 
 // Graphique : largeur des barres et infobulle
