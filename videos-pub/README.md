@@ -11,7 +11,7 @@ publication (bibliothèque audio de TikTok, Instagram, YouTube ou CapCut).
 ## Déroulé (24 s)
 
 1. **0–4 s** — Un mur de briques se construit : « La force de la terre », logo dpr AXXAM.
-2. **4–7,5 s** — Vue aérienne de la carrière : « De la carrière… »
+2. **4–7,5 s** — Photo de notre carrière d'argile : « De la carrière… »
 3. **7,5–11 s** — Four animé, flammes et briques qui cuisent : « …au four », ≈ 1 000 °C.
 4. **11–15 s** — Produits rouges : B8, B12, hourdis et leurs formats.
 5. **15–19,5 s** — « −23 % d'énergie de chauffage avec des murs en briques » (étude CNERIB pour l'ABA, 2019).

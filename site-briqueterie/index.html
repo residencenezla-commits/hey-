@@ -241,6 +241,11 @@ button.btn{font:inherit;font-weight:600;cursor:pointer;background:transparent}
 .visionneuse button{background:none;border:0;color:#fff;font-size:2.4rem;cursor:pointer}
 .v-fermer{position:absolute;top:10px;right:16px;font-size:1.6rem!important}
 
+.carriere-intro{display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:center}
+.carriere-photo{position:relative;border-radius:18px;overflow:hidden;max-height:520px;box-shadow:0 20px 50px rgba(42,29,23,.18)}
+.carriere-photo img{display:block;width:100%;height:100%;max-height:520px;object-fit:cover;object-position:center 40%}
+.carriere-photo figcaption{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;color:#fff;font-size:.85rem;background:linear-gradient(transparent,rgba(0,0,0,.65))}
+
 /* Simulateur de mur */
 .simulateur{display:grid;grid-template-columns:1fr 1.1fr;gap:28px;align-items:center;margin-top:24px;background:var(--carte);border:1px solid var(--ligne);border-radius:18px;padding:28px}
 .simulateur h3{font-size:1.4rem;margin:.2em 0 .3em}
@@ -292,7 +297,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 @media (max-width:900px){
   .duo,.carte-grille,.contact-grille,.comparaison{grid-template-columns:1fr}
   .kpis{grid-template-columns:1fr}
-  .ligne-prod,.simulateur,.phases{grid-template-columns:1fr}
+  .ligne-prod,.simulateur,.phases,.carriere-intro{grid-template-columns:1fr}
+  .carriere-photo,.carriere-photo img{max-height:420px}
   .scene-cadre{top:76px;z-index:2;padding:12px}
   .pas-item{min-height:48vh}
   section{padding:72px 0}
@@ -474,10 +480,17 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 <!-- ============ CARRIÈRE RESPONSABLE ============ -->
 <section class="carriere" id="carriere">
   <div class="wrap">
-    <div class="reveal">
-      <p class="eyebrow">Carrière responsable</p>
-      <h2>De la carrière au champ</h2>
-      <p class="lead">Une carrière d'argile s'exploite par phases. Pendant que l'argile est extraite sur une zone, le reste du site continue d'être cultivé ; puis chaque zone exploitée est remise en état et rendue à sa vocation agricole.</p>
+    <div class="carriere-intro">
+      <div class="reveal">
+        <p class="eyebrow">Carrière responsable</p>
+        <h2>De la carrière au champ</h2>
+        <p class="lead">Tout commence dans notre carrière : un front de taille où l'argile est extraite couche après couche, puis mise en tas pour s'homogénéiser avant de partir à l'usine.</p>
+        <p class="lead" style="margin-top:1em">Une carrière d'argile s'exploite par phases. Pendant que l'argile est extraite sur une zone, le reste du site continue d'être cultivé ; puis chaque zone exploitée est remise en état et rendue à sa vocation agricole.</p>
+      </div>
+      <figure class="carriere-photo reveal">
+        <img src="images/carriere-argile.jpg" alt="Front de taille de la carrière d'argile de DPR Axxam, avec un tas d'argile extraite au premier plan" loading="lazy" width="608" height="1080">
+        <figcaption>Notre carrière d'argile : le front de taille et l'argile extraite.</figcaption>
+      </figure>
     </div>
     <div class="phases reveal" id="phases">
       <div class="phases-vue">
