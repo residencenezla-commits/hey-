@@ -66,6 +66,17 @@ nav{display:flex;align-items:center;justify-content:space-between;height:72px;co
 .chiffres div>span{font-size:.85rem;opacity:.75}
 .descendre{position:absolute;bottom:28px;left:50%;z-index:2;color:#fff;opacity:.7;animation:flotte 2s infinite;text-decoration:none;font-size:1.4rem}
 @keyframes flotte{50%{transform:translateY(8px)}}
+.hero-video{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.hero-video iframe,.hero-video video{position:absolute;top:50%;left:50%;width:177.78vh;height:56.25vw;min-width:100%;min-height:100%;transform:translate(-50%,-50%);border:0;object-fit:cover}
+.lueur{position:absolute;inset:0;z-index:1;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(circle 260px at var(--mx,70%) var(--my,80%),rgba(255,138,61,.35),transparent 70%);transition:background .1s}
+.progression{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--brique),var(--four));z-index:60}
+.modale{position:fixed;inset:0;z-index:80;background:rgba(15,9,7,.85);display:grid;place-items:center;padding:16px}
+.modale[hidden]{display:none}
+.modale-cadre{position:relative;width:min(960px,100%)}
+.ratio{position:relative;padding-top:56.25%;border-radius:14px;overflow:hidden;background:#000}
+.ratio iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.fermer{position:absolute;top:-44px;right:0;background:none;border:0;color:#fff;font-size:1.6rem;cursor:pointer}
+button.btn{font:inherit;font-weight:600;cursor:pointer;background:transparent}
 
 /* Qui sommes-nous */
 .duo{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:center}
@@ -87,13 +98,48 @@ nav{display:flex;align-items:center;justify-content:space-between;height:72px;co
 /* De la carrière au four */
 .parcours{background:var(--encre);color:var(--sable)}
 .parcours .lead{color:#c9b3a5}
-.etapes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;counter-reset:e}
-.etape{background:#33241d;border-radius:16px;padding:28px;position:relative;overflow:hidden;border-top:4px solid var(--brique)}
-.etape::before{counter-increment:e;content:"0" counter(e);font-family:Fraunces,serif;font-size:3.2rem;color:rgba(217,139,95,.25);position:absolute;right:18px;top:6px}
-.etape .ico{font-size:2rem}
-.etape h3{font-size:1.3rem;margin:.5em 0 .3em;color:#fff}
-.etape p{font-size:.95rem;color:#c9b3a5}
-.etape.feu{background:linear-gradient(160deg,#5a2312,#2a1d17);border-top-color:var(--four)}
+.ligne-prod{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;margin-top:40px;align-items:start}
+.scene-cadre{position:sticky;top:96px;background:#33241d;border-radius:18px;padding:20px;border:1px solid #4a372e}
+.scene{width:100%;height:auto;display:block}
+.scene text{font-size:11px;fill:#c9b3a5;text-anchor:middle;font-family:Inter,sans-serif}
+.sol{stroke:#5a4339;stroke-width:2}.tapis{stroke:#4a372e;stroke-width:6;stroke-linecap:round}
+.tapis-mvt{stroke:#6b5246;stroke-width:2;stroke-dasharray:4 10;animation:tapis 1s linear infinite}
+@keyframes tapis{to{stroke-dashoffset:-14}}
+.terre{fill:#8f4a2a}.terre-claire{fill:#b9683f}.metal{fill:#7a6a62}.bras{stroke:#7a6a62;stroke-width:5;stroke-linecap:round}
+.bati{fill:#4a372e;stroke:#6b5246;stroke-width:1.5}.roue{fill:none;stroke:#d98b5f;stroke-width:5;stroke-dasharray:5 4}.axe{fill:#d98b5f}
+.tremie{fill:none;stroke:#6b5246;stroke-width:2}
+.brique-crue{fill:#c98a63}.brique-cuite{fill:#b4472b}.palette{fill:#8a6a4a}
+.four{fill:#5a2312;stroke:#7d2a17;stroke-width:2}.cheminee{fill:#4a372e}
+.vapeur{fill:none;stroke:#c9b3a5;stroke-width:2;stroke-linecap:round;opacity:.6}
+.voyageuse{fill:#c98a63;transition:transform 1.1s cubic-bezier(.5,0,.2,1),fill 1.1s}
+.voyageuse.cuite{fill:#e0592f}
+.poste{opacity:.38;transition:opacity .5s}
+.poste.actif{opacity:1}
+.poste.actif text{fill:#fff;font-weight:600}
+.poste.actif .engrenage{animation:tourne 2s linear infinite}
+.poste.actif .engrenage.inverse{animation-direction:reverse}
+@keyframes tourne{to{transform:rotate(360deg)}}
+.poste.actif .extrusion{animation:pousse 1.6s ease-in-out infinite}
+@keyframes pousse{0%{transform:translateX(-14px);opacity:0}30%{opacity:1}100%{transform:translateX(6px);opacity:1}}
+.poste.actif .vapeur{animation:monte 2s ease-in-out infinite}
+@keyframes monte{50%{transform:translateY(-6px);opacity:.2}}
+.poste.actif .flammes{transform-origin:466px 202px;animation:flamme .35s ease-in-out infinite alternate}
+@keyframes flamme{to{transform:scaleY(1.25) scaleX(.96)}}
+.halo{opacity:0;transition:opacity .6s}.poste.actif .halo{opacity:1}
+.poste.actif .pelle{transform-origin:78px 177px;animation:creuse 1.8s ease-in-out infinite}
+@keyframes creuse{50%{transform:rotate(-12deg)}}
+.scene-info{display:flex;align-items:center;gap:12px;margin-top:12px;color:var(--sable)}
+.scene-info b{font-family:Fraunces,serif;font-size:1.8rem;color:var(--argile)}
+.scene-info span{font-weight:600;min-width:9ch}
+.barre-etapes{flex:1;height:4px;background:#4a372e;border-radius:4px;overflow:hidden}
+.barre-etapes i{display:block;height:100%;width:16.6%;background:var(--four);transition:width .6s}
+.pas{list-style:none;display:grid;gap:0}
+.pas-item{min-height:62vh;display:flex;flex-direction:column;justify-content:center;padding:24px 0 24px 22px;border-left:3px solid #4a372e;opacity:.35;transition:opacity .4s,border-color .4s}
+.pas-item.actif{opacity:1;border-left-color:var(--brique)}
+.pas-item.feu.actif{border-left-color:var(--four)}
+.pas-item .num{font-family:Fraunces,serif;font-size:2.6rem;color:rgba(217,139,95,.45);line-height:1}
+.pas-item h3{font-size:1.6rem;margin:.3em 0;color:#fff}
+.pas-item p{color:#c9b3a5}
 .temp{display:inline-block;margin-top:10px;font-weight:600;color:var(--four)}
 
 /* Produits */
@@ -152,6 +198,26 @@ nav{display:flex;align-items:center;justify-content:space-between;height:72px;co
 .loi h3{font-size:1.3rem;margin-bottom:.3em;color:#fff}
 .loi p{font-size:.95rem;color:#e3cfc1}
 
+/* Simulateur de mur */
+.simulateur{display:grid;grid-template-columns:1fr 1.1fr;gap:28px;align-items:center;margin-top:24px;background:var(--carte);border:1px solid var(--ligne);border-radius:18px;padding:28px}
+.simulateur h3{font-size:1.4rem;margin:.2em 0 .3em}
+.sim-texte>p{color:var(--gris);font-size:.93rem}
+.choix{display:grid;gap:8px;margin:18px 0}
+.choix button{font:inherit;font-size:.92rem;text-align:left;padding:12px 14px;border-radius:10px;border:1.5px solid var(--ligne);background:transparent;color:var(--texte);cursor:pointer;transition:border-color .2s,background .2s}
+.choix button:hover{border-color:var(--argile)}
+.choix button[aria-checked=true]{border-color:var(--brique);background:rgba(180,71,43,.08);font-weight:600}
+.resultat{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.resultat div{background:var(--fond);border-radius:12px;padding:12px 14px;display:grid}
+.resultat small{color:var(--gris);font-size:.78rem}
+.resultat b{font-family:Fraunces,serif;font-size:2rem;color:var(--brique);line-height:1.2}
+.sim-visuel svg{width:100%;height:auto;border-radius:14px;display:block}
+.cote-froid{fill:#dde9f5}.cote-chaud{fill:#fbe3d3}
+.cote-txt{font-size:12px;font-weight:600;fill:#2a1d17}
+.ep{font-size:12px;fill:#2a1d17;font-weight:600}
+.couche{transition:all .6s}
+.flux{fill:#ff8a3d;animation:fuite linear infinite}
+@keyframes fuite{from{transform:translateX(0);opacity:0}10%{opacity:1}90%{opacity:1}to{transform:translateX(-380px);opacity:0}}
+
 /* Vue aérienne & carte */
 .carte-grille{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
 .aerien{position:relative;border-radius:18px;overflow:hidden;min-height:380px;background:
@@ -183,7 +249,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 @media (max-width:900px){
   .duo,.carte-grille,.contact-grille,.comparaison{grid-template-columns:1fr}
   .kpis{grid-template-columns:1fr}
-  .etapes{grid-template-columns:1fr 1fr}
+  .ligne-prod,.simulateur{grid-template-columns:1fr}
+  .scene-cadre{top:76px;z-index:2;padding:12px}
+  .pas-item{min-height:48vh}
   section{padding:72px 0}
 }
 @media (max-width:720px){
@@ -192,7 +260,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .menu.ouvert{display:flex}
   .menu a{display:block;padding:12px 0;border-bottom:1px solid #3b2d27}
   .burger{display:block}
-  .etapes{grid-template-columns:1fr}
+  .scene-info b{font-size:1.3rem}
+  .resultat b{font-size:1.6rem}
   .chiffres{gap:28px}
   .barre{grid-template-columns:1fr;gap:4px}
 }
@@ -201,6 +270,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 </head>
 <body>
 
+<div class="progression" id="progression" aria-hidden="true"></div>
 <header id="haut">
   <nav class="wrap">
     <a href="#accueil" class="logo" aria-label="DPR Axxam"><svg viewBox="0 0 150 46" width="120" height="37" aria-hidden="true"><path d="M8 20 L75 3 L142 20" fill="none" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><path d="M128 16 V30" stroke="#fff" stroke-width="5"/><text x="6" y="42" font-family="Inter,Arial,sans-serif" font-weight="700" font-size="30" fill="#fff" letter-spacing="-1">dpr</text><text x="62" y="41" font-family="Inter,Arial,sans-serif" font-weight="800" font-size="17" fill="#e8462e">AXXAM</text></svg></a>
@@ -219,6 +289,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 <!-- ============ FAÇADE DYNAMIQUE ============ -->
 <section class="hero" id="accueil">
   <div class="facade" id="facade" aria-hidden="true"></div>
+  <div class="hero-video" id="heroVideo" aria-hidden="true"></div>
+  <div class="lueur" id="lueur" aria-hidden="true"></div>
   <div class="wrap">
     <p class="eyebrow" style="color:var(--argile)">Briqueterie · Béjaïa · Algérie</p>
     <h1>La <em>force</em> de la terre</h1>
@@ -226,6 +298,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="btns">
       <a href="#produits" class="btn plein">Nos produits</a>
       <a href="#contact" class="btn vide">Demander un devis</a>
+      <button type="button" class="btn vide film" id="btnFilm" hidden>▶ Le film de l'usine</button>
     </div>
     <div class="chiffres">
       <div><strong>2018</strong><span>en service depuis</span></div>
@@ -277,17 +350,76 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 <section class="parcours" id="fabrication">
   <div class="wrap">
     <div class="reveal">
-      <p class="eyebrow" style="color:var(--argile)">Notre savoir-faire</p>
+      <p class="eyebrow" style="color:var(--argile)">Notre unité de fabrication</p>
       <h2>De la carrière au four</h2>
-      <p class="lead">Chaque brique suit un parcours précis. La terre devient matériau de construction grâce à l'eau, à la forme et au feu.</p>
+      <p class="lead">Faites défiler pour suivre une brique tout au long de la chaîne de production : la terre devient matériau de construction grâce à l'eau, à la forme et au feu.</p>
     </div>
-    <div class="etapes">
-      <div class="etape reveal"><div class="ico">⛰️</div><h3>Extraction</h3><p>L'argile est prélevée dans notre carrière, sélectionnée puis stockée pour s'homogénéiser.</p></div>
-      <div class="etape reveal"><div class="ico">⚙️</div><h3>Préparation</h3><p>Broyage, dosage et malaxage avec de l'eau pour obtenir une pâte homogène et plastique.</p></div>
-      <div class="etape reveal"><div class="ico">🧱</div><h3>Façonnage</h3><p>La pâte passe dans l'étireuse et la filière qui donne la forme et les alvéoles de chaque produit.</p></div>
-      <div class="etape reveal"><div class="ico">💨</div><h3>Séchage</h3><p>Les produits crus perdent progressivement leur humidité en séchoir pour éviter fissures et déformations.</p></div>
-      <div class="etape feu reveal"><div class="ico">🔥</div><h3>Cuisson</h3><p>Le passage au four transforme définitivement l'argile en terre cuite résistante et durable.</p><span class="temp">≈ 900 à 1 000 °C</span></div>
-      <div class="etape reveal"><div class="ico">📦</div><h3>Contrôle et expédition</h3><p>Tri, contrôle qualité, palettisation puis livraison sur vos chantiers.</p></div>
+    <div class="ligne-prod">
+      <div class="scene-cadre">
+        <svg class="scene" id="scene" viewBox="0 84 600 160" role="img" aria-label="Chaîne de fabrication de la briqueterie, de la carrière au four">
+          <defs>
+            <linearGradient id="gFeu" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ff8a3d"/><stop offset="1" stop-color="#ffd27a"/></linearGradient>
+            <radialGradient id="gHalo"><stop offset="0" stop-color="#ff8a3d" stop-opacity=".55"/><stop offset="1" stop-color="#ff8a3d" stop-opacity="0"/></radialGradient>
+          </defs>
+          <line x1="0" y1="210" x2="600" y2="210" class="sol"/>
+          <line x1="20" y1="202" x2="590" y2="202" class="tapis"/>
+          <line x1="20" y1="202" x2="590" y2="202" class="tapis-mvt"/>
+          <!-- 1 Extraction -->
+          <g class="poste" data-i="0">
+            <path d="M0 210 L38 128 L62 150 L100 210 Z" class="terre"/>
+            <path d="M10 210 L38 150 L56 168 L82 210 Z" class="terre-claire"/>
+            <g class="pelle"><rect x="62" y="170" width="30" height="14" rx="3" class="metal"/><line x1="78" y1="172" x2="98" y2="148" class="bras"/><path d="M96 146 l12 4 l-6 12 z" class="metal"/></g>
+            <text x="50" y="232">1 · Extraction</text>
+          </g>
+          <!-- 2 Préparation -->
+          <g class="poste" data-i="1">
+            <rect x="118" y="150" width="68" height="52" rx="4" class="bati"/>
+            <g class="engrenage" style="transform-origin:140px 176px"><circle cx="140" cy="176" r="13" class="roue"/><circle cx="140" cy="176" r="4" class="axe"/></g>
+            <g class="engrenage inverse" style="transform-origin:166px 176px"><circle cx="166" cy="176" r="10" class="roue"/><circle cx="166" cy="176" r="3" class="axe"/></g>
+            <path d="M126 150 l8 -16 h36 l8 16" class="tremie"/>
+            <text x="152" y="232">2 · Préparation</text>
+          </g>
+          <!-- 3 Façonnage -->
+          <g class="poste" data-i="2">
+            <rect x="212" y="158" width="56" height="44" rx="4" class="bati"/>
+            <rect x="268" y="172" width="14" height="22" class="metal"/>
+            <g class="extrusion"><rect x="284" y="176" width="22" height="16" rx="1" class="brique-crue"/></g>
+            <text x="250" y="232">3 · Façonnage</text>
+          </g>
+          <!-- 4 Séchage -->
+          <g class="poste" data-i="3">
+            <rect x="318" y="128" width="78" height="74" rx="4" class="bati"/>
+            <g class="etageres"><rect x="326" y="140" width="62" height="8" class="brique-crue"/><rect x="326" y="160" width="62" height="8" class="brique-crue"/><rect x="326" y="180" width="62" height="8" class="brique-crue"/></g>
+            <path class="vapeur" d="M336 122 q4 -8 0 -16 q-4 -8 0 -16 M357 122 q4 -8 0 -16 q-4 -8 0 -16 M378 122 q4 -8 0 -16 q-4 -8 0 -16"/>
+            <text x="357" y="232">4 · Séchage</text>
+          </g>
+          <!-- 5 Cuisson -->
+          <g class="poste" data-i="4">
+            <circle cx="466" cy="178" r="60" fill="url(#gHalo)" class="halo"/>
+            <path d="M414 202 V160 Q466 118 518 160 V202 Z" class="four"/>
+            <rect x="490" y="104" width="12" height="40" class="cheminee"/>
+            <g class="flammes"><path d="M440 202 q6 -26 12 -8 q4 -20 12 -2 q6 -24 12 -4 q4 -18 12 0 q4 -16 8 14 z" fill="url(#gFeu)"/></g>
+            <text x="466" y="232">5 · Cuisson</text>
+          </g>
+          <!-- 6 Expédition -->
+          <g class="poste" data-i="5">
+            <rect x="534" y="194" width="52" height="8" class="palette"/>
+            <g class="pile"><rect x="536" y="180" width="23" height="13" class="brique-cuite"/><rect x="561" y="180" width="23" height="13" class="brique-cuite"/><rect x="536" y="166" width="23" height="13" class="brique-cuite"/><rect x="561" y="166" width="23" height="13" class="brique-cuite"/><rect x="548" y="152" width="23" height="13" class="brique-cuite"/></g>
+            <text x="560" y="232">6 · Expédition</text>
+          </g>
+          <!-- La brique qui voyage -->
+          <rect id="voyageuse" x="-12" y="188" width="24" height="13" rx="2" class="voyageuse"/>
+        </svg>
+        <div class="scene-info"><b id="sceneNum">01</b><span id="sceneTitre">Extraction</span><i class="barre-etapes"><i id="sceneProg"></i></i></div>
+      </div>
+      <ol class="pas">
+        <li class="pas-item" data-i="0" data-x="50"><span class="num">01</span><h3>Extraction</h3><p>L'argile est prélevée dans notre carrière, sélectionnée par couches puis mise en stock pour s'homogénéiser. La qualité de la brique commence ici, dans la terre.</p></li>
+        <li class="pas-item" data-i="1" data-x="152"><span class="num">02</span><h3>Préparation</h3><p>Broyage, dosage et malaxage avec de l'eau : la terre devient une pâte homogène et plastique, débarrassée de ses impuretés.</p></li>
+        <li class="pas-item" data-i="2" data-x="295"><span class="num">03</span><h3>Façonnage</h3><p>La pâte est poussée à travers une filière par l'étireuse. Elle en sort en un boudin continu, découpé aux dimensions de la brique 8 trous, 12 trous ou du hourdis.</p></li>
+        <li class="pas-item" data-i="3" data-x="357"><span class="num">04</span><h3>Séchage</h3><p>Les produits crus perdent lentement leur eau dans le séchoir, sans fissure ni déformation, avant d'affronter le feu.</p></li>
+        <li class="pas-item feu" data-i="4" data-x="466"><span class="num">05</span><h3>Cuisson</h3><p>Le passage au four transforme définitivement l'argile en terre cuite : un matériau dur, durable et incombustible.</p><span class="temp">≈ 900 à 1 000 °C</span></li>
+        <li class="pas-item" data-i="5" data-x="560"><span class="num">06</span><h3>Contrôle et expédition</h3><p>Tri, contrôle qualité et palettisation, puis chargement vers vos chantiers. Capacité installée : 140 000 tonnes par an.</p></li>
+      </ol>
     </div>
   </div>
 </section>
@@ -347,6 +479,35 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       </div>
       <p class="source">Source : CNERIB (Centre National d'Études et de Recherches Intégrées du Bâtiment), étude comparative brique / béton réalisée pour l'Association des Briquetiers Algériens, mars 2019. Calcul selon le DTR C 3.2/4.</p>
     </figure>
+
+    <div class="simulateur reveal" id="simulateur">
+      <div class="sim-texte">
+        <p class="eyebrow">Simulateur</p>
+        <h3>Composez votre mur extérieur</h3>
+        <p>Choisissez une paroi et regardez la chaleur s'échapper en hiver. Moins il y a de flux, plus la maison est économe.</p>
+        <div class="choix" role="radiogroup" aria-label="Type de mur">
+          <button type="button" role="radio" data-mur="beton">Voile en béton armé 16 cm</button>
+          <button type="button" role="radio" data-mur="b12">Brique 12 trous (15 cm)</button>
+          <button type="button" role="radio" data-mur="double">Double mur B8 + lame d'air + B12</button>
+        </div>
+        <div class="resultat">
+          <div><small>Coefficient de transmission U</small><b id="simU">–</b><small>W/m²·K</small></div>
+          <div><small>Pertes comparées au béton</small><b id="simGain">–</b></div>
+        </div>
+        <p class="source">Calcul indicatif d'après les résistances thermiques de l'étude CNERIB (tableau III.5) : brique creuse λ = 0,49, béton armé λ = 1,75, lame d'air 0,16 m²·K/W, enduits plâtre et ciment ; résistances superficielles 0,17 m²·K/W.</p>
+      </div>
+      <div class="sim-visuel">
+        <svg viewBox="0 0 420 260" id="simSvg" role="img" aria-label="Coupe du mur choisi avec le flux de chaleur">
+          <rect x="0" y="0" width="210" height="260" class="cote-froid"/>
+          <rect x="210" y="0" width="210" height="260" class="cote-chaud"/>
+          <text x="16" y="26" class="cote-txt">Extérieur ❄ 5 °C</text>
+          <text x="404" y="26" text-anchor="end" class="cote-txt">Intérieur 🔥 20 °C</text>
+          <g id="simCouches"></g>
+          <g id="simFlux"></g>
+          <text x="210" y="250" text-anchor="middle" class="ep" id="simEp"></text>
+        </svg>
+      </div>
+    </div>
 
     <div class="comparaison">
       <figure class="photo reveal">
@@ -432,6 +593,10 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </div>
 </section>
 
+<div class="modale" id="modale" role="dialog" aria-modal="true" aria-label="Film de l'usine" hidden>
+  <div class="modale-cadre"><button type="button" class="fermer" id="fermerFilm" aria-label="Fermer">✕</button><div class="ratio" id="filmCadre"></div></div>
+</div>
+
 <footer>
   <div class="wrap">
     <span>© <span id="annee"></span> SARL DPR Axxam · DPR Groupe</span>
@@ -440,6 +605,13 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 </footer>
 
 <script>
+// ================= RÉGLAGES =================
+// Collez ici l'identifiant de votre vidéo YouTube (la partie après "v=" dans le lien),
+// par exemple 'dQw4w9WgXcQ'. La vidéo passe en fond de la façade (sans le son)
+// et le bouton « Le film de l'usine » l'ouvre en grand avec le son.
+const CONFIG={ youtubeId:'' };
+// ============================================
+
 // Façade dynamique : un mur de briques qui se pose rang par rang
 (function(){
   const f=document.getElementById('facade');
@@ -473,6 +645,87 @@ document.querySelectorAll('.compteur').forEach(el=>{
   const fin=+el.dataset.fin,t0=performance.now();
   (function tick(t){const p=Math.min((t-t0)/2200,1);el.textContent=Math.round(fin*(1-Math.pow(1-p,3))).toLocaleString('fr-FR');if(p<1)requestAnimationFrame(tick)})(t0);
 });
+
+// Vidéo YouTube : fond de la façade + film en grand
+(function(){
+  const id=(CONFIG.youtubeId||'').trim(); if(!/^[\w-]{11}$/.test(id)) return;
+  const reduit=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduit){
+    const f=document.createElement('iframe');
+    f.src=`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&playsinline=1&modestbranding=1&rel=0`;
+    f.allow='autoplay; encrypted-media'; f.title='Vidéo de la briqueterie'; f.tabIndex=-1;
+    document.getElementById('heroVideo').appendChild(f);
+    document.getElementById('facade').style.opacity=.35;
+  }
+  const btn=document.getElementById('btnFilm'), m=document.getElementById('modale'), cadre=document.getElementById('filmCadre');
+  btn.hidden=false;
+  const fermer=()=>{m.hidden=true;cadre.innerHTML='';btn.focus()};
+  btn.onclick=()=>{cadre.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen title="Film de l'usine"></iframe>`;m.hidden=false;document.getElementById('fermerFilm').focus()};
+  document.getElementById('fermerFilm').onclick=fermer;
+  m.addEventListener('click',e=>{if(e.target===m)fermer()});
+  addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden)fermer()});
+})();
+
+// Lueur du four qui suit le curseur sur la façade
+(function(){
+  const hero=document.querySelector('.hero'), l=document.getElementById('lueur');
+  hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();l.style.setProperty('--mx',(e.clientX-r.left)+'px');l.style.setProperty('--my',(e.clientY-r.top)+'px')});
+})();
+
+// Barre de progression de lecture
+const prog=document.getElementById('progression');
+addEventListener('scroll',()=>{const h=document.documentElement;prog.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'},{passive:true});
+
+// Chaîne de fabrication : l'étape lue pilote l'animation
+(function(){
+  const items=[...document.querySelectorAll('.pas-item')], postes=[...document.querySelectorAll('.poste')];
+  const v=document.getElementById('voyageuse'), num=document.getElementById('sceneNum'), titre=document.getElementById('sceneTitre'), barre=document.getElementById('sceneProg');
+  function activer(i){
+    items.forEach((it,k)=>it.classList.toggle('actif',k===i));
+    postes.forEach((p,k)=>p.classList.toggle('actif',k===i));
+    const it=items[i]; v.style.transform=`translateX(${+it.dataset.x}px)`; v.classList.toggle('cuite',i>=4);
+    num.textContent=String(i+1).padStart(2,'0'); titre.textContent=it.querySelector('h3').textContent; barre.style.width=((i+1)/items.length*100)+'%';
+  }
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)activer(+e.target.dataset.i)}),{rootMargin:'-45% 0px -45% 0px'});
+  items.forEach(it=>obs.observe(it)); activer(0);
+})();
+
+// Simulateur de mur : couches et flux de chaleur
+(function(){
+  const RS=0.17; // résistances superficielles intérieure + extérieure (m²·K/W)
+  const MURS={
+    beton:{couches:[['Enduit ciment',2,0.014,'#b9b2ac'],['Voile béton armé',16,0.091,'#8f8a86'],['Enduit plâtre',2,0.057,'#efe8e0']]},
+    b12:{couches:[['Enduit ciment',2,0.014,'#b9b2ac'],['Brique 12 trous',15,0.306,'#b4472b'],['Enduit plâtre',2,0.057,'#efe8e0']]},
+    double:{couches:[['Enduit ciment',2,0.014,'#b9b2ac'],['Brique 12 trous',15,0.306,'#b4472b'],["Lame d'air",5,0.16,'#e9f1f8'],['Brique 8 trous',10,0.204,'#c0583a'],['Enduit plâtre',2,0.057,'#efe8e0']]}
+  };
+  const U=k=>1/(RS+MURS[k].couches.reduce((a,c)=>a+c[2],0));
+  const uBeton=U('beton'), NS='http://www.w3.org/2000/svg';
+  const gC=document.getElementById('simCouches'), gF=document.getElementById('simFlux');
+  const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e};
+  function choisir(k){
+    document.querySelectorAll('.choix button').forEach(b=>b.setAttribute('aria-checked',b.dataset.mur===k));
+    const cs=MURS[k].couches, total=cs.reduce((a,c)=>a+c[1],0), larg=total*4.2; let x=210-larg/2;
+    gC.innerHTML='';
+    cs.forEach(([nom,ep,,coul])=>{
+      const w=ep*4.2; const r=el('rect',{x,y:40,width:w,height:180,fill:coul,class:'couche'});
+      const t=el('title',{}); t.textContent=`${nom} · ${ep} cm`; r.appendChild(t); gC.appendChild(r);
+      if(nom.startsWith('Brique')) for(let y=52;y<212;y+=30) for(let xx=x+4;xx<x+w-8;xx+=Math.max(10,w/3)) gC.appendChild(el('rect',{x:xx,y,width:Math.min(8,w/3-3),height:18,fill:'#7d2a17',rx:1.5}));
+      x+=w;
+    });
+    document.getElementById('simEp').textContent=`Épaisseur : ${total} cm`;
+    const u=U(k); gF.innerHTML='';
+    const n=Math.round(u*6);
+    for(let i=0;i<n;i++){
+      const c=el('circle',{cx:400,cy:50+((i*37)%160),r:5,class:'flux'});
+      c.style.animationDuration=(3.2-u*0.5)+'s'; c.style.animationDelay=(-(i*0.47)%3)+'s'; gF.appendChild(c);
+    }
+    document.getElementById('simU').textContent=u.toFixed(2).replace('.',',');
+    const g=Math.round((1-u/uBeton)*100);
+    document.getElementById('simGain').textContent=k==='beton'?'référence':`−${g} %`;
+  }
+  document.querySelectorAll('.choix button').forEach(b=>b.addEventListener('click',()=>choisir(b.dataset.mur)));
+  choisir('double');
+})();
 
 // Graphique : largeur des barres et infobulle
 document.querySelectorAll('.barre').forEach(b=>{
