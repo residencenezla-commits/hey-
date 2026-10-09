@@ -1,5 +1,8 @@
 .env
 donnees/
 sauvegardes/*.sql
-# Liste des tiers à importer (le dépôt ignore les .csv par défaut)
+exports/
+# Fichiers à importer (le dépôt ignore les .csv par défaut)
 !init/tiers-dpr-axxam.csv
+!init/compta/*.csv
+__pycache__/

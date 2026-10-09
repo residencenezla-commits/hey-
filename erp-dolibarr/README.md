@@ -11,6 +11,7 @@ caisse et fabrication.
 | Société | SARL DPR AXXAM, capital 294 000 000 DA, RC 08B0185858-06/00, NIF 000806018585831, siège Village Tizi, Tissa, 06020 Semaoun (Béjaïa), usine ZAC Helouane ; devise **dinar (DZD)**, langue française, gérant Ahcene DJENNADI |
 | Clients et fournisseurs | **421 tiers repris de PC Compta** (282 clients, 139 fournisseurs) avec leur code (C005, FL012…), compte général (41100, 40101…), RC, NIF, AI et adresse ; solde au 08/10/2026 en note privée ; une catégorie par compte |
 | Factures | RC, NIF et AI du client imprimés sous son adresse ; capital, RC et NIF de DPR AXXAM en pied de page |
+| Comptabilité | plan comptable, 31 journaux et 8 748 écritures 2026 de PC Compta ; droit de timbre automatique ; export au format PC Compta (voir plus bas) |
 | TVA | 19 % par défaut (0 % et 9 % disponibles) |
 | Numérotation | Factures **FA2610-0001**, avoirs AV…, acomptes AC… |
 | Produits vendus | **B8** (brique 8 trous), **B12** (brique 12 trous), **HOURDIS** 16 — vendus à la pièce |
@@ -45,6 +46,8 @@ Les autres postes du réseau de l'usine ouvrent `http://ADRESSE-IP-DU-PC:8080`
 | `demarrer.bat` | Démarre l'ERP et ouvre le navigateur |
 | `arreter.bat` | Arrête l'ERP (les données restent dans `donnees/`) |
 | `sauvegarder.bat` | Enregistre une sauvegarde dans `sauvegardes/` |
+| `exporter_pccompta.bat` | Crée le fichier d'import PC Compta dans `exports/` |
+| `importer_pccompta.bat` | Recharge un export de PC Compta (glisser le fichier dessus) |
 
 ### Sur un serveur Linux
 
@@ -113,11 +116,50 @@ ne sont pas des tiers et sont écartées : « SOLDE SONELGAZ 2021 »,
 « AVANCE CLIENTS 2014 -2019 » et « Concessions ». Les soldes ne sont **pas**
 repris comme factures : ils figurent pour information dans la note privée.
 
-## Comptabilité
+## Comptabilité, sur le modèle de PC Compta
 
-La comptabilité légale reste tenue dans votre logiciel actuel (PC Compta).
-Dolibarr sert à la gestion de tous les jours ; les factures et règlements
-s'exportent (Outils › Exports) pour le comptable.
+La comptabilité en partie double de Dolibarr est activée et réglée **comme dans PC Compta**,
+à partir de l'export « DLG_COMPTA4 SARL DPR AXXAM consolidé 2026 » :
+
+| Élément | Repris de PC Compta |
+|---|---|
+| Plan comptable | 347 comptes SCF de la société |
+| Journaux | les 31 journaux avec les mêmes codes : 01 réouverture, 02 CPA El Kseur, 03 caisse briqueterie, 073 ventes briqueterie, 15 achats locaux briqueterie… |
+| Banques et caisses | CPA 4083 (51201, journal 02), CPA 6599 (51211, 11), CPA 26216391 (51202, 23), BNA (51230, 13), Al Baraka (51240, 17), Société Générale (51250, 24), caisse briqueterie (53000, 03), caisse carrosserie (53000, 18) |
+| Comptes par défaut | clients 41100 (auxiliaire = code tiers), fournisseurs 40101, ventes de briques 70110, TVA collectée 44570, TVA déductible 44563, timbre 44720, remises 70900, avances 41900 / 40900 |
+| Écritures | les **8 748 lignes** de 2026 (2 582 pièces), verrouillées ; la balance est contrôlée compte par compte contre PC Compta à chaque chargement |
+
+### Droit de timbre (module « Timbre DZ »)
+
+À la validation d'une facture **payée en espèces**, le timbre est calculé tout seul sur le
+TTC, arrondi au dinar supérieur : 1 % jusqu'à 30 000 DA, 1,5 % jusqu'à 100 000 DA, 2 % au-delà.
+Ce barème redonne exactement le timbre de vos **471 factures** de 2026. Il s'imprime sur la
+facture (« Timbre fiscal ») et passe au compte 44720.
+
+### Le quotidien comptable
+
+1. Les factures, règlements et achats sont saisis dans l'ERP.
+2. **Comptabilité › Liaison** : *Lier automatiquement* (chaque ligne prend le compte de son produit).
+3. **Comptabilité › Journaux** : ouvrir le journal (073 ventes briqueterie, 03 caisse…) et
+   *Enregistrer dans le grand livre*. Exemple réel testé : facture de 2 000 B8 en espèces →
+   41100/C023 60 393 au débit ; 70110 50 000, 44570 9 500, 44720 893 au crédit ; puis caisse
+   53000 au débit / 41100 au crédit.
+4. **Envoyer à PC Compta** : double-clic sur `exporter_pccompta.bat` (ou `./exporter_pccompta.sh`).
+   Le fichier `exports/EXPORT_PCCOMPTA_….xls` est au **format binaire exact** des fichiers
+   d'import de PC Compta (vérifié : le générateur réécrit à l'octet près vos fichiers PC Compta) :
+   FOLIO = mois, PIECE à 6 chiffres qui continue la numérotation de PC Compta par journal,
+   libellés en majuscules (40 caractères), tables TAB_JRN, TAB_COM et TAB_AUX (RC, NIF, AI des tiers).
+   Une écriture n'est exportée qu'une fois. Options : `--du=2026-10-01 --au=2026-10-31`,
+   `--journal=073`, `--essai` (fichier sans marquer les écritures).
+5. **Recharger PC Compta dans l'ERP** (après des saisies faites dans PC Compta : paie,
+   carrosserie, OD…) : faites glisser le nouvel export `DLG_COMPTA….xls/.xlsx` sur
+   `importer_pccompta.bat` (ou `./importer_pccompta.sh fichier`). Les écritures venues de
+   PC Compta sont remplacées, celles saisies dans l'ERP restent, et celles que l'ERP avait
+   déjà envoyées à PC Compta ne sont pas doublées. Le fichier est **refusé** s'il n'a pas
+   le NIF de DPR AXXAM.
+
+La comptabilité légale (déclarations, bilan) reste tenue dans PC Compta ; l'ERP lui envoie
+les écritures du quotidien et garde une copie complète et contrôlée de la comptabilité.
 
 ## Sauvegarde
 

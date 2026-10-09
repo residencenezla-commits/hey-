@@ -50,7 +50,7 @@ ol,ul{margin:0 0 6pt;padding-left:15pt}li{margin:2pt 0}
 <h2>Contenu de la livraison</h2>
 <table class="sommaire">
 <tr><td>1</td><td><b>DPR-AXXAM_site-web.zip</b> — le site Internet complet, prêt à déposer chez un hébergeur (page unique, photos, vidéo, visuels ABA).</td></tr>
-<tr><td>2</td><td><b>DPR-AXXAM_ERP-Dolibarr.zip</b> — le logiciel de gestion paramétré pour la briqueterie : ventes, achats, stocks, caisse, fabrication, avec les 421 clients et fournisseurs de la comptabilité.</td></tr>
+<tr><td>2</td><td><b>DPR-AXXAM_ERP-Dolibarr.zip</b> — le logiciel de gestion paramétré pour la briqueterie : ventes, achats, stocks, caisse, fabrication, avec les 421 clients et fournisseurs, et la <b>comptabilité 2026 de PC Compta</b> (plan, journaux, 8 748 écritures), le droit de timbre automatique et l'export vers PC Compta.</td></tr>
 <tr><td>3</td><td><b>DPR-AXXAM_videos-publicitaires.zip</b> — deux vidéos de 24 secondes : verticale (Reels, TikTok, WhatsApp) et horizontale (YouTube, Facebook).</td></tr>
 <tr><td>4</td><td><b>DPR-AXXAM_Guide.pdf</b> — ce document.</td></tr>
 </table>
@@ -63,9 +63,14 @@ ol,ul{margin:0 0 6pt;padding-left:15pt}li{margin:2pt 0}
 <tr><td>ERP</td><td>Installation complète à partir de zéro, paramétrage automatique, import des tiers</td><td>421 tiers, 0 erreur</td></tr>
 <tr><td>ERP</td><td>Facture client (FA2610-…), PDF, facture fournisseur, TVA 19 %</td><td>Conformes</td></tr>
 <tr><td>ERP</td><td>Sauvegarde puis restauration de la base</td><td>Données retrouvées</td></tr>
+<tr><td>Compta</td><td>Import des 8 748 lignes de PC Compta, balance comparée compte par compte</td><td>Identique</td></tr>
+<tr><td>Compta</td><td>Timbre calculé comparé aux 471 factures en espèces de 2026</td><td>471 / 471 exacts</td></tr>
+<tr><td>Compta</td><td>Facture → règlement caisse → journaux 073 et 03 → export PC Compta</td><td>Écritures conformes</td></tr>
+<tr><td>Compta</td><td>Générateur .xls : réécriture de vos fichiers PC Compta (import janvier, export d'origine)</td><td>Identiques à l'octet</td></tr>
+<tr><td>Compta</td><td>Rechargement d'un export PC Compta : pas de doublon ; fichier d'une autre société refusé</td><td>Conforme</td></tr>
 <tr><td>Vidéos</td><td>Encodage H.264 1080×1920 et 1920×1080, 30 i/s, 24 s ; version WebM pour le site</td><td>Lisibles</td></tr>
 </table>
-<div class="encadre">Les lanceurs Windows de l'ERP (<code>demarrer.bat</code>, <code>arreter.bat</code>, <code>sauvegarder.bat</code>) n'ont pas pu être essayés sur un PC Windows ; leurs équivalents Linux ont été testés. Faites un premier essai accompagné.</div>
+<div class="encadre">Les lanceurs Windows (<code>demarrer.bat</code>, <code>sauvegarder.bat</code>, <code>exporter_pccompta.bat</code>…) n'ont pas pu être essayés sur un PC Windows ; leurs équivalents Linux ont été testés. Le fichier .xls n'a pas pu être importé dans PC Compta lui-même (logiciel non disponible ici) : son format est garanti identique à vos fichiers PC Compta, mais faites le premier import sur une copie du dossier PC Compta.</div>
 </section>
 
 <section>
@@ -148,7 +153,27 @@ ol,ul{margin:0 0 6pt;padding-left:15pt}li{margin:2pt 0}
 </section>
 
 <section>
-<h2>3. Les vidéos publicitaires</h2>
+<h2>3. La comptabilité, comme dans PC Compta</h2>
+<p>L'ERP reprend <b>votre comptabilité 2026 de PC Compta</b> : les 347 comptes SCF, les 31 journaux avec les mêmes codes (073 ventes briqueterie, 03 caisse briqueterie, 02 CPA El Kseur…), les banques reliées à leur compte 512xx et les <b>8 748 lignes d'écritures</b> jusqu'au 04/10/2026, verrouillées. À chaque chargement, la balance est comparée compte par compte à celle de PC Compta : identique.</p>
+<div class="deux">
+  <div><img class="capture" src="captures/erp-facture-timbre.jpg" alt=""><div class="legende">Facture payée en espèces : timbre de 893 DA calculé automatiquement (1,5 % du TTC).</div></div>
+  <div><img class="capture" src="captures/erp-grand-livre-41100.jpg" alt=""><div class="legende">Grand livre du compte 41100 avec les codes auxiliaires de PC Compta.</div></div>
+</div>
+<h3>Le droit de timbre</h3>
+<p>À la validation d'une facture payée en <b>espèces</b> : 1 % du TTC jusqu'à 30 000 DA, 1,5 % jusqu'à 100 000 DA, 2 % au-delà, arrondi au dinar supérieur, au compte 44720. Ce barème redonne exactement le timbre de vos 471 factures en espèces de 2026.</p>
+<h3>Le circuit avec PC Compta</h3>
+<table>
+<tr><th>Étape</th><th>Comment</th></tr>
+<tr><td>1. Saisir</td><td>Factures, règlements, achats dans l'ERP.</td></tr>
+<tr><td>2. Comptabiliser</td><td>Comptabilité › Liaison › <i>Lier automatiquement</i>, puis Comptabilité › Journaux › 073 (ou 03…) › <i>Enregistrer dans le grand livre</i>.</td></tr>
+<tr><td>3. Envoyer à PC Compta</td><td>Double-clic sur <b>exporter_pccompta.bat</b> : fichier <code>exports\EXPORT_PCCOMPTA_….xls</code> au format exact de PC Compta (folio = mois, pièces qui continuent votre numérotation, tables des journaux, comptes et tiers avec RC / NIF / AI). Une écriture n'est envoyée qu'une fois.</td></tr>
+<tr><td>4. Recharger PC Compta</td><td>Après des saisies faites dans PC Compta (paie, carrosserie, OD) : faites glisser le nouvel export DLG_COMPTA… sur <b>importer_pccompta.bat</b>. Pas de doublon ; un fichier d'une autre société (autre NIF) est refusé.</td></tr>
+</table>
+<p>Exemple testé : 2 000 B8 à 25 DA HT en espèces → <b>073</b> : 41100/C023 débit 60 393 ; 70110 crédit 50 000 ; 44570 crédit 9 500 ; 44720 crédit 893 — puis <b>03</b> : 53000 débit / 41100 crédit 60 393. Exportées en pièces 073/000216 et 03/000114, à la suite de PC Compta.</p>
+</section>
+
+<section>
+<h2>4. Les vidéos publicitaires</h2>
 <div class="trois">
 <div>
 <table>
@@ -169,10 +194,11 @@ ol,ul{margin:0 0 6pt;padding-left:15pt}li{margin:2pt 0}
 </section>
 
 <section>
-<h2>4. Points à vérifier</h2>
+<h2>5. Points à vérifier</h2>
 <table>
 <tr><th>Sujet</th><th>À faire</th></tr>
-<tr><td>Comptabilité</td><td>Le <b>NIF et le RC de DPR AXXAM</b> sont saisis sur le fournisseur <b>SARL AXECHAN ELECTROME</b> (FI121) ; le même NIF figure sur <b>STATION GAMMA 4</b>. Probable erreur de saisie à corriger.</td></tr>
+<tr><td>Comptabilité</td><td>Le <b>NIF, le RC et l'article d'imposition de DPR AXXAM</b> sont saisis sur le fournisseur <b>SARL AXECHAN ELECTROME</b> (FI121) ; le même NIF figure sur <b>STATION GAMMA 4</b>. Erreur de saisie à corriger dans PC Compta.</td></tr>
+<tr><td>Comptabilité</td><td>Le .xls d'export n'a pas pu être essayé dans PC Compta : faites le premier import sur une copie du dossier, puis contrôlez la balance.</td></tr>
 <tr><td>Comptabilité</td><td>Trois fournisseurs étrangers sont nommés « <b>A IDENTIFIER (PTI …)</b> » (FE060, FE061, FE062) : à identifier.</td></tr>
 <tr><td>Comptabilité</td><td>Certains tiers ont plusieurs codes (SARL DPR COMPANY : 5 codes ; SONELGAZ : 2). Ils restent séparés dans l'ERP, comme dans PC Compta.</td></tr>
 <tr><td>Produits</td><td>Les formats affichés (30×20×10, 30×20×15, 53×20×16) sont ceux de l'étude CNERIB : confirmez qu'ils sont les vôtres.</td></tr>

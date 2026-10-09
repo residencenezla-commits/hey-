@@ -49,8 +49,9 @@ services:
       # Modules utiles au quotidien d'une briqueterie :
       # tiers, devis, commandes, bons de livraison, factures, achats fournisseurs,
       # produits, stocks, banque/caisse, nomenclatures + ordres de fabrication,
-      # charges sociales et fiscales, salaires, agenda, catégories, import/export
-      DOLI_ENABLE_MODULES: "Societe,Propale,Commande,Expedition,Facture,Fournisseur,Product,Stock,Banque,Bom,Mrp,Tax,Salaries,Agenda,Categorie,Export,Import"
+      # charges sociales et fiscales, salaires, agenda, catégories, import/export,
+      # comptabilité en partie double (paramétrée comme PC Compta par init/30-comptabilite.php)
+      DOLI_ENABLE_MODULES: "Societe,Propale,Commande,Expedition,Facture,Fournisseur,Product,Stock,Banque,Bom,Mrp,Tax,Salaries,Agenda,Categorie,Export,Import,Accounting"
       DOLI_CRON: 0
       PHP_INI_DATE_TIMEZONE: Africa/Algiers
       PHP_INI_UPLOAD_MAX_FILESIZE: 20M
@@ -62,3 +63,10 @@ services:
       - ./donnees/custom:/var/www/html/custom
       # Paramétrage briqueterie appliqué une seule fois, au premier démarrage
       - ./init:/var/www/scripts/docker-init.d:ro
+      # Corrections appliquées à chaque démarrage
+      - ./avant-demarrage:/var/www/scripts/before-starting.d:ro
+      # Module « Timbre DZ » (droit de timbre algérien)
+      - ./modules/timbredz:/var/www/html/custom/timbredz:ro
+      # Outils (export vers PC Compta…) et dossier des fichiers exportés
+      - ./outils:/var/www/scripts/outils:ro
+      - ./exports:/var/www/exports
