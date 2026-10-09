@@ -7,6 +7,10 @@
 # Les données (base, documents, modules) sont gardées dans le dossier ./donnees
 # à côté de ce fichier : c'est ce dossier qu'il faut sauvegarder.
 
+# Nom fixe du projet : les scripts démarrer/arrêter/sauvegarder retrouvent toujours l'ERP,
+# quel que soit le nom du dossier.
+name: dpr-axxam-erp
+
 services:
   mariadb:
     image: mariadb:11.8

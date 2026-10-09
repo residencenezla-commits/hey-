@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Briqueterie DPR Axxam</title>
 <meta name="description" content="SARL DPR Axxam (DPR Groupe) : fabrication industrielle de produits rouges en argile, briqueterie de la ZAC Helouane, Ighzer Amokrane, Béjaïa. De la carrière au four.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://www.dpraxxam.com/">
+<meta name="theme-color" content="#2a1d17">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_DZ">
+<meta property="og:site_name" content="Briqueterie DPR Axxam">
+<meta property="og:title" content="Briqueterie DPR Axxam — La force de la terre">
+<meta property="og:description" content="Briques creuses B8, B12 et hourdis en terre cuite, fabriqués à Béjaïa. De la carrière au four, depuis 2018.">
+<meta property="og:url" content="https://www.dpraxxam.com/">
+<meta property="og:image" content="https://www.dpraxxam.com/videos/film-dpr-axxam.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -268,6 +279,8 @@ button.btn{font:inherit;font-weight:600;cursor:pointer;background:transparent}
 
 /* Vue aérienne & carte */
 .carte-grille{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
+.carte-grille.seule{grid-template-columns:1fr}
+.aerien[hidden]{display:none}
 .aerien{position:relative;border-radius:18px;overflow:hidden;min-height:380px;background:
   repeating-linear-gradient(45deg,#c9a184 0 22px,#bf9276 22px 44px)}
 .aerien img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 8s ease}
@@ -680,13 +693,12 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="reveal">
       <p class="eyebrow">Notre site de production</p>
       <h2>La briqueterie vue du ciel</h2>
-      <p class="lead">Carrière, ateliers, séchoirs et four : découvrez notre site en photo aérienne et trouvez-nous sur Google Maps.</p>
+      <p class="lead">Carrière, ateliers, séchoirs et four : trouvez notre usine de la ZAC Helouane sur Google Maps, en vue satellite.</p>
     </div>
-    <div class="carte-grille">
-      <figure class="aerien reveal">
-        <div class="vide">Photo aérienne de la briqueterie<br><small>Placez votre image dans <code>images/vue-aerienne.jpg</code></small></div>
-        <!-- Remplacez par votre photo aérienne (drone) de la briqueterie -->
-        <img src="images/vue-aerienne.jpg" alt="Vue aérienne de la briqueterie DPR Axxam" onerror="this.remove()">
+    <div class="carte-grille" id="carteGrille">
+      <!-- La photo aérienne s'affiche quand CONFIG.photoAerienne est renseigné (voir en bas de page) -->
+      <figure class="aerien reveal" id="aerien" hidden>
+        <img id="aerienImg" alt="Vue aérienne de la briqueterie DPR Axxam">
         <figcaption class="legende"><strong>Briqueterie DPR Axxam</strong><br><small>De la carrière au four, sur un même site</small></figcaption>
       </figure>
       <div class="map reveal">
@@ -743,7 +755,9 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 // par exemple 'dQw4w9WgXcQ'. La vidéo passe en fond de la façade (sans le son)
 // et le bouton « Le film de l'usine » l'ouvre en grand avec le son.
 // Sans vidéo YouTube, le bouton ouvre le film publicitaire hébergé avec le site.
-const CONFIG={ youtubeId:'', videoLocale:'videos/film-dpr-axxam.mp4', affiche:'videos/film-dpr-axxam.jpg' };
+// Photo aérienne (drone) de l'usine : déposez-la dans images/ et indiquez son nom,
+// par exemple photoAerienne:'images/vue-aerienne.jpg'.
+const CONFIG={ photoAerienne:'', youtubeId:'', videoLocale:'videos/film-dpr-axxam.mp4', affiche:'videos/film-dpr-axxam.jpg' };
 // ============================================
 
 // Façade dynamique : un mur de briques qui se pose rang par rang
@@ -803,6 +817,16 @@ document.querySelectorAll('.compteur').forEach(el=>{
   document.getElementById('fermerFilm').onclick=fermer;
   m.addEventListener('click',e=>{if(e.target===m)fermer()});
   addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden)fermer()});
+})();
+
+// Photo aérienne : affichée seulement si elle est configurée, sinon la carte prend toute la largeur
+(function(){
+  const g=document.getElementById('carteGrille');
+  if(!CONFIG.photoAerienne){g.classList.add('seule');return}
+  const f=document.getElementById('aerien'), i=document.getElementById('aerienImg');
+  i.onload=()=>{f.hidden=false;g.classList.remove('seule')};
+  i.onerror=()=>g.classList.add('seule');
+  g.classList.add('seule'); i.src=CONFIG.photoAerienne;
 })();
 
 // Lueur du four qui suit le curseur sur la façade

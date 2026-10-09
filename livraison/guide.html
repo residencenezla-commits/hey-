@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<title>DPR AXXAM — Guide de livraison</title>
+<style>
+@page{size:A4;margin:16mm 16mm 18mm}
+*{box-sizing:border-box}
+body{font-family:"Inter","Inter Display",Arial,sans-serif;color:#2a1d17;font-size:10.2pt;line-height:1.5;margin:0}
+h1,h2,h3{font-family:"Inter Display","Inter",Arial,sans-serif;line-height:1.15;margin:0}
+h1{font-size:30pt;font-weight:900}
+h2{font-size:17pt;font-weight:800;color:#7d2a17;margin:0 0 8pt;padding-top:2pt}
+h3{font-size:11.5pt;font-weight:800;margin:12pt 0 4pt}
+p{margin:0 0 6pt}
+.rouge{color:#c0281f}.argile{color:#b4472b}
+section{page-break-before:always}
+.couverture{height:255mm;display:flex;flex-direction:column;justify-content:space-between;background:#1b1411;color:#fff;margin:-16mm -16mm 0;padding:22mm 18mm}
+.couverture .sur{letter-spacing:.2em;font-size:9pt;font-weight:700;color:#e9a070}
+.couverture h1{font-size:40pt;margin:6pt 0 10pt}
+.couverture .sous{font-size:13pt;opacity:.85;max-width:120mm}
+.couverture img{width:100%;border-radius:4mm;margin-top:10mm}
+.couverture .pied{font-size:8.5pt;opacity:.7}
+table{width:100%;border-collapse:collapse;margin:6pt 0 10pt;font-size:9.4pt}
+th{background:#f3e6d8;text-align:left;padding:5pt 6pt;font-weight:700}
+td{border-bottom:1px solid #ead9c8;padding:5pt 6pt;vertical-align:top}
+code{font-family:"DejaVu Sans Mono",monospace;font-size:8.6pt;background:#f6efe7;padding:1pt 3pt;border-radius:2pt}
+pre{font-family:"DejaVu Sans Mono",monospace;font-size:8.4pt;background:#2a1d17;color:#f3e6d8;padding:7pt 9pt;border-radius:3pt;white-space:pre-wrap;margin:4pt 0 8pt}
+.encadre{border-left:3pt solid #b4472b;background:#fbf3ec;padding:7pt 10pt;margin:8pt 0;border-radius:0 3pt 3pt 0}
+.alerte{border-left-color:#c0281f;background:#fdeeee}
+.capture{width:100%;border:1px solid #ead9c8;border-radius:3pt;margin:4pt 0 2pt}
+.legende{font-size:8.4pt;color:#6b5a51;margin-bottom:8pt}
+.deux{display:grid;grid-template-columns:1fr 1fr;gap:8mm;align-items:start}
+.trois{display:grid;grid-template-columns:2.2fr 1fr;gap:6mm;align-items:start}
+ol,ul{margin:0 0 6pt;padding-left:15pt}li{margin:2pt 0}
+.etape{display:grid;grid-template-columns:9mm 1fr;gap:3mm;margin:5pt 0}
+.etape b.n{display:grid;place-items:center;width:8mm;height:8mm;border-radius:50%;background:#b4472b;color:#fff;font-size:10pt}
+.sommaire td:first-child{font-weight:800;width:10mm;color:#b4472b}
+</style></head>
+<body>
+
+<div class="couverture">
+  <div>
+    <div class="sur">SARL DPR AXXAM · BRIQUETERIE · BÉJAÏA</div>
+    <h1>Guide de<br>livraison</h1>
+    <div class="sous">Site Internet, ERP de gestion, vidéos publicitaires : ce qui a été réalisé, comment le mettre en service et quoi vérifier.</div>
+    <img src="captures/site-accueil.jpg" alt="">
+  </div>
+  <div class="pied">Version du <span id="date"></span> · Contenu du paquet « DPR-AXXAM_livraison-complete.zip »</div>
+</div>
+
+<section>
+<h2>Contenu de la livraison</h2>
+<table class="sommaire">
+<tr><td>1</td><td><b>DPR-AXXAM_site-web.zip</b> — le site Internet complet, prêt à déposer chez un hébergeur (page unique, photos, vidéo, visuels ABA).</td></tr>
+<tr><td>2</td><td><b>DPR-AXXAM_ERP-Dolibarr.zip</b> — le logiciel de gestion paramétré pour la briqueterie : ventes, achats, stocks, caisse, fabrication, avec les 421 clients et fournisseurs de la comptabilité.</td></tr>
+<tr><td>3</td><td><b>DPR-AXXAM_videos-publicitaires.zip</b> — deux vidéos de 24 secondes : verticale (Reels, TikTok, WhatsApp) et horizontale (YouTube, Facebook).</td></tr>
+<tr><td>4</td><td><b>DPR-AXXAM_Guide.pdf</b> — ce document.</td></tr>
+</table>
+
+<h3>Tests réalisés avant livraison</h3>
+<table>
+<tr><th>Élément</th><th>Test</th><th>Résultat</th></tr>
+<tr><td>Site</td><td>Téléphone (360 px), tablette, portable, grand écran : affichage, erreurs, fichiers manquants, débordement</td><td>Aucune erreur</td></tr>
+<tr><td>Site</td><td>Simulateur de mur, phases de la carrière, filtres et visionneuse ABA, film de l'usine, carte</td><td>Fonctionnels</td></tr>
+<tr><td>ERP</td><td>Installation complète à partir de zéro, paramétrage automatique, import des tiers</td><td>421 tiers, 0 erreur</td></tr>
+<tr><td>ERP</td><td>Facture client (FA2610-…), PDF, facture fournisseur, TVA 19 %</td><td>Conformes</td></tr>
+<tr><td>ERP</td><td>Sauvegarde puis restauration de la base</td><td>Données retrouvées</td></tr>
+<tr><td>Vidéos</td><td>Encodage H.264 1080×1920 et 1920×1080, 30 i/s, 24 s ; version WebM pour le site</td><td>Lisibles</td></tr>
+</table>
+<div class="encadre">Les lanceurs Windows de l'ERP (<code>demarrer.bat</code>, <code>arreter.bat</code>, <code>sauvegarder.bat</code>) n'ont pas pu être essayés sur un PC Windows ; leurs équivalents Linux ont été testés. Faites un premier essai accompagné.</div>
+</section>
+
+<section>
+<h2>1. Le site Internet</h2>
+<div class="trois">
+  <div>
+    <p>Une page unique, en français, organisée en sections : façade animée, qui sommes-nous et DPR Groupe, chaîne de fabrication animée « de la carrière au four », carrière responsable, produits B8 / B12 / hourdis, économie d'énergie (étude CNERIB, loi 99-09, simulateur de mur), visuels de l'ABA, carte Google Maps, contact et demande de devis.</p>
+    <img class="capture" src="captures/site-simulateur.jpg" alt="">
+    <div class="legende">Le simulateur « Composez votre mur extérieur ».</div>
+  </div>
+  <div><img class="capture" src="captures/site-telephone.jpg" alt=""><div class="legende">Le site sur téléphone.</div></div>
+</div>
+
+<h3>Mettre le site en ligne</h3>
+<div class="etape"><b class="n">1</b><div>Réservez le nom de domaine <b>dpraxxam.com</b> (s'il n'est pas déjà à vous) et un hébergement web simple (offre « mutualisée » avec cPanel ou FTP).</div></div>
+<div class="etape"><b class="n">2</b><div>Décompressez <b>DPR-AXXAM_site-web.zip</b> et déposez <b>tout son contenu</b> (<code>index.html</code>, dossiers <code>images</code> et <code>videos</code>, etc.) dans le dossier public de l'hébergement (souvent <code>public_html</code> ou <code>www</code>).</div></div>
+<div class="etape"><b class="n">3</b><div>Activez le certificat <b>https</b> (gratuit chez la plupart des hébergeurs : « Let's Encrypt »), puis ouvrez <code>https://www.dpraxxam.com</code>.</div></div>
+<div class="etape"><b class="n">4</b><div>Facultatif : déclarez le site dans Google Search Console (le fichier <code>sitemap.xml</code> est fourni) et dans votre fiche Google Maps « Sarl dpr axxam ».</div></div>
+
+<h3>Réglages simples (en bas du fichier index.html, bloc « RÉGLAGES »)</h3>
+<table>
+<tr><th>Réglage</th><th>Effet</th></tr>
+<tr><td><code>photoAerienne:'images/vue-aerienne.jpg'</code></td><td>Affiche votre photo de drone à côté de la carte (déposez d'abord la photo dans <code>images/</code>). Sans photo, la carte occupe toute la largeur.</td></tr>
+<tr><td><code>youtubeId:'…'</code></td><td>Passe une vidéo YouTube en fond de la façade et dans le bouton « Le film de l'usine ».</td></tr>
+<tr><td><code>videoLocale</code></td><td>Film hébergé avec le site (déjà réglé sur la vidéo publicitaire).</td></tr>
+</table>
+<div class="encadre">Le formulaire de devis ouvre la messagerie du visiteur vers <b>dpr.axxam2022@gmail.com</b> : il ne nécessite aucun serveur. Les prix ne sont pas affichés sur le site.</div>
+</section>
+
+<section>
+<h2>2. L'ERP Dolibarr</h2>
+<p>Dolibarr est un logiciel de gestion libre et gratuit, en français. Il est livré <b>déjà paramétré</b> pour DPR AXXAM.</p>
+<table>
+<tr><th>Prêt à l'emploi</th><th>Détail</th></tr>
+<tr><td>Société</td><td>SARL DPR AXXAM, capital 294 000 000 DA, RC 08B0185858-06/00, NIF 000806018585831, siège Village Tizi, Tissa, 06020 Semaoun ; dinar algérien ; TVA 19 % (9 % et 0 % disponibles)</td></tr>
+<tr><td>Produits</td><td>B8, B12, hourdis (à la pièce) ; achats : argile, gasoil, gaz, électricité, palettes, film, pièces de rechange, transport, entretien</td></tr>
+<tr><td>Entrepôts</td><td>PF produits finis · MP matières premières · MAG pièces de rechange ; caisse usine</td></tr>
+<tr><td>Tiers</td><td>421 clients et fournisseurs de PC Compta avec code, compte SCF, RC, NIF, AI, adresse, solde au 08/10/2026 en note</td></tr>
+<tr><td>Documents</td><td>Factures FA2610-0001, avoirs AV…, acomptes AC… ; identifiants fiscaux du client et mentions légales de DPR AXXAM imprimés</td></tr>
+</table>
+<div class="deux">
+  <div><img class="capture" src="captures/erp-fournisseurs.jpg" alt=""><div class="legende">Les fournisseurs repris de la comptabilité, avec leur code PC Compta.</div></div>
+  <div><img class="capture" src="captures/erp-facture.jpg" alt=""><div class="legende">Facture de test : RC, NIF et AI du client, montants en dinars algériens.</div></div>
+</div>
+
+</section>
+
+<section>
+<h2>2. L'ERP Dolibarr (suite)</h2>
+<h3>Installer sur un PC Windows</h3>
+<div class="etape"><b class="n">1</b><div>Installez <b>Docker Desktop</b> (docker.com), redémarrez le PC et lancez Docker Desktop.</div></div>
+<div class="etape"><b class="n">2</b><div>Décompressez <b>DPR-AXXAM_ERP-Dolibarr.zip</b> dans <code>C:\DPR-AXXAM\</code>.</div></div>
+<div class="etape"><b class="n">3</b><div>Double-cliquez sur <b>demarrer.bat</b> : le Bloc-notes s'ouvre, choisissez les 3 mots de passe, enregistrez, fermez, puis double-cliquez à nouveau sur <b>demarrer.bat</b>.</div></div>
+<div class="etape"><b class="n">4</b><div>Après 2 à 3 minutes, le navigateur s'ouvre sur l'ERP. Identifiant <code>admin</code>, mot de passe choisi à l'étape 3. Les autres postes ouvrent <code>http://ADRESSE-IP-DU-PC:8080</code>.</div></div>
+<h3>Le premier jour</h3>
+<ol>
+<li><b>Configuration › Société</b> : ajoutez l'AI, le NIS et le logo (RC, NIF, capital et adresse sont déjà saisis).</li>
+<li><b>Configuration › Banques</b> : ajoutez vos comptes bancaires.</li>
+<li><b>Produits</b> : saisissez les prix de vente HT de B8, B12 et hourdis, puis le stock de départ (<i>Corriger le stock</i>).</li>
+<li><b>Utilisateurs</b> : un compte par personne (commercial, magasinier, comptable), avec seulement les droits utiles.</li>
+</ol>
+
+<h3>Le quotidien</h3>
+<table>
+<tr><th>Je veux…</th><th>Dans l'ERP</th></tr>
+<tr><td>Faire un devis</td><td>Commerce › Propositions › Nouvelle</td></tr>
+<tr><td>Charger un camion</td><td>Commande › Créer expédition (le stock PF baisse à la validation)</td></tr>
+<tr><td>Facturer</td><td>Commande ou expédition › Créer facture</td></tr>
+<tr><td>Encaisser</td><td>Facture › Saisir règlement (espèces, chèque, virement)</td></tr>
+<tr><td>Enregistrer la production du jour</td><td>Produits › B8 › Stock › Corriger le stock (+ quantité)</td></tr>
+<tr><td>Saisir une facture fournisseur</td><td>Facturation › Factures fournisseurs › Nouvelle</td></tr>
+<tr><td>Voir les impayés</td><td>Accueil (tableau de bord)</td></tr>
+<tr><td>Exporter pour le comptable</td><td>Outils › Exports</td></tr>
+</table>
+
+<h3>Sauvegarder (chaque jour)</h3>
+<p>Double-clic sur <b>sauvegarder.bat</b> : un fichier <code>sauvegardes\dolibarr-AAAA-MM-JJ_HHMM.sql</code> est créé. Copiez-le sur une clé USB ou un disque externe. La restauration est décrite dans le <code>README.md</code> du dossier ERP.</p>
+<div class="encadre alerte"><b>Sécurité.</b> Changez tous les mots de passe d'exemple. Si l'ERP doit être ouvert depuis Internet, faites-le installer derrière une adresse https par un technicien.</div>
+<div class="encadre">La comptabilité légale reste tenue dans PC Compta ; Dolibarr sert à la gestion quotidienne.</div>
+</section>
+
+<section>
+<h2>3. Les vidéos publicitaires</h2>
+<div class="trois">
+<div>
+<table>
+<tr><th>Moment</th><th>Contenu</th></tr>
+<tr><td>0–4 s</td><td>Mur de briques qui se construit : « La force de la terre », logo</td></tr>
+<tr><td>4–7,5 s</td><td>Photo de la carrière d'argile : « De la carrière… »</td></tr>
+<tr><td>7,5–11 s</td><td>Four animé : « …au four », ≈ 1 000 °C</td></tr>
+<tr><td>11–15 s</td><td>Produits B8, B12, hourdis et formats</td></tr>
+<tr><td>15–19,5 s</td><td>−23 % d'énergie de chauffage avec des murs en briques</td></tr>
+<tr><td>19,5–24 s</td><td>Logo, 2018, 140 000 t/an, téléphones, adresse, site</td></tr>
+</table>
+<p><b>Vertical 9:16</b> : Reels Instagram et Facebook, TikTok, YouTube Shorts, statuts WhatsApp.<br><b>Horizontal 16:9</b> : YouTube, Facebook, site web.</p>
+<div class="encadre">Les vidéos sont muettes : ajoutez une musique libre de droits au moment de publier (bibliothèque audio de TikTok, Instagram ou CapCut).</div>
+</div>
+<div><img class="capture" src="captures/video-v.jpg" alt=""><div class="legende">Extrait de la vidéo verticale.</div></div>
+</div>
+<img class="capture" src="captures/video-h.jpg" alt="" style="width:70%"><div class="legende">Extrait de la vidéo horizontale.</div>
+</section>
+
+<section>
+<h2>4. Points à vérifier</h2>
+<table>
+<tr><th>Sujet</th><th>À faire</th></tr>
+<tr><td>Comptabilité</td><td>Le <b>NIF et le RC de DPR AXXAM</b> sont saisis sur le fournisseur <b>SARL AXECHAN ELECTROME</b> (FI121) ; le même NIF figure sur <b>STATION GAMMA 4</b>. Probable erreur de saisie à corriger.</td></tr>
+<tr><td>Comptabilité</td><td>Trois fournisseurs étrangers sont nommés « <b>A IDENTIFIER (PTI …)</b> » (FE060, FE061, FE062) : à identifier.</td></tr>
+<tr><td>Comptabilité</td><td>Certains tiers ont plusieurs codes (SARL DPR COMPANY : 5 codes ; SONELGAZ : 2). Ils restent séparés dans l'ERP, comme dans PC Compta.</td></tr>
+<tr><td>Produits</td><td>Les formats affichés (30×20×10, 30×20×15, 53×20×16) sont ceux de l'étude CNERIB : confirmez qu'ils sont les vôtres.</td></tr>
+<tr><td>Chiffres</td><td>Le −23 % vient d'une étude de la profession (CNERIB pour l'ABA, 2019), pas d'essais sur vos briques. Le simulateur donne des valeurs indicatives.</td></tr>
+<tr><td>Photos</td><td>Vérifiez vos droits sur les vues aériennes de la carrière (si elles viennent de Google Earth) et sur les visuels de l'ABA.</td></tr>
+<tr><td>Données</td><td>Le dépôt GitHub contient la liste des tiers (noms, NIF, soldes) : il doit rester <b>privé</b>.</td></tr>
+<tr><td>Site</td><td>À ajouter quand vous les aurez : photo aérienne de l'usine (drone), photos ou vidéos réelles du four et des chargements, lien YouTube.</td></tr>
+</table>
+
+<h3>Contacts repris partout</h3>
+<p>SARL DPR AXXAM — Usine : ZAC Helouane, Ighzer Amokrane, Béjaïa · Siège : Village Tizi, Tissa, 06020 Semaoun, Béjaïa<br>
++213 559 90 40 00 · +213 770 93 93 94 · +213 34 19 21 21 · dpr.axxam2022@gmail.com · www.dpraxxam.com</p>
+</section>
+
+<script>document.getElementById('date').textContent=new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})</script>
+</body></html>

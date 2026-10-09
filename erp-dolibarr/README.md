@@ -25,9 +25,28 @@ Tous les prix sont à **0** : vous les saisissez vous-même (voir plus bas).
 
 ## Installation
 
-Il faut un ordinateur ou un serveur toujours allumé, avec **Docker** installé.
-Ce peut être un PC du bureau (accès depuis le réseau de l'usine) ou un serveur
-loué chez un hébergeur (accès depuis partout).
+Il faut un ordinateur ou un serveur toujours allumé, avec **Docker**.
+
+### Sur un PC Windows (le plus simple)
+
+1. Installez **Docker Desktop** (docker.com), redémarrez, lancez-le.
+2. Copiez ce dossier `erp-dolibarr` sur le PC (par exemple `C:\DPR-AXXAM\erp-dolibarr`).
+3. Double-cliquez sur **`demarrer.bat`**. La première fois, le Bloc-notes s'ouvre :
+   choisissez les 3 mots de passe, enregistrez, fermez, puis double-cliquez à nouveau
+   sur `demarrer.bat`.
+4. Après 2 à 3 minutes, le navigateur ouvre `http://localhost:8080`. Identifiant
+   `admin`, mot de passe choisi dans `.env`.
+
+Les autres postes du réseau de l'usine ouvrent `http://ADRESSE-IP-DU-PC:8080`
+(mettez cette adresse dans `DOLI_URL_ROOT` du fichier `.env`).
+
+| Double-clic | Effet |
+|---|---|
+| `demarrer.bat` | Démarre l'ERP et ouvre le navigateur |
+| `arreter.bat` | Arrête l'ERP (les données restent dans `donnees/`) |
+| `sauvegarder.bat` | Enregistre une sauvegarde dans `sauvegardes/` |
+
+### Sur un serveur Linux
 
 ```bash
 cd erp-dolibarr
@@ -35,9 +54,6 @@ cp .env.exemple .env      # puis ouvrez .env et changez les 3 mots de passe
 docker compose up -d      # premier démarrage : 2 à 3 minutes
 docker compose logs -f web   # attendre « You can connect to the running Dolibarr »
 ```
-
-Ouvrez ensuite `http://adresse-du-serveur:8080` et connectez-vous avec
-l'identifiant `admin` et le mot de passe choisi dans `.env`.
 
 > **Sécurité.** Si l'ERP est accessible depuis Internet, il doit passer par une
 > adresse en **https** (certificat). Ne laissez jamais les mots de passe d'exemple.
@@ -106,10 +122,16 @@ s'exportent (Outils › Exports) pour le comptable.
 ## Sauvegarde
 
 Tout est dans le dossier `donnees/` (base de données, PDF, pièces jointes).
-Sauvegardez-le chaque jour, par exemple sur un disque externe :
+Faites une sauvegarde **chaque jour** et copiez-la hors du PC (clé USB, disque externe) :
+
+- Windows : double-clic sur `sauvegarder.bat`
+- Linux : `./sauvegarder.sh` (à planifier chaque soir avec `cron`)
+
+Le fichier `sauvegardes/dolibarr-AAAA-MM-JJ_HHMM.sql` contient toute la base.
+Pour la restaurer sur une installation neuve :
 
 ```bash
-docker compose exec mariadb mariadb-dump -u dolidbuser -p dolidb > sauvegarde-$(date +%F).sql
+docker compose exec -T mariadb sh -c 'mariadb -u dolidbuser -p"$MARIADB_PASSWORD" dolidb' < sauvegardes/dolibarr-AAAA-MM-JJ_HHMM.sql
 ```
 
 ## Relancer le paramétrage
