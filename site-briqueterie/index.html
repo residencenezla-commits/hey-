@@ -74,7 +74,7 @@ nav{display:flex;align-items:center;justify-content:space-between;height:72px;co
 .modale[hidden]{display:none}
 .modale-cadre{position:relative;width:min(960px,100%)}
 .ratio{position:relative;padding-top:56.25%;border-radius:14px;overflow:hidden;background:#000}
-.ratio iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.ratio iframe,.ratio video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
 .fermer{position:absolute;top:-44px;right:0;background:none;border:0;color:#fff;font-size:1.6rem;cursor:pointer}
 button.btn{font:inherit;font-weight:600;cursor:pointer;background:transparent}
 
@@ -729,7 +729,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 // Collez ici l'identifiant de votre vidéo YouTube (la partie après "v=" dans le lien),
 // par exemple 'dQw4w9WgXcQ'. La vidéo passe en fond de la façade (sans le son)
 // et le bouton « Le film de l'usine » l'ouvre en grand avec le son.
-const CONFIG={ youtubeId:'' };
+// Sans vidéo YouTube, le bouton ouvre le film publicitaire hébergé avec le site.
+const CONFIG={ youtubeId:'', videoLocale:'videos/film-dpr-axxam.mp4', affiche:'videos/film-dpr-axxam.jpg' };
 // ============================================
 
 // Façade dynamique : un mur de briques qui se pose rang par rang
@@ -766,11 +767,12 @@ document.querySelectorAll('.compteur').forEach(el=>{
   (function tick(t){const p=Math.min((t-t0)/2200,1);el.textContent=Math.round(fin*(1-Math.pow(1-p,3))).toLocaleString('fr-FR');if(p<1)requestAnimationFrame(tick)})(t0);
 });
 
-// Vidéo YouTube : fond de la façade + film en grand
+// Vidéo : YouTube en fond de la façade, ou film hébergé avec le site
 (function(){
-  const id=(CONFIG.youtubeId||'').trim(); if(!/^[\w-]{11}$/.test(id)) return;
+  const id=(CONFIG.youtubeId||'').trim(), yt=/^[\w-]{11}$/.test(id), locale=(CONFIG.videoLocale||'').trim();
+  if(!yt&&!locale) return;
   const reduit=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(!reduit){
+  if(yt&&!reduit){
     const f=document.createElement('iframe');
     f.src=`https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&playsinline=1&modestbranding=1&rel=0`;
     f.allow='autoplay; encrypted-media'; f.title='Vidéo de la briqueterie'; f.tabIndex=-1;
@@ -780,7 +782,11 @@ document.querySelectorAll('.compteur').forEach(el=>{
   const btn=document.getElementById('btnFilm'), m=document.getElementById('modale'), cadre=document.getElementById('filmCadre');
   btn.hidden=false;
   const fermer=()=>{m.hidden=true;cadre.innerHTML='';btn.focus()};
-  btn.onclick=()=>{cadre.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen title="Film de l'usine"></iframe>`;m.hidden=false;document.getElementById('fermerFilm').focus()};
+  btn.onclick=()=>{
+    cadre.innerHTML=yt
+      ?`<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen title="Film de l'usine"></iframe>`
+      :`<video poster="${CONFIG.affiche||''}" controls autoplay playsinline title="Film de l'usine"><source src="${locale.replace(/\.mp4$/,'.webm')}" type="video/webm"><source src="${locale}" type="video/mp4"></video>`;
+    m.hidden=false;document.getElementById('fermerFilm').focus()};
   document.getElementById('fermerFilm').onclick=fermer;
   m.addEventListener('click',e=>{if(e.target===m)fermer()});
   addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden)fermer()});
