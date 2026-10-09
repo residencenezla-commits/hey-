@@ -69,6 +69,8 @@ ol,ul{margin:0 0 6pt;padding-left:15pt}li{margin:2pt 0}
 <tr><td>Compta</td><td>Générateur .xls : réécriture de vos fichiers PC Compta (import janvier, export d'origine)</td><td>Identiques à l'octet</td></tr>
 <tr><td>Compta</td><td>Rechargement d'un export PC Compta : pas de doublon ; fichier d'une autre société refusé</td><td>Conforme</td></tr>
 <tr><td>Compta</td><td>Tableau de bord : chiffre d'affaires, créances, trésorerie, timbre, TVA, 1er client comparés à un calcul indépendant</td><td>Identiques</td></tr>
+<tr><td>Compta</td><td>Dossier comptable : balance générale (148 comptes), balance des tiers (499 lignes), G50 sur 10 mois recalculées indépendamment ; actif = passif ; résultat TCR = classe 7 − classe 6</td><td>0 écart</td></tr>
+<tr><td>ERP</td><td>Montant en lettres sur facture et devis (60 393 DA ; 57 120 000 DA)</td><td>Texte exact</td></tr>
 <tr><td>Vidéos</td><td>Encodage H.264 1080×1920 et 1920×1080, 30 i/s, 24 s ; version WebM pour le site</td><td>Lisibles</td></tr>
 </table>
 <div class="encadre">Les lanceurs Windows (<code>demarrer.bat</code>, <code>sauvegarder.bat</code>, <code>exporter_pccompta.bat</code>…) n'ont pas pu être essayés sur un PC Windows ; leurs équivalents Linux ont été testés. Le fichier .xls n'a pas pu être importé dans PC Compta lui-même (logiciel non disponible ici) : son format est garanti identique à vos fichiers PC Compta, mais faites le premier import sur une copie du dossier PC Compta.</div>
@@ -172,6 +174,9 @@ ol,ul{margin:0 0 6pt;padding-left:15pt}li{margin:2pt 0}
 </table>
 <h3>Le tableau de bord</h3>
 <p>Double-clic sur <b>tableau_de_bord.bat</b> : une page s'ouvre (sans Internet) avec le chiffre d'affaires par mois, la trésorerie par banque, la TVA et le timbre, les principaux clients de la briqueterie et les principales charges, calculés sur le grand livre. Chiffres contrôlés contre l'export de PC Compta.</p>
+<h3>Le dossier comptable</h3>
+<p>Double-clic sur <b>dossier_comptable.bat</b> : un classeur Excel <code>exports\DOSSIER_COMPTABLE_2026_….xlsx</code> (bilan actif et passif, <b>TCR</b> au format SCF, balance générale, balance des tiers, grand livre, <b>préparation G50</b> mois par mois, contrôles) et une page imprimable des états financiers (Ctrl+P → PDF). Arrêté à une date : <code>dossier_comptable.bat --au=2026-09-30</code>. Au 04/10/2026 : total du bilan 2 403 173 420,04 DA, résultat <b>provisoire</b> 174 013 933,55 DA (avant écritures d'inventaire : stocks, amortissements de l'année, provisions, IBS). La feuille G50 est une aide : vérifiez-la avant la déclaration.</p>
+<p>Factures et devis portent en bas la mention « Arrêtée la présente facture à la somme de : soixante mille trois cent quatre-vingt-treize dinars algériens, toutes taxes comprises. »</p>
 <p>Exemple testé : 2 000 B8 à 25 DA HT en espèces → <b>073</b> : 41100/C023 débit 60 393 ; 70110 crédit 50 000 ; 44570 crédit 9 500 ; 44720 crédit 893 — puis <b>03</b> : 53000 débit / 41100 crédit 60 393. Exportées en pièces 073/000216 et 03/000114, à la suite de PC Compta.</p>
 </section>
 

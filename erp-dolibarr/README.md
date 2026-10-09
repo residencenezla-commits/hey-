@@ -10,7 +10,7 @@ caisse et fabrication.
 |---|---|
 | Société | SARL DPR AXXAM, capital 294 000 000 DA, RC 08B0185858-06/00, NIF 000806018585831, siège Village Tizi, Tissa, 06020 Semaoun (Béjaïa), usine ZAC Helouane ; devise **dinar (DZD)**, langue française, gérant Ahcene DJENNADI |
 | Clients et fournisseurs | **421 tiers repris de PC Compta** (282 clients, 139 fournisseurs) avec leur code (C005, FL012…), compte général (41100, 40101…), RC, NIF, AI et adresse ; solde au 08/10/2026 en note privée ; une catégorie par compte |
-| Factures | RC, NIF et AI du client imprimés sous son adresse ; capital, RC et NIF de DPR AXXAM en pied de page |
+| Factures et devis | RC, NIF et AI du client imprimés sous son adresse ; capital, RC et NIF de DPR AXXAM en pied de page ; mention « Arrêtée la présente facture à la somme de : … dinars algériens » en toutes lettres |
 | Comptabilité | plan comptable, 31 journaux et 8 748 écritures 2026 de PC Compta ; droit de timbre automatique ; export au format PC Compta (voir plus bas) |
 | TVA | 19 % par défaut (0 % et 9 % disponibles) |
 | Numérotation | Factures **FA2610-0001**, avoirs AV…, acomptes AC… |
@@ -49,6 +49,7 @@ Les autres postes du réseau de l'usine ouvrent `http://ADRESSE-IP-DU-PC:8080`
 | `exporter_pccompta.bat` | Crée le fichier d'import PC Compta dans `exports/` |
 | `importer_pccompta.bat` | Recharge un export de PC Compta (glisser le fichier dessus) |
 | `tableau_de_bord.bat` | Calcule et ouvre le tableau de bord de gestion |
+| `dossier_comptable.bat` | Bilan, TCR, balances, grand livre et G50 (Excel + page à imprimer) |
 
 ### Sur un serveur Linux
 
@@ -137,6 +138,11 @@ TTC, arrondi au dinar supérieur : 1 % jusqu'à 30 000 DA, 1,5 % jusqu'à 100 00
 Ce barème redonne exactement le timbre de vos **471 factures** de 2026. Il s'imprime sur la
 facture (« Timbre fiscal ») et passe au compte 44720.
 
+Le même module écrit le **montant en lettres** au bas des factures et devis, par exemple
+« Arrêtée la présente facture à la somme de : soixante mille trois cent quatre-vingt-treize
+dinars algériens, toutes taxes comprises. » Le texte se modifie dans *Accueil › Configuration ›
+Modules › Factures* (« Mention complémentaire »), en gardant la clé `__MONTANT_EN_LETTRES__`.
+
 ### Le quotidien comptable
 
 1. Les factures, règlements et achats sont saisis dans l'ERP.
@@ -170,6 +176,33 @@ déductible, droit de timbre, principaux clients de la briqueterie (codes PC Com
 principales charges, et la date de la dernière écriture de chaque journal (un mois récent
 peut être incomplet). Les chiffres ont été contrôlés contre un calcul indépendant fait
 sur l'export de PC Compta.
+
+### Dossier comptable : bilan, TCR, balances, grand livre, G50
+
+Double-clic sur `dossier_comptable.bat` (ou `./dossier_comptable.sh`). Deux fichiers
+arrivent dans `exports/` :
+
+| Fichier | Contenu |
+|---|---|
+| `DOSSIER_COMPTABLE_2026_….xlsx` | Bilan actif (brut, amortissements, net), bilan passif, **TCR** par nature au format SCF, balance générale (soldes d'ouverture, mouvements, soldes), balance des tiers, grand livre complet, **préparation G50** mois par mois (TVA collectée, TVA déductible, timbre, IRG salaires, taxe de formation, acomptes IBS), feuille de contrôles |
+| `ETATS_FINANCIERS_2026_….html` | Bilan, TCR et G50 en page imprimable (Ctrl+P → PDF), sans Internet |
+
+Pour arrêter les états à une date : `dossier_comptable.bat --au=2026-09-30`.
+
+Classement SCF : les comptes de tiers (40 à 48) et de trésorerie (51 à 58) vont à l'actif
+ou au passif selon le **sens de leur solde** (un fournisseur débiteur est à l'actif, une
+banque créditrice au passif). La feuille *Contrôles* vérifie la balance (débit = crédit),
+actif = passif, résultat du TCR = classe 7 − classe 6, et qu'aucun compte n'est resté hors du bilan ou du TCR.
+
+Sur les écritures 2026 (au 04/10/2026), le dossier donne : total du bilan
+2 403 173 420,04 DA à l'actif et au passif, résultat provisoire 174 013 933,55 DA ;
+la balance, la balance des tiers et la G50 ont été recalculées indépendamment sur l'export
+PC Compta, sans écart.
+
+> **À savoir.** Avant les écritures d'inventaire (stocks de fin d'exercice, amortissements
+> et provisions de l'année, charges et produits constatés d'avance, IBS), le résultat est
+> **provisoire**. La feuille G50 est une **aide** : vérifiez les montants et les rubriques
+> avant de remplir la déclaration officielle.
 
 La comptabilité légale (déclarations, bilan) reste tenue dans PC Compta ; l'ERP lui envoie
 les écritures du quotidien et garde une copie complète et contrôlée de la comptabilité.

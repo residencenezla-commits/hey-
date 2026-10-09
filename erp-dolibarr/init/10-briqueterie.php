@@ -58,6 +58,9 @@ $constantes = array(
 	'MAIN_PROFID1_IN_ADDRESS'            => '1',
 	'MAIN_PROFID2_IN_ADDRESS'            => '1',
 	'MAIN_PROFID3_IN_ADDRESS'            => '1',
+	// Mentions en bas des factures et devis (montant en lettres : module Timbre DZ)
+	'INVOICE_FREE_TEXT'                  => 'Arrêtée la présente facture à la somme de : __MONTANT_EN_LETTRES__, toutes taxes comprises.',
+	'PROPOSAL_FREE_TEXT'                 => 'Arrêté le présent devis à la somme de : __MONTANT_EN_LETTRES__, toutes taxes comprises. Devis valable 30 jours.',
 );
 foreach ($constantes as $nom => $valeur) {
 	dolibarr_set_const($db, $nom, $valeur, 'chaine', 0, '', $conf->entity);
