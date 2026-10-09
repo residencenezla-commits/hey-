@@ -198,6 +198,27 @@ button.btn{font:inherit;font-weight:600;cursor:pointer;background:transparent}
 .loi h3{font-size:1.3rem;margin-bottom:.3em;color:#fff}
 .loi p{font-size:.95rem;color:#e3cfc1}
 
+/* Carrière responsable */
+.carriere{background:linear-gradient(180deg,var(--fond),#eef3e6)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .carriere{background:linear-gradient(180deg,var(--fond),#1d2117)}}
+.phases{display:grid;grid-template-columns:1.5fr 1fr;gap:32px;margin-top:40px;align-items:center}
+.phases-vue{position:relative;aspect-ratio:2/1;border-radius:18px;overflow:hidden;background:#3a3a2e;box-shadow:0 20px 50px rgba(42,29,23,.18)}
+.phases-vue img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.04);transition:opacity 1s,transform 6s ease}
+.phases-vue img.actif{opacity:1;transform:scale(1)}
+.phase-badge{position:absolute;left:14px;top:14px;background:rgba(27,16,12,.8);color:#fff;font-size:.82rem;font-weight:600;padding:6px 12px;border-radius:99px}
+.lecture{position:absolute;right:14px;bottom:14px;width:38px;height:38px;border-radius:50%;border:0;background:rgba(27,16,12,.8);color:#fff;cursor:pointer;font-size:.8rem}
+.phases-liste{list-style:none;display:grid;gap:8px}
+.phases-liste button{all:unset;box-sizing:border-box;width:100%;display:flex;gap:14px;padding:14px;border-radius:12px;cursor:pointer;border:1.5px solid transparent;transition:background .3s,border-color .3s}
+.phases-liste button:hover{background:var(--carte)}
+.phases-liste button:focus-visible{outline:2px solid var(--brique)}
+.phases-liste button[aria-current=true]{background:var(--carte);border-color:#6f8f4e}
+.phases-liste b{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--ligne);font-family:Fraunces,serif}
+.phases-liste button[aria-current=true] b{background:#6f8f4e;color:#fff}
+.phases-liste span{font-size:.9rem;color:var(--gris);display:grid;gap:2px}
+.phases-liste strong{color:var(--texte);font-size:1rem}
+.curseur{display:grid;gap:6px;margin-top:16px;font-size:.8rem;color:var(--gris)}
+.curseur input{width:100%;accent-color:#6f8f4e}
+
 /* Simulateur de mur */
 .simulateur{display:grid;grid-template-columns:1fr 1.1fr;gap:28px;align-items:center;margin-top:24px;background:var(--carte);border:1px solid var(--ligne);border-radius:18px;padding:28px}
 .simulateur h3{font-size:1.4rem;margin:.2em 0 .3em}
@@ -249,7 +270,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 @media (max-width:900px){
   .duo,.carte-grille,.contact-grille,.comparaison{grid-template-columns:1fr}
   .kpis{grid-template-columns:1fr}
-  .ligne-prod,.simulateur{grid-template-columns:1fr}
+  .ligne-prod,.simulateur,.phases{grid-template-columns:1fr}
   .scene-cadre{top:76px;z-index:2;padding:12px}
   .pas-item{min-height:48vh}
   section{padding:72px 0}
@@ -278,6 +299,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <ul class="menu">
       <li><a href="#societe">La société</a></li>
       <li><a href="#fabrication">Fabrication</a></li>
+      <li><a href="#carriere">Carrière</a></li>
       <li><a href="#produits">Produits</a></li>
       <li><a href="#energie">Énergie</a></li>
       <li><a href="#site">Notre site</a></li>
@@ -413,13 +435,43 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <div class="scene-info"><b id="sceneNum">01</b><span id="sceneTitre">Extraction</span><i class="barre-etapes"><i id="sceneProg"></i></i></div>
       </div>
       <ol class="pas">
-        <li class="pas-item" data-i="0" data-x="50"><span class="num">01</span><h3>Extraction</h3><p>L'argile est prélevée dans notre carrière, sélectionnée par couches puis mise en stock pour s'homogénéiser. La qualité de la brique commence ici, dans la terre.</p></li>
+        <li class="pas-item" data-i="0" data-x="50"><span class="num">01</span><h3>Extraction</h3><p>L'argile est prélevée dans notre carrière, sélectionnée par couches puis mise en stock pour s'homogénéiser. La qualité de la brique commence ici, dans la terre ; chaque zone exploitée est ensuite <a href="#carriere" style="color:var(--argile)">rendue à l'agriculture</a>.</p></li>
         <li class="pas-item" data-i="1" data-x="152"><span class="num">02</span><h3>Préparation</h3><p>Broyage, dosage et malaxage avec de l'eau : la terre devient une pâte homogène et plastique, débarrassée de ses impuretés.</p></li>
         <li class="pas-item" data-i="2" data-x="295"><span class="num">03</span><h3>Façonnage</h3><p>La pâte est poussée à travers une filière par l'étireuse. Elle en sort en un boudin continu, découpé aux dimensions de la brique 8 trous, 12 trous ou du hourdis.</p></li>
         <li class="pas-item" data-i="3" data-x="357"><span class="num">04</span><h3>Séchage</h3><p>Les produits crus perdent lentement leur eau dans le séchoir, sans fissure ni déformation, avant d'affronter le feu.</p></li>
         <li class="pas-item feu" data-i="4" data-x="466"><span class="num">05</span><h3>Cuisson</h3><p>Le passage au four transforme définitivement l'argile en terre cuite : un matériau dur, durable et incombustible.</p><span class="temp">≈ 900 à 1 000 °C</span></li>
         <li class="pas-item" data-i="5" data-x="560"><span class="num">06</span><h3>Contrôle et expédition</h3><p>Tri, contrôle qualité et palettisation, puis chargement vers vos chantiers. Capacité installée : 140 000 tonnes par an.</p></li>
       </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CARRIÈRE RESPONSABLE ============ -->
+<section class="carriere" id="carriere">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">Carrière responsable</p>
+      <h2>De la carrière au champ</h2>
+      <p class="lead">Une carrière d'argile s'exploite par phases. Pendant que l'argile est extraite sur une zone, le reste du site continue d'être cultivé ; puis chaque zone exploitée est remise en état et rendue à sa vocation agricole.</p>
+    </div>
+    <div class="phases reveal" id="phases">
+      <div class="phases-vue">
+        <img src="images/carriere-phase1.jpg" alt="Vue aérienne : périmètre de la carrière tracé en rouge, début d'exploitation" class="actif" loading="lazy">
+        <img src="images/carriere-phase2.jpg" alt="Vue aérienne : progression des travaux, la plus grande partie du site reste cultivée" loading="lazy">
+        <img src="images/carriere-phase3.jpg" alt="Vue aérienne : poursuite de l'extraction et remise en état de la partie exploitée" loading="lazy">
+        <img src="images/carriere-phase4.jpg" alt="Vue aérienne : zone exploitée rendue à l'agriculture, remise en état d'une deuxième zone" loading="lazy">
+        <span class="phase-badge" id="phaseBadge">Phase 1 / 4</span>
+        <button type="button" class="lecture" id="phaseLecture" aria-label="Mettre en pause le défilement">❚❚</button>
+      </div>
+      <div class="phases-texte">
+        <ol class="phases-liste" id="phasesListe">
+          <li><button type="button" aria-current="true"><b>1</b><span><strong>Périmètre et début d'exploitation</strong>Le périmètre de la carrière est délimité ; l'extraction commence sur une petite partie du site.</span></button></li>
+          <li><button type="button"><b>2</b><span><strong>Progression des travaux</strong>L'exploitation avance, mais la plus grande partie du site est toujours cultivée.</span></button></li>
+          <li><button type="button"><b>3</b><span><strong>Extraction et remise en état</strong>L'extraction se poursuit ; l'activité agricole continue sur une partie du site et la partie déjà exploitée est remise en état.</span></button></li>
+          <li><button type="button"><b>4</b><span><strong>Retour à l'agriculture</strong>La zone exploitée retrouve sa vocation agricole ; une deuxième zone est à son tour remise en état.</span></button></li>
+        </ol>
+        <label class="curseur"><span>Faites glisser pour suivre l'évolution du site</span><input type="range" min="1" max="4" step="1" value="1" id="phaseCurseur" aria-label="Phase d'exploitation"></label>
+      </div>
     </div>
   </div>
 </section>
@@ -725,6 +777,22 @@ addEventListener('scroll',()=>{const h=document.documentElement;prog.style.width
   }
   document.querySelectorAll('.choix button').forEach(b=>b.addEventListener('click',()=>choisir(b.dataset.mur)));
   choisir('double');
+})();
+
+// Carrière : phases d'exploitation (défilement automatique, boutons, curseur)
+(function(){
+  const box=document.getElementById('phases'), imgs=[...box.querySelectorAll('.phases-vue img')], btns=[...box.querySelectorAll('.phases-liste button')];
+  const cur=document.getElementById('phaseCurseur'), badge=document.getElementById('phaseBadge'), lect=document.getElementById('phaseLecture');
+  let i=0, minuterie=null, enLecture=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function aller(k){i=(k+imgs.length)%imgs.length;imgs.forEach((im,n)=>im.classList.toggle('actif',n===i));btns.forEach((b,n)=>b.setAttribute('aria-current',n===i));cur.value=i+1;badge.textContent=`Phase ${i+1} / ${imgs.length}`}
+  function demarrer(){arreter();if(enLecture)minuterie=setInterval(()=>aller(i+1),4500)}
+  function arreter(){clearInterval(minuterie);minuterie=null}
+  function majBouton(){lect.textContent=enLecture?'❚❚':'▶';lect.setAttribute('aria-label',enLecture?'Mettre en pause le défilement':'Lancer le défilement')}
+  btns.forEach((b,n)=>b.addEventListener('click',()=>{aller(n);enLecture=false;majBouton();arreter()}));
+  cur.addEventListener('input',()=>{aller(cur.value-1);enLecture=false;majBouton();arreter()});
+  lect.addEventListener('click',()=>{enLecture=!enLecture;majBouton();enLecture?demarrer():arreter()});
+  new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting?demarrer():arreter()),{threshold:.3}).observe(box);
+  majBouton();aller(0);
 })();
 
 // Graphique : largeur des barres et infobulle
