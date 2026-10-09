@@ -1,0 +1,60 @@
+# ERP Dolibarr de la briqueterie SARL DPR Axxam
+#
+# Démarrage :  docker compose up -d
+# Journal :    docker compose logs -f web
+# Accès :      http://adresse-du-serveur:8080   (identifiant et mot de passe : voir le fichier .env)
+#
+# Les données (base, documents, modules) sont gardées dans le dossier ./donnees
+# à côté de ce fichier : c'est ce dossier qu'il faut sauvegarder.
+
+services:
+  mariadb:
+    image: mariadb:11.8
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MARIADB_DATABASE: dolidb
+      MARIADB_USER: dolidbuser
+      MARIADB_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./donnees/base:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  web:
+    image: dolibarr/dolibarr:24.0.1
+    restart: unless-stopped
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      DOLI_INSTALL_AUTO: 1
+      DOLI_PROD: 1
+      DOLI_DB_HOST: mariadb
+      DOLI_DB_NAME: dolidb
+      DOLI_DB_USER: dolidbuser
+      DOLI_DB_PASSWORD: ${MYSQL_PASSWORD}
+      DOLI_URL_ROOT: ${DOLI_URL_ROOT:-http://localhost:8080}
+      DOLI_ADMIN_LOGIN: ${DOLI_ADMIN_LOGIN:-admin}
+      DOLI_ADMIN_PASSWORD: ${DOLI_ADMIN_PASSWORD}
+      DOLI_COMPANY_NAME: "SARL DPR AXXAM"
+      DOLI_COMPANY_COUNTRYCODE: DZ
+      # Modules utiles au quotidien d'une briqueterie :
+      # tiers, devis, commandes, bons de livraison, factures, achats fournisseurs,
+      # produits, stocks, banque/caisse, nomenclatures + ordres de fabrication,
+      # charges sociales et fiscales, salaires, agenda, catégories, import/export
+      DOLI_ENABLE_MODULES: "Societe,Propale,Commande,Expedition,Facture,Fournisseur,Product,Stock,Banque,Bom,Mrp,Tax,Salaries,Agenda,Categorie,Export,Import"
+      DOLI_CRON: 0
+      PHP_INI_DATE_TIMEZONE: Africa/Algiers
+      PHP_INI_UPLOAD_MAX_FILESIZE: 20M
+      PHP_INI_POST_MAX_SIZE: 25M
+    ports:
+      - "${PORT:-8080}:80"
+    volumes:
+      - ./donnees/documents:/var/www/documents
+      - ./donnees/custom:/var/www/html/custom
+      # Paramétrage briqueterie appliqué une seule fois, au premier démarrage
+      - ./init:/var/www/scripts/docker-init.d:ro
