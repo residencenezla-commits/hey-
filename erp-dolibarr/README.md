@@ -8,7 +8,9 @@ caisse et fabrication.
 
 | Élément | Paramétrage |
 |---|---|
-| Société | SARL DPR AXXAM, Algérie, devise **dinar (DZD)**, langue française, gérant Ahcene DJENNADI, adresses de l'usine et du siège, téléphone, e-mail |
+| Société | SARL DPR AXXAM, capital 294 000 000 DA, RC 08B0185858-06/00, NIF 000806018585831, siège Village Tizi, Tissa, 06020 Semaoun (Béjaïa), usine ZAC Helouane ; devise **dinar (DZD)**, langue française, gérant Ahcene DJENNADI |
+| Clients et fournisseurs | **421 tiers repris de PC Compta** (282 clients, 139 fournisseurs) avec leur code (C005, FL012…), compte général (41100, 40101…), RC, NIF, AI et adresse ; solde au 08/10/2026 en note privée ; une catégorie par compte |
+| Factures | RC, NIF et AI du client imprimés sous son adresse ; capital, RC et NIF de DPR AXXAM en pied de page |
 | TVA | 19 % par défaut (0 % et 9 % disponibles) |
 | Numérotation | Factures **FA2610-0001**, avoirs AV…, acomptes AC… |
 | Produits vendus | **B8** (brique 8 trous), **B12** (brique 12 trous), **HOURDIS** 16 — vendus à la pièce |
@@ -42,8 +44,8 @@ l'identifiant `admin` et le mot de passe choisi dans `.env`.
 
 ## À compléter le premier jour
 
-1. **Accueil › Configuration › Société/Organisation** : RC, NIF, AI (article
-   d'imposition), NIS, capital, logo. Ils s'impriment sur les factures.
+1. **Accueil › Configuration › Société/Organisation** : vérifiez RC, NIF et capital
+   (déjà saisis), ajoutez l'AI (article d'imposition), le NIS et le logo.
 2. **Accueil › Configuration › Banques** : ajoutez vos comptes bancaires
    (banque, agence, RIB).
 3. **Produits** : ouvrez B8, B12 et HOURDIS et saisissez le **prix de vente HT**.
@@ -75,6 +77,25 @@ Le module **GPAO** permet de décrire la composition d'un produit (nomenclature 
 argile, gaz, palettes… pour 1 000 briques) puis de lancer des **ordres de
 fabrication** : la production consomme les matières et ajoute les briques au parc
 PF. Les quantités dépendent de votre usine : à saisir avec le responsable de production.
+
+## Clients et fournisseurs repris de la comptabilité
+
+La liste vient du fichier « Liste Clients Fournisseurs Plan Comptable 2026 DPR AXXAM ».
+Chaque tiers garde son **code PC Compta** : c'est son code client ou fournisseur
+et son compte auxiliaire dans Dolibarr ; les nouveaux tiers se créent avec un code
+libre, à saisir dans la même logique (C…, FL…, FS…).
+
+Pour mettre à jour la liste depuis un nouvel export Excel :
+
+```bash
+python3 outils/convertir_tiers.py "Liste_Clients_Fournisseurs_Plan_Comptable_2026_DPR_AXXAM.xlsx"
+docker compose exec web php /var/www/scripts/docker-init.d/20-tiers.php
+```
+
+Les tiers existants sont mis à jour (pas de doublons). Trois lignes du fichier
+ne sont pas des tiers et sont écartées : « SOLDE SONELGAZ 2021 »,
+« AVANCE CLIENTS 2014 -2019 » et « Concessions ». Les soldes ne sont **pas**
+repris comme factures : ils figurent pour information dans la note privée.
 
 ## Comptabilité
 

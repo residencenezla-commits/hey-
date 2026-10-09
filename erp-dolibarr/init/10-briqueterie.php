@@ -31,8 +31,12 @@ $constantes = array(
 	'MAIN_LANG_DEFAULT'            => 'fr_FR',
 	'MAIN_MONNAIE'                 => 'DZD',
 	'MAIN_INFO_SOCIETE_NOM'        => 'SARL DPR AXXAM',
-	'MAIN_INFO_SOCIETE_ADDRESS'    => "Usine : ZAC Helouane, Ighzer Amokrane\nSiège : Village Tizi, lieu-dit Tiassa, commune de Smaoun",
-	'MAIN_INFO_SOCIETE_TOWN'       => 'Béjaïa',
+	'MAIN_INFO_SOCIETE_ADDRESS'    => "Village Tizi, Tissa\n(Usine : ZAC Helouane, Ighzer Amokrane)",
+	'MAIN_INFO_SOCIETE_ZIP'        => '06020',
+	'MAIN_INFO_SOCIETE_TOWN'       => 'Semaoun, Béjaïa',
+	'MAIN_INFO_CAPITAL'            => '294000000',
+	'MAIN_INFO_SIREN'              => '08B0185858-06/00',  // Algérie : RC
+	'MAIN_INFO_SIRET'              => '000806018585831',   // NIF
 	'MAIN_INFO_SOCIETE_TEL'        => '+213 34 19 21 21',
 	'MAIN_INFO_SOCIETE_FAX'        => '+213 34 19 21 21',
 	'MAIN_INFO_SOCIETE_MAIL'       => 'dpr.axxam2022@gmail.com',
@@ -50,10 +54,15 @@ $constantes = array(
 	'FACTURE_MERCURE_MASK_REPLACEMENT'   => 'FR{yy}{mm}-{0000}',
 	'FACTURE_MERCURE_MASK_CREDIT'        => 'AV{yy}{mm}-{0000}',
 	'FACTURE_MERCURE_MASK_DEPOSIT'       => 'AC{yy}{mm}-{0000}',
+	// Sur les factures, devis et bons : RC, NIF et AI du client sous son adresse
+	'MAIN_PROFID1_IN_ADDRESS'            => '1',
+	'MAIN_PROFID2_IN_ADDRESS'            => '1',
+	'MAIN_PROFID3_IN_ADDRESS'            => '1',
 );
 foreach ($constantes as $nom => $valeur) {
 	dolibarr_set_const($db, $nom, $valeur, 'chaine', 0, '', $conf->entity);
 }
+$db->query("UPDATE ".MAIN_DB_PREFIX."c_currencies SET label = 'dinars algériens' WHERE code_iso = 'DZD'");
 etape('société, devise DZD et langue française configurées');
 
 // ---------------------------------------------------------------- Entrepôts
