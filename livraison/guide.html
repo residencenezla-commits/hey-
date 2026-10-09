@@ -68,6 +68,7 @@ ol,ul{margin:0 0 6pt;padding-left:15pt}li{margin:2pt 0}
 <tr><td>Compta</td><td>Facture → règlement caisse → journaux 073 et 03 → export PC Compta</td><td>Écritures conformes</td></tr>
 <tr><td>Compta</td><td>Générateur .xls : réécriture de vos fichiers PC Compta (import janvier, export d'origine)</td><td>Identiques à l'octet</td></tr>
 <tr><td>Compta</td><td>Rechargement d'un export PC Compta : pas de doublon ; fichier d'une autre société refusé</td><td>Conforme</td></tr>
+<tr><td>Compta</td><td>Tableau de bord : chiffre d'affaires, créances, trésorerie, timbre, TVA, 1er client comparés à un calcul indépendant</td><td>Identiques</td></tr>
 <tr><td>Vidéos</td><td>Encodage H.264 1080×1920 et 1920×1080, 30 i/s, 24 s ; version WebM pour le site</td><td>Lisibles</td></tr>
 </table>
 <div class="encadre">Les lanceurs Windows (<code>demarrer.bat</code>, <code>sauvegarder.bat</code>, <code>exporter_pccompta.bat</code>…) n'ont pas pu être essayés sur un PC Windows ; leurs équivalents Linux ont été testés. Le fichier .xls n'a pas pu être importé dans PC Compta lui-même (logiciel non disponible ici) : son format est garanti identique à vos fichiers PC Compta, mais faites le premier import sur une copie du dossier PC Compta.</div>
@@ -169,6 +170,8 @@ ol,ul{margin:0 0 6pt;padding-left:15pt}li{margin:2pt 0}
 <tr><td>3. Envoyer à PC Compta</td><td>Double-clic sur <b>exporter_pccompta.bat</b> : fichier <code>exports\EXPORT_PCCOMPTA_….xls</code> au format exact de PC Compta (folio = mois, pièces qui continuent votre numérotation, tables des journaux, comptes et tiers avec RC / NIF / AI). Une écriture n'est envoyée qu'une fois.</td></tr>
 <tr><td>4. Recharger PC Compta</td><td>Après des saisies faites dans PC Compta (paie, carrosserie, OD) : faites glisser le nouvel export DLG_COMPTA… sur <b>importer_pccompta.bat</b>. Pas de doublon ; un fichier d'une autre société (autre NIF) est refusé.</td></tr>
 </table>
+<h3>Le tableau de bord</h3>
+<p>Double-clic sur <b>tableau_de_bord.bat</b> : une page s'ouvre (sans Internet) avec le chiffre d'affaires par mois, la trésorerie par banque, la TVA et le timbre, les principaux clients de la briqueterie et les principales charges, calculés sur le grand livre. Chiffres contrôlés contre l'export de PC Compta.</p>
 <p>Exemple testé : 2 000 B8 à 25 DA HT en espèces → <b>073</b> : 41100/C023 débit 60 393 ; 70110 crédit 50 000 ; 44570 crédit 9 500 ; 44720 crédit 893 — puis <b>03</b> : 53000 débit / 41100 crédit 60 393. Exportées en pièces 073/000216 et 03/000114, à la suite de PC Compta.</p>
 </section>
 

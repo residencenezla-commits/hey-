@@ -48,6 +48,7 @@ Les autres postes du réseau de l'usine ouvrent `http://ADRESSE-IP-DU-PC:8080`
 | `sauvegarder.bat` | Enregistre une sauvegarde dans `sauvegardes/` |
 | `exporter_pccompta.bat` | Crée le fichier d'import PC Compta dans `exports/` |
 | `importer_pccompta.bat` | Recharge un export de PC Compta (glisser le fichier dessus) |
+| `tableau_de_bord.bat` | Calcule et ouvre le tableau de bord de gestion |
 
 ### Sur un serveur Linux
 
@@ -157,6 +158,18 @@ facture (« Timbre fiscal ») et passe au compte 44720.
    PC Compta sont remplacées, celles saisies dans l'ERP restent, et celles que l'ERP avait
    déjà envoyées à PC Compta ne sont pas doublées. Le fichier est **refusé** s'il n'a pas
    le NIF de DPR AXXAM.
+
+### Tableau de bord de gestion
+
+Double-clic sur `tableau_de_bord.bat` (ou `./tableau_de_bord.sh`) : la page
+`exports/TABLEAU_DE_BORD_AAAAMMJJ.html` s'ouvre dans le navigateur, sans Internet. Elle est
+calculée sur le grand livre de l'ERP (écritures de PC Compta + saisies de l'ERP) :
+chiffre d'affaires par mois et par compte de vente (70110 briqueterie en rouge brique),
+créances clients, dettes fournisseurs, trésorerie par compte bancaire, TVA collectée et
+déductible, droit de timbre, principaux clients de la briqueterie (codes PC Compta),
+principales charges, et la date de la dernière écriture de chaque journal (un mois récent
+peut être incomplet). Les chiffres ont été contrôlés contre un calcul indépendant fait
+sur l'export de PC Compta.
 
 La comptabilité légale (déclarations, bilan) reste tenue dans PC Compta ; l'ERP lui envoie
 les écritures du quotidien et garde une copie complète et contrôlée de la comptabilité.
