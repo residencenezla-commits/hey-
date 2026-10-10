@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Exporte la liste type de l'atelier de préparation (construire_dossier.py) en CSV pour le module
-Maintenance de l'ERP : erp-dolibarr/modules/gmao/donnees/*.csv (chargés au premier démarrage)."""
+Maintenance de l'ERP : erp-dolibarr/modules/gmao/referentiel/*.csv (chargés au premier démarrage)."""
 import csv, os, runpy, tempfile
 from pathlib import Path
 ICI = Path(__file__).resolve().parent
-SORTIE = ICI.parent / 'erp-dolibarr' / 'modules' / 'gmao' / 'donnees'
+SORTIE = ICI.parent / 'erp-dolibarr' / 'modules' / 'gmao' / 'referentiel'
 cwd = os.getcwd(); os.chdir(tempfile.mkdtemp())            # le classeur produit au passage est jeté
 g = runpy.run_path(str(ICI / 'construire_dossier.py')); os.chdir(cwd)
 EMP, M, P, PI = g['EMP'], g['M'], g['P'], g['PI']

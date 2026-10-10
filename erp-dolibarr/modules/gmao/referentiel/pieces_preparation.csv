@@ -1,0 +1,13 @@
+nom;reference;tag;unite;seuil_conseille
+Bande transporteuse (largeur à relever);;DPR-PRE-CVY-01;mètre;1 longueur de rouleau entier
+Rouleau porteur de convoyeur;;DPR-PRE-CVY-01;pièce;10
+Rouleau de retour de convoyeur;;DPR-PRE-CVY-01;pièce;5
+Racleur de bande (lame);;DPR-PRE-CVY-01;pièce;4
+Roulement de palier — laminoirs;réf. sur palier;DPR-PRE-LAM-02;pièce;2
+Courroie trapézoïdale — laminoirs;réf. sur courroie;DPR-PRE-LAM-02;pièce;1 jeu complet
+Pale d'usure du mélangeur;;DPR-PRE-MEL-01;pièce;1 jeu
+Dent / couteau de désagrégateur;;DPR-PRE-DES-01;pièce;1 jeu
+Latte de tablier du caisson doseur;;DPR-PRE-DOS-01;pièce;5
+Huile réducteur (grade selon plaque);ex. ISO VG 220/320;DPR-PRE-LAM-02;litre;1 vidange du plus gros réducteur
+Graisse paliers (EP2);;DPR-PRE-LAM-01;kg;1 seau
+Buse de rampe d'eau;;DPR-PRE-MEL-01;pièce;4

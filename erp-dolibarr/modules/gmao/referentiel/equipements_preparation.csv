@@ -1,0 +1,72 @@
+tag;nom;type;parent;armoire;repere;puissance_kw;vitesse;folio;criticite;fabricant;modele;notes
+DPR-SITE;Briqueterie DPR AXXAM — ZAC Helouane;site;;;;;;;B;;;Usine de la ZAC Helouane, Ighzer Amokrane (Béjaïa)
+DPR-PRE;Atelier Préparation de l'argile;atelier;DPR-SITE;;;;;;B;;;De la réception de l'argile à l'alimentation de l'étireuse
+DPR-PRE-Z1;Zone 1 — Réception et dosage;zone;DPR-PRE;;;;;;B;;;Caissons doseurs alimentés à la chargeuse
+DPR-PRE-Z2;Zone 2 — Broyage et laminage;zone;DPR-PRE;;;;;;B;;;Désagrégateur, laminoirs dégrossisseur et finisseur
+DPR-PRE-Z3;Zone 3 — Mélange et humidification;zone;DPR-PRE;;;;;;B;;;Mélangeur, circuit d'eau
+DPR-PRE-Z4;Zone 4 — Stockage / pourrissoir et reprise;zone;DPR-PRE;;;;;;B;;;Stock de terre préparée, reprise vers le façonnage
+DPR-PRE-Z5;Zone 5 — Convoyage;zone;DPR-PRE;;;;;;B;;;Bandes de liaison entre machines
+DPR-PRE-EL;Local électrique préparation;zone;DPR-PRE;;;;;;B;;;Armoires et variateurs de l'atelier
+DPR-FAC;Atelier Façonnage (étireuse);atelier;DPR-SITE;;;;;;B;;;À détailler ensuite
+DPR-SEC;Séchoir tunnel;atelier;DPR-SITE;;;;;;B;;;À détailler ensuite
+DPR-FOU;Four tunnel (84 m);atelier;DPR-SITE;;;;;;B;;;À détailler ensuite
+DPR-CND;Déchargement, palettisation et expédition;atelier;DPR-SITE;;;;;;B;;;À détailler ensuite
+DPR-PRE-DOS-01;Caisson doseur n°1;machine;DPR-PRE-Z1;ARM-PRE;;;;;A;;;Doseur — Caisson d'alimentation à tablier (lattes ou bande) avec herse de dosage
+DPR-PRE-DOS-01-MOT;Caisson doseur n°1 — moteur;moteur;DPR-PRE-DOS-01;;;;;;A;;;Moteur d'entraînement (puissance et vitesse : plaque)
+DPR-PRE-DOS-01-RED;Caisson doseur n°1 — réducteur;organe;DPR-PRE-DOS-01;;;;;;A;;;Réducteur / motoréducteur (type d'huile et quantité : plaque)
+DPR-PRE-DOS-01-TAB;Caisson doseur n°1 — tablier / chaîne;organe;DPR-PRE-DOS-01;;;;;;A;;;Tablier à lattes ou bande, chaînes, galets
+DPR-PRE-DOS-01-HER;Caisson doseur n°1 — herse / arbre doseur;organe;DPR-PRE-DOS-01;;;;;;A;;;Arbre à herse ou à palettes de dosage
+DPR-PRE-DOS-02;Caisson doseur n°2 (ajout / dégraissant);machine;DPR-PRE-Z1;ARM-PRE;;;;;B;;;Doseur — Second caisson si la ligne en comporte un (sable, argile 2)
+DPR-PRE-DOS-02-MOT;Caisson doseur n°2 (ajout / dégraissant) — moteur;moteur;DPR-PRE-DOS-02;;;;;;B;;;Moteur d'entraînement (puissance et vitesse : plaque)
+DPR-PRE-DOS-02-RED;Caisson doseur n°2 (ajout / dégraissant) — réducteur;organe;DPR-PRE-DOS-02;;;;;;B;;;Réducteur / motoréducteur (type d'huile et quantité : plaque)
+DPR-PRE-DES-01;Désagrégateur / émotteur;machine;DPR-PRE-Z2;ARM-PRE;;;;;A;;;Broyeur — Broyage primaire des mottes et élimination des cailloux
+DPR-PRE-DES-01-MOT;Désagrégateur / émotteur — moteur;moteur;DPR-PRE-DES-01;;;;;;A;;;Moteur d'entraînement (puissance et vitesse : plaque)
+DPR-PRE-DES-01-RED;Désagrégateur / émotteur — réducteur;organe;DPR-PRE-DES-01;;;;;;A;;;Réducteur / motoréducteur (type d'huile et quantité : plaque)
+DPR-PRE-DES-01-CYL;Désagrégateur / émotteur — cylindres / rotor;organe;DPR-PRE-DES-01;;;;;;A;;;Cylindres dentés ou rotor à couteaux
+DPR-PRE-DES-01-PAL;Désagrégateur / émotteur — paliers;organe;DPR-PRE-DES-01;;;;;;A;;;Paliers à roulements des arbres
+DPR-PRE-LAM-01;Laminoir dégrossisseur;machine;DPR-PRE-Z2;ARM-PRE;;;;;A;;;Laminoir — Laminoir à deux cylindres, écartement de dégrossissage
+DPR-PRE-LAM-01-MOT;Laminoir dégrossisseur — moteur;moteur;DPR-PRE-LAM-01;;;;;;A;;;Moteur d'entraînement (puissance et vitesse : plaque)
+DPR-PRE-LAM-01-RED;Laminoir dégrossisseur — réducteur;organe;DPR-PRE-LAM-01;;;;;;A;;;Réducteur / motoréducteur (type d'huile et quantité : plaque)
+DPR-PRE-LAM-01-CYL;Laminoir dégrossisseur — cylindres;organe;DPR-PRE-LAM-01;;;;;;A;;;Paire de cylindres, frettes, rectifieuse si présente
+DPR-PRE-LAM-01-PAL;Laminoir dégrossisseur — paliers;organe;DPR-PRE-LAM-01;;;;;;A;;;Paliers des cylindres
+DPR-PRE-LAM-01-COU;Laminoir dégrossisseur — courroies;organe;DPR-PRE-LAM-01;;;;;;A;;;Courroies trapézoïdales et poulies
+DPR-PRE-LAM-02;Laminoir finisseur;machine;DPR-PRE-Z2;ARM-PRE;;;;;A;;;Laminoir — Laminoir à deux cylindres, écartement fin (qualité de la pâte)
+DPR-PRE-LAM-02-MOT;Laminoir finisseur — moteur;moteur;DPR-PRE-LAM-02;;;;;;A;;;Moteur d'entraînement (puissance et vitesse : plaque)
+DPR-PRE-LAM-02-RED;Laminoir finisseur — réducteur;organe;DPR-PRE-LAM-02;;;;;;A;;;Réducteur / motoréducteur (type d'huile et quantité : plaque)
+DPR-PRE-LAM-02-CYL;Laminoir finisseur — cylindres;organe;DPR-PRE-LAM-02;;;;;;A;;;Paire de cylindres, frettes
+DPR-PRE-LAM-02-PAL;Laminoir finisseur — paliers;organe;DPR-PRE-LAM-02;;;;;;A;;;Paliers des cylindres
+DPR-PRE-LAM-02-COU;Laminoir finisseur — courroies;organe;DPR-PRE-LAM-02;;;;;;A;;;Courroies trapézoïdales et poulies
+DPR-PRE-MEL-01;Mélangeur humidificateur à double arbre;machine;DPR-PRE-Z3;ARM-PRE;;;;;A;;;Mélangeur — Malaxage et réglage de l'humidité de la pâte
+DPR-PRE-MEL-01-MOT;Mélangeur humidificateur à double arbre — moteur;moteur;DPR-PRE-MEL-01;;;;;;A;;;Moteur d'entraînement (puissance et vitesse : plaque)
+DPR-PRE-MEL-01-RED;Mélangeur humidificateur à double arbre — réducteur;organe;DPR-PRE-MEL-01;;;;;;A;;;Réducteur / motoréducteur (type d'huile et quantité : plaque)
+DPR-PRE-MEL-01-PAL;Mélangeur humidificateur à double arbre — pales et arbres;organe;DPR-PRE-MEL-01;;;;;;A;;;Pales d'usure, bras, arbres
+DPR-PRE-MEL-01-ROU;Mélangeur humidificateur à double arbre — paliers;organe;DPR-PRE-MEL-01;;;;;;A;;;Paliers des arbres
+DPR-PRE-MEL-01-EAU;Mélangeur humidificateur à double arbre — rampe d'eau;organe;DPR-PRE-MEL-01;;;;;;A;;;Rampe, vannes et débitmètre d'eau
+DPR-PRE-EAU-01;Pompe d'eau d'humidification;machine;DPR-PRE-Z3;ARM-PRE;;;;;B;;;Pompe — Alimentation en eau du mélangeur
+DPR-PRE-EAU-01-MOT;Pompe d'eau d'humidification — moteur;moteur;DPR-PRE-EAU-01;;;;;;B;;;Moteur de pompe
+DPR-PRE-STK-01;Stockage / pourrissoir de terre préparée;machine;DPR-PRE-Z4;ARM-PRE;;;;;B;;;Stockage — Silo ou pourrissoir (repos de la pâte), avec chariot de remplissage si présent
+DPR-PRE-STK-01-CHA;Stockage / pourrissoir de terre préparée — chariot / répartiteur;organe;DPR-PRE-STK-01;;;;;;B;;;Bande navette ou chariot de remplissage
+DPR-PRE-REP-01;Excavateur / dispositif de reprise;machine;DPR-PRE-Z4;ARM-PRE;;;;;A;;;Reprise — Reprise de la terre stockée vers le façonnage (excavateur à godets, pont, ou chargeuse)
+DPR-PRE-REP-01-MOT;Excavateur / dispositif de reprise — moteur;moteur;DPR-PRE-REP-01;;;;;;A;;;Moteur d'entraînement (puissance et vitesse : plaque)
+DPR-PRE-REP-01-RED;Excavateur / dispositif de reprise — réducteur;organe;DPR-PRE-REP-01;;;;;;A;;;Réducteur / motoréducteur (type d'huile et quantité : plaque)
+DPR-PRE-REP-01-GOD;Excavateur / dispositif de reprise — godets / chaîne;organe;DPR-PRE-REP-01;;;;;;A;;;Chaîne à godets et dents
+DPR-PRE-CVY-01;Convoyeur à bande n°1 (caisson doseur → désagrégateur);machine;DPR-PRE-Z5;ARM-PRE;;;;;B;;;Convoyeur — Bande de liaison caisson doseur → désagrégateur
+DPR-PRE-CVY-01-MOT;Convoyeur à bande n°1 (caisson doseur → désagrégateur) — motoréducteur / tambour moteur;moteur;DPR-PRE-CVY-01;;;;;;B;;;Entraînement de la bande
+DPR-PRE-CVY-01-BND;Convoyeur à bande n°1 (caisson doseur → désagrégateur) — bande et rouleaux;organe;DPR-PRE-CVY-01;;;;;;B;;;Bande, rouleaux porteurs et de retour, racleurs
+DPR-PRE-CVY-02;Convoyeur à bande n°2 (désagrégateur → laminoir dégrossisseur);machine;DPR-PRE-Z5;ARM-PRE;;;;;B;;;Convoyeur — Bande de liaison désagrégateur → laminoir dégrossisseur
+DPR-PRE-CVY-02-MOT;Convoyeur à bande n°2 (désagrégateur → laminoir dégrossisseur) — motoréducteur / tambour moteur;moteur;DPR-PRE-CVY-02;;;;;;B;;;Entraînement de la bande
+DPR-PRE-CVY-02-BND;Convoyeur à bande n°2 (désagrégateur → laminoir dégrossisseur) — bande et rouleaux;organe;DPR-PRE-CVY-02;;;;;;B;;;Bande, rouleaux porteurs et de retour, racleurs
+DPR-PRE-CVY-03;Convoyeur à bande n°3 (laminoir dégrossisseur → laminoir finisseur);machine;DPR-PRE-Z5;ARM-PRE;;;;;B;;;Convoyeur — Bande de liaison laminoir dégrossisseur → laminoir finisseur
+DPR-PRE-CVY-03-MOT;Convoyeur à bande n°3 (laminoir dégrossisseur → laminoir finisseur) — motoréducteur / tambour moteur;moteur;DPR-PRE-CVY-03;;;;;;B;;;Entraînement de la bande
+DPR-PRE-CVY-03-BND;Convoyeur à bande n°3 (laminoir dégrossisseur → laminoir finisseur) — bande et rouleaux;organe;DPR-PRE-CVY-03;;;;;;B;;;Bande, rouleaux porteurs et de retour, racleurs
+DPR-PRE-CVY-04;Convoyeur à bande n°4 (laminoir finisseur → mélangeur);machine;DPR-PRE-Z5;ARM-PRE;;;;;B;;;Convoyeur — Bande de liaison laminoir finisseur → mélangeur
+DPR-PRE-CVY-04-MOT;Convoyeur à bande n°4 (laminoir finisseur → mélangeur) — motoréducteur / tambour moteur;moteur;DPR-PRE-CVY-04;;;;;;B;;;Entraînement de la bande
+DPR-PRE-CVY-04-BND;Convoyeur à bande n°4 (laminoir finisseur → mélangeur) — bande et rouleaux;organe;DPR-PRE-CVY-04;;;;;;B;;;Bande, rouleaux porteurs et de retour, racleurs
+DPR-PRE-CVY-05;Convoyeur à bande n°5 (mélangeur → stockage);machine;DPR-PRE-Z5;ARM-PRE;;;;;B;;;Convoyeur — Bande de liaison mélangeur → stockage
+DPR-PRE-CVY-05-MOT;Convoyeur à bande n°5 (mélangeur → stockage) — motoréducteur / tambour moteur;moteur;DPR-PRE-CVY-05;;;;;;B;;;Entraînement de la bande
+DPR-PRE-CVY-05-BND;Convoyeur à bande n°5 (mélangeur → stockage) — bande et rouleaux;organe;DPR-PRE-CVY-05;;;;;;B;;;Bande, rouleaux porteurs et de retour, racleurs
+DPR-PRE-CVY-06;Convoyeur à bande n°6 (reprise → façonnage);machine;DPR-PRE-Z5;ARM-PRE;;;;;B;;;Convoyeur — Bande de liaison reprise → façonnage
+DPR-PRE-CVY-06-MOT;Convoyeur à bande n°6 (reprise → façonnage) — motoréducteur / tambour moteur;moteur;DPR-PRE-CVY-06;;;;;;B;;;Entraînement de la bande
+DPR-PRE-CVY-06-BND;Convoyeur à bande n°6 (reprise → façonnage) — bande et rouleaux;organe;DPR-PRE-CVY-06;;;;;;B;;;Bande, rouleaux porteurs et de retour, racleurs
+DPR-PRE-ARM-01;Armoire électrique préparation;armoire;DPR-PRE-EL;;;;;;A;;;Électricité — Puissance, commande, variateurs et automate de la préparation
+DPR-PRE-SEP-01;Séparateur magnétique / détecteur de métaux;machine;DPR-PRE-Z5;ARM-PRE;;;;;B;;;Sécurité process — Protection des laminoirs contre les pièces métalliques (si installé)

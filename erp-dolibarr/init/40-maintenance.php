@@ -22,7 +22,7 @@ $P = MAIN_DB_PREFIX; $E = (int) $conf->entity;
 $o = $db->fetch_object($db->query("SELECT COUNT(*) AS n FROM {$P}gmao_equipement WHERE entity = $E"));
 if ($o && $o->n > 0) { etape("base déjà remplie ({$o->n} équipements) : rien à charger"); exit(0); }
 
-$dir = '/var/www/html/custom/gmao/donnees/';
+$dir = '/var/www/html/custom/gmao/referentiel/';
 require_once '/var/www/html/custom/gmao/lib/import.lib.php';
 $r = gmao_importer_equipements($db, file_get_contents($dir.'equipements_preparation.csv'), $E);
 etape("{$r['crees']} équipements de l'atelier de préparation chargés".($r['erreurs'] ? ' ; '.implode(' ; ', $r['erreurs']) : ''));
