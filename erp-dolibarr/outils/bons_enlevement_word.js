@@ -5,9 +5,13 @@
 //         CLIENT="KERDJA BILEL" ADRESSE="..." TEL="..." PAYE="10/10/2026" PRODUIT=B8 QUANTITE=7040
 const fs = require('fs');
 const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, BorderStyle,
-  AlignmentType, ShadingType, PageBreak, TabStopType, ImageRun } = require('docx');
+  AlignmentType, ShadingType, PageBreak, TabStopType, ImageRun, HorizontalPositionRelativeFrom, VerticalPositionRelativeFrom, TextWrappingType } = require('docx');
 const path = require('path');
 const LOGO = fs.readFileSync(path.join(__dirname, '..', 'modules', 'timbredz', 'img', 'logo-dpr-axxam.png'));
+// FILIGRANE=force (« La force de la terre ») ou bien (« Le bien-être dans l'habitat ») : slogan en fond de chaque bon
+const FILIGRANES = { force: 'filigrane-force-terre.png', bien: 'filigrane-bien-etre.png' };
+const FILIGRANE = FILIGRANES[process.env.FILIGRANE] ? fs.readFileSync(path.join(__dirname, '..', 'modules', 'timbredz', 'img', FILIGRANES[process.env.FILIGRANE])) : null;
+const MM = 36000; // EMU par millimètre
 
 const premier = parseInt(process.argv[2] || '1', 10);
 const nombre = parseInt(process.argv[3] || '10', 10);
@@ -68,9 +72,14 @@ function bon(n, rempli) {
                              : [para(t(' '), { after: 1000 })])], [3489, 3489, 3488][i], { borders: cadre(i === 2 ? { style: BorderStyle.DOUBLE, size: 6, color: BRIQUE } : pointille) })) }),
     ],
   });
+  const fond = FILIGRANE ? [new ImageRun({
+    type: 'png', data: FILIGRANE, transformation: { width: 640, height: 352 },
+    floating: { horizontalPosition: { relative: HorizontalPositionRelativeFrom.MARGIN, offset: 5 * MM }, verticalPosition: { relative: VerticalPositionRelativeFrom.PARAGRAPH, offset: 14 * MM },
+      behindDocument: true, allowOverlap: true, wrap: { type: TextWrappingType.NONE } },
+    altText: { title: 'Filigrane', description: 'Slogan DPR AXXAM en fond', name: 'filigrane' } })] : [];
   return [
     enTete,
-    para(t(''), { border: { bottom: { style: BorderStyle.SINGLE, size: 10, color: '222222', space: 1 } }, after: 100 }),
+    para([t(''), ...fond], { border: { bottom: { style: BorderStyle.SINGLE, size: 10, color: '222222', space: 1 } }, after: 100 }),
     titre,
     para(t(''), { after: 60 }),
     champ('Client :', rempli.client),
