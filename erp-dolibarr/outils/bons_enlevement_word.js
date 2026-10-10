@@ -1,7 +1,7 @@
 // Carnet de bons d'enlèvement payés, au format Word (2 bons par feuille A4).
 // Usage : node bons_enlevement_word.js [premier=1] [nombre=10] [fichier.docx]
 //         Variables facultatives pour pré-remplir le premier bon :
-//         CLIENT="KERDJA BILEL" PRODUIT=B8 QUANTITE=7040
+//         CLIENT="KERDJA BILEL" ADRESSE="..." TEL="..." PAYE="10/10/2026" PRODUIT=B8 QUANTITE=7040
 const fs = require('fs');
 const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, BorderStyle,
   AlignmentType, ShadingType, PageBreak, TabStopType } = require('docx');
@@ -9,7 +9,7 @@ const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthT
 const premier = parseInt(process.argv[2] || '1', 10);
 const nombre = parseInt(process.argv[3] || '10', 10);
 const sortie = process.argv[4] || 'BONS_ENLEVEMENT.docx';
-const pre = { client: process.env.CLIENT || '', produit: process.env.PRODUIT || '', quantite: process.env.QUANTITE || '' };
+const pre = { client: process.env.CLIENT || '', adresse: [process.env.ADRESSE, process.env.TEL && 'Tél. ' + process.env.TEL].filter(Boolean).join(' — '), paye: process.env.PAYE || '', produit: process.env.PRODUIT || '', quantite: process.env.QUANTITE || '' };
 
 const LARGEUR = 10466;            // A4 (11906) − marges 720 × 2
 const MONO = 'DejaVu Sans Mono', SANS = 'DejaVu Sans', BRIQUE = 'B4472B';
@@ -70,8 +70,8 @@ function bon(n, rempli) {
     titre,
     para(t(''), { after: 60 }),
     champ('Client :', rempli.client),
-    champ('Adresse / téléphone :'),
-    champ('Payé le :'),
+    champ('Adresse / téléphone :', rempli.adresse),
+    champ('Payé le :', rempli.paye),
     produits,
     para(t(''), { after: 40 }),
     champ("Date d'enlèvement :"),
