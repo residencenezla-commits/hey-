@@ -153,6 +153,14 @@ button.btn{font:inherit;font-weight:600;cursor:pointer;background:transparent}
 .pas-item p{color:#c9b3a5}
 .temp{display:inline-block;margin-top:10px;font-weight:600;color:var(--four)}
 
+/* L'usine en images */
+.usine-grille{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:32px}
+.usine-grille figure{margin:0;background:var(--carte);border:1px solid var(--ligne);border-radius:16px;overflow:hidden}
+.usine-grille img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;transition:transform .6s}
+.usine-grille figure:hover img{transform:scale(1.04)}
+.usine-grille figcaption{padding:12px 14px;font-size:.88rem;color:var(--gris)}
+.usine-grille figcaption b{display:block;color:var(--texte);font-family:Fraunces,serif;font-size:1.05rem;margin-bottom:2px}
+
 /* Le séchoir */
 .sechoir-s{--c-t:#c4521a;--c-u:#2f78b8}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sechoir-s{--c-t:#e06a28;--c-u:#4a90cc}}
@@ -402,6 +410,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .duo,.carte-grille,.contact-grille,.comparaison{grid-template-columns:1fr}
   .kpis{grid-template-columns:1fr}
   .ligne-prod,.simulateur,.phases,.carriere-intro,.four-bas,.courbes{grid-template-columns:1fr}
+  .usine-grille{grid-template-columns:1fr 1fr}
   .sech-faits{grid-template-columns:1fr 1fr}
   .four-info{grid-template-columns:1fr 1fr}
   .carriere-photo,.carriere-photo img{max-height:420px}
@@ -422,6 +431,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .four-astuce{display:block}
   .four-faits b{font-size:1.4rem}
   .sech-faits b{font-size:1.45rem}
+  .usine-grille{gap:10px}
   .sech-faits{gap:10px}
 }
 @media (max-width:520px){.four-info{grid-template-columns:1fr}.four-info span{display:none}.four-info button[aria-pressed="true"] span{display:block}}
@@ -714,6 +724,23 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         </ul>
         <p class="four-recup">Rien ne se perd : l'air qui refroidit les briques cuites est récupéré chaud et envoyé au séchoir, et les fumées de cuisson préchauffent les briques qui entrent. Moins de gaz consommé par tonne produite. <a href="#energie">Les économies d'énergie de la brique, côté habitat →</a></p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ L'USINE EN IMAGES ============ -->
+<section id="usine">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">L'usine en images</p>
+      <h2>Une chaîne automatisée, de la brique crue au camion</h2>
+      <p class="lead">Des photos prises dans notre usine de la ZAC Helouane : séchage, chargement des wagons par robot, palettisation et expédition.</p>
+    </div>
+    <div class="usine-grille reveal">
+      <figure><img src="images/usine-briques-crues.jpg" alt="Briques crues 12 trous alignées sur le convoyeur, devant les étagères des chariots du séchoir" loading="lazy" width="1400" height="1050"><figcaption><b>Briques crues</b>Tout juste façonnées, devant les étagères des chariots du séchoir.</figcaption></figure>
+      <figure><img src="images/usine-robot.jpg" alt="Robot industriel jaune empilant des briques séchées sur un wagon du four" loading="lazy" width="1050" height="1400"><figcaption><b>Chargement par robot</b>Un robot empile les briques séchées sur les wagons du four.</figcaption></figure>
+      <figure><img src="images/usine-palette.jpg" alt="Palette de briques cuites cerclée sur le convoyeur de sortie" loading="lazy" width="1400" height="1050"><figcaption><b>Palettisation</b>Les briques cuites sont mises en paquets et cerclées en sortie de ligne.</figcaption></figure>
+      <figure><img src="images/usine-expedition.jpg" alt="Semi-remorque chargée de paquets de briques dans la cour de l'usine, sous un ciel bleu" loading="lazy" width="1050" height="1400"><figcaption><b>Expédition</b>Chargement d'une semi-remorque dans la cour de l'usine.</figcaption></figure>
     </div>
   </div>
 </section>
