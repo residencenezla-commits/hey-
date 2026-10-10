@@ -58,7 +58,7 @@ function bon(n, rempli) {
   const bas = new Table({
     width: { size: LARGEUR, type: WidthType.DXA }, columnWidths: [3489, 3489, 3488],
     rows: [
-      new TableRow({ children: ['Cachet de la société (DPR AXXAM)', 'Visa du magasinier au chargement', 'SERVI — cadre réservé à l\'usine'].map((h, i) =>
+      new TableRow({ children: ['Cachet de la société et signature du Responsable commercial', 'Visa du magasinier au chargement', 'SERVI — cadre réservé à l\'usine'].map((h, i) =>
         cellule([para(t(h, { size: 15, italics: true, bold: i === 2, color: i === 2 ? BRIQUE : undefined }), { align: AlignmentType.CENTER, after: 0 }),
                  ...(i === 2 ? [para(t('Servi le ..../..../........', { size: 15, mono: true }), { before: 450, align: AlignmentType.CENTER, after: 0 }),
                                 para(t('Classé en comptabilité ☐', { size: 15 }), { before: 200, align: AlignmentType.CENTER, after: 0 })]
@@ -79,7 +79,7 @@ function bon(n, rempli) {
     champ('Chauffeur (nom et pièce d\'identité) :'),
     champ('Matricule du camion :'),
     bas,
-    para(t('Bon au porteur : le chauffeur qui présente ce bon est chargé de la quantité indiquée, une seule fois. Le bon est gardé par l\'usine après le chargement, marqué SERVI, et classé en comptabilité. Tout bon raturé ou sans cachet est nul.', { size: 13, italics: true }), { before: 60, after: 0 }),
+    para(t('Bon au porteur : le chauffeur qui présente ce bon est chargé de la quantité indiquée, une seule fois. Le bon est gardé par l\'usine après le chargement, marqué SERVI, et classé en comptabilité. Tout bon raturé, sans cachet ou sans signature du Responsable commercial est nul.', { size: 13, italics: true }), { before: 60, after: 0 }),
   ];
 }
 
