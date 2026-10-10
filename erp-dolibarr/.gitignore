@@ -1,5 +1,5 @@
 .env
-donnees/
+/donnees/
 sauvegardes/*.sql
 exports/
 # Fichiers à importer (le dépôt ignore les .csv par défaut)
