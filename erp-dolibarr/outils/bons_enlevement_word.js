@@ -9,8 +9,9 @@ const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthT
 const path = require('path');
 const LOGO = fs.readFileSync(path.join(__dirname, '..', 'modules', 'timbredz', 'img', 'logo-dpr-axxam.png'));
 // FILIGRANE=force (« La force de la terre ») ou bien (« Le bien-être dans l'habitat ») : slogan en fond de chaque bon
-const FILIGRANES = { force: 'filigrane-force-terre.png', bien: 'filigrane-bien-etre.png' };
-const FILIGRANE = FILIGRANES[process.env.FILIGRANE] ? fs.readFileSync(path.join(__dirname, '..', 'modules', 'timbredz', 'img', FILIGRANES[process.env.FILIGRANE])) : null;
+// DENSITE=moyen ou fort (par défaut) ; images fabriquées par outils/filigranes.py
+const DENSITE = process.env.DENSITE === 'moyen' ? 'moyen' : 'fort';
+const FILIGRANE = ['force', 'bien'].includes(process.env.FILIGRANE) ? fs.readFileSync(path.join(__dirname, '..', 'modules', 'timbredz', 'img', `filigrane-${process.env.FILIGRANE}-${DENSITE}.png`)) : null;
 const MM = 36000; // EMU par millimètre
 
 const premier = parseInt(process.argv[2] || '1', 10);

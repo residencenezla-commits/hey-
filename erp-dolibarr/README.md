@@ -163,7 +163,7 @@ node outils/bons_enlevement_word.js 1 10 BONS_ENLEVEMENT.docx        # bons 0001
 CLIENT="KERDJA BILEL" PRODUIT=B8 QUANTITE=7040 node outils/bons_enlevement_word.js 1 10
 # 50 bons au même client, tous pré-remplis, + bordereau de remise avec le montant réglé :
 TOUS=1 PRIX=20.50 CLIENT="..." PAYE="10/10/2026" PRODUIT=B8 QUANTITE=7040 node outils/bons_enlevement_word.js 1 50
-# slogan en filigrane derrière chaque bon : FILIGRANE=force (« La force de la terre ») ou FILIGRANE=bien (« Le bien-être dans l'habitat »)
+# slogan en filigrane derrière chaque bon : FILIGRANE=force (« La force de la terre ») ou FILIGRANE=bien (« Le bien-être dans l'habitat »), DENSITE=moyen ou fort (défaut) ; images : python3 outils/filigranes.py
 ```
 
 ### Factures et bons de livraison au format DLG
