@@ -153,6 +153,34 @@ button.btn{font:inherit;font-weight:600;cursor:pointer;background:transparent}
 .pas-item p{color:#c9b3a5}
 .temp{display:inline-block;margin-top:10px;font-weight:600;color:var(--four)}
 
+/* Le séchoir */
+.sechoir-s{--c-t:#c4521a;--c-u:#2f78b8}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sechoir-s{--c-t:#e06a28;--c-u:#4a90cc}}
+:root[data-theme="dark"] .sechoir-s{--c-t:#e06a28;--c-u:#4a90cc}
+.sech-faits{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:36px}
+.sech-faits div{background:var(--carte);border:1px solid var(--ligne);border-radius:14px;padding:18px}
+.sech-faits b{display:block;font-family:Fraunces,serif;font-size:1.9rem;color:var(--brique);line-height:1.1}
+.sech-faits span{font-size:.88rem;color:var(--gris)}
+.courbes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:20px}
+.courbe{position:relative;background:var(--carte);border:1px solid var(--ligne);border-radius:16px;padding:18px 18px 10px;margin:0}
+.courbe h3{font-size:1.1rem}
+.courbe p{font-size:.85rem;color:var(--gris)}
+.courbe svg{width:100%;height:auto;display:block;margin-top:8px;touch-action:pan-y}
+.courbe .grille line{stroke:var(--ligne);stroke-width:1}
+.courbe .axe text,.courbe .lab{font-family:Inter,sans-serif;font-size:11px;fill:var(--gris)}
+.courbe .lab{font-weight:600;fill:var(--texte)}
+.courbe .ligne{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.courbe .pt{stroke:var(--carte);stroke-width:2}
+.courbe .viseur{stroke:var(--gris);stroke-width:1;stroke-dasharray:3 3;opacity:0}
+.courbe .actif .viseur{opacity:.8}
+.courbe .bulle{position:absolute;pointer-events:none;background:var(--texte);color:var(--fond);font-size:.82rem;padding:6px 10px;border-radius:8px;white-space:nowrap;opacity:0;transition:opacity .15s;transform:translate(-50%,-100%)}
+.sech-table{overflow-x:auto;margin-top:14px;font-size:.9rem;color:var(--gris)}
+.sech-table summary{cursor:pointer}
+.sech-table table{border-collapse:collapse;margin-top:8px;width:100%;font-variant-numeric:tabular-nums}
+.sech-table th,.sech-table td{border-bottom:1px solid var(--ligne);padding:4px 6px;text-align:right}
+.sech-table th:first-child,.sech-table td:first-child{text-align:left}
+.sech-note{margin-top:14px;font-size:.85rem;color:var(--gris)}
+
 /* Le four tunnel */
 .four-tunnel{background:radial-gradient(ellipse at 55% 0%,#3a1a10 0%,#1b1411 60%);color:var(--sable)}
 .four-tunnel .lead{color:#c9b3a5}
@@ -347,10 +375,18 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s}
 .reveal.visible{opacity:1;transform:none}
 
+@media (max-width:1100px){
+  .menu{position:fixed;top:72px;left:0;right:0;flex-direction:column;gap:0;background:#2a1d17;padding:8px 16px 20px;display:none}
+  .menu.ouvert{display:flex}
+  .menu a{display:block;padding:12px 0;border-bottom:1px solid #3b2d27}
+  .burger{display:block}
+  .menu{max-height:calc(100vh - 72px);overflow-y:auto}
+}
 @media (max-width:900px){
   .duo,.carte-grille,.contact-grille,.comparaison{grid-template-columns:1fr}
   .kpis{grid-template-columns:1fr}
-  .ligne-prod,.simulateur,.phases,.carriere-intro,.four-bas{grid-template-columns:1fr}
+  .ligne-prod,.simulateur,.phases,.carriere-intro,.four-bas,.courbes{grid-template-columns:1fr}
+  .sech-faits{grid-template-columns:1fr 1fr}
   .four-info{grid-template-columns:1fr 1fr}
   .carriere-photo,.carriere-photo img{max-height:420px}
   .scene-cadre{top:76px;z-index:2;padding:12px}
@@ -359,10 +395,6 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 }
 @media (max-width:720px){
   .wrap{padding:0 16px}
-  .menu{position:fixed;top:72px;left:0;right:0;flex-direction:column;gap:0;background:#2a1d17;padding:8px 16px 20px;display:none}
-  .menu.ouvert{display:flex}
-  .menu a{display:block;padding:12px 0;border-bottom:1px solid #3b2d27}
-  .burger{display:block}
   .scene-info b{font-size:1.3rem}
   .aba-grille{grid-template-columns:1fr 1fr;gap:10px}
   .visionneuse{grid-template-columns:34px 1fr 34px;padding:8px}
@@ -373,6 +405,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .four-svg{width:720px;max-width:none}
   .four-astuce{display:block}
   .four-faits b{font-size:1.4rem}
+  .sech-faits b{font-size:1.45rem}
+  .sech-faits{gap:10px}
 }
 @media (max-width:520px){.four-info{grid-template-columns:1fr}.four-info span{display:none}.four-info button[aria-pressed="true"] span{display:block}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.b{opacity:1;transform:none}.reveal{opacity:1;transform:none}}
@@ -388,6 +422,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <ul class="menu">
       <li><a href="#societe">La société</a></li>
       <li><a href="#fabrication">Fabrication</a></li>
+      <li><a href="#sechoir">Séchoir</a></li>
       <li><a href="#four">Le four</a></li>
       <li><a href="#carriere">Carrière</a></li>
       <li><a href="#produits">Produits</a></li>
@@ -529,11 +564,47 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <li class="pas-item" data-i="0" data-x="50"><span class="num">01</span><h3>Extraction</h3><p>L'argile est prélevée dans notre carrière, sélectionnée par couches puis mise en stock pour s'homogénéiser. La qualité de la brique commence ici, dans la terre ; chaque zone exploitée est ensuite <a href="#carriere" style="color:var(--argile)">rendue à l'agriculture</a>.</p></li>
         <li class="pas-item" data-i="1" data-x="152"><span class="num">02</span><h3>Préparation</h3><p>Broyage, dosage et malaxage avec de l'eau : la terre devient une pâte homogène et plastique, débarrassée de ses impuretés.</p></li>
         <li class="pas-item" data-i="2" data-x="295"><span class="num">03</span><h3>Façonnage</h3><p>La pâte est poussée à travers une filière par l'étireuse. Elle en sort en un boudin continu, découpé aux dimensions de la brique 8 trous, 12 trous ou du hourdis.</p></li>
-        <li class="pas-item" data-i="3" data-x="357"><span class="num">04</span><h3>Séchage</h3><p>Les produits crus perdent lentement leur eau dans le séchoir, sans fissure ni déformation, avant d'affronter le feu.</p></li>
+        <li class="pas-item" data-i="3" data-x="357"><span class="num">04</span><h3>Séchage</h3><p>Les produits crus perdent lentement leur eau dans le <a href="#sechoir" style="color:var(--argile)">séchoir tunnel</a>, sans fissure ni déformation, avant d'affronter le feu.</p></li>
         <li class="pas-item feu" data-i="4" data-x="466"><span class="num">05</span><h3>Cuisson</h3><p>Le passage au <a href="#four" style="color:var(--argile)">four tunnel</a> transforme définitivement l'argile en terre cuite : un matériau dur, durable et incombustible.</p><span class="temp">≈ 900 à 1 000 °C</span></li>
         <li class="pas-item" data-i="5" data-x="560"><span class="num">06</span><h3>Contrôle et expédition</h3><p>Tri, contrôle qualité et palettisation, puis chargement vers vos chantiers. Capacité installée : 140 000 tonnes par an.</p></li>
       </ol>
     </div>
+  </div>
+</section>
+
+<!-- ============ LE SÉCHOIR ============ -->
+<section class="sechoir-s" id="sechoir">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">Avant le feu</p>
+      <h2>Le séchoir : sécher sans fissurer</h2>
+      <p class="lead">Une brique crue contient beaucoup d'eau. Si elle sèche trop vite, elle se fend ; trop lentement, la production s'arrête. Notre séchoir tunnel avance les chariots secteur après secteur : l'air y devient plus chaud et plus sec à mesure que la brique perd son eau. Chacun des 11 secteurs a sa propre vanne d'air, sa mesure de température et d'humidité.</p>
+    </div>
+    <div class="sech-faits reveal">
+      <div><b>2 × 74 m</b><span>deux tunnels de séchage, A et B, de 26 chariots chacun</span></div>
+      <div><b>11</b><span>secteurs réglés un par un, selon une recette par produit</span></div>
+      <div><b>≈ 355 °C</b><span>air chaud qui arrive du four par la récupération de chaleur</span></div>
+      <div><b>0 à 2 %</b><span>d'ouverture du brûleur d'appoint lors de nos relevés : c'est la chaleur du four qui sèche</span></div>
+    </div>
+    <div class="courbes reveal" id="courbes">
+      <figure class="courbe" data-serie="t">
+        <h3>Température de l'air</h3>
+        <p>Tunnel A, en °C, du secteur 1 (entrée, briques crues) au secteur 11 (sortie)</p>
+        <svg viewBox="0 0 520 230" role="img" aria-label="Température de l'air dans le tunnel A : 40 °C à l'entrée, 35 °C au secteur 4, 62 °C à la sortie"></svg>
+        <div class="bulle" aria-hidden="true"></div>
+      </figure>
+      <figure class="courbe" data-serie="u">
+        <h3>Humidité de l'air</h3>
+        <p>Tunnel A, en % d'humidité relative, du secteur 1 au secteur 11</p>
+        <svg viewBox="0 0 520 230" role="img" aria-label="Humidité de l'air dans le tunnel A : 66 % à l'entrée, maximum 78 % aux secteurs 4 et 5, 5 % à la sortie"></svg>
+        <div class="bulle" aria-hidden="true"></div>
+      </figure>
+    </div>
+    <details class="sech-table">
+      <summary>Voir les valeurs en tableau</summary>
+      <table id="sechTable"><thead><tr><th>Secteur</th></tr></thead><tbody><tr><td>Température (°C)</td></tr><tr><td>Humidité (%)</td></tr></tbody></table>
+    </details>
+    <p class="sech-note">Relevés de la supervision du séchoir, tunnel A, le 10/10/2026. L'humidité monte d'abord, au moment où la brique rend le plus d'eau, puis l'air chaud et sec venu du four termine le séchage.</p>
   </div>
 </section>
 
@@ -985,6 +1056,47 @@ addEventListener('scroll',()=>{const h=document.documentElement;prog.style.width
   }
   const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)activer(+e.target.dataset.i)}),{rootMargin:'-45% 0px -45% 0px'});
   items.forEach(it=>obs.observe(it)); activer(0);
+})();
+
+// Séchoir : courbes de température et d'humidité (tunnel A), viseur partagé
+(function(){
+  const T=[40,40,40,35,35,36,39,48,48,50,62], H=[66,66,66,78,78,66,55,28,26,21,5];
+  const SERIES={t:{v:T,max:80,pas:20,unite:' °C',coul:'var(--c-t)'},u:{v:H,max:100,pas:25,unite:' %',coul:'var(--c-u)'}};
+  const NS='http://www.w3.org/2000/svg', HA=14, BA=196, n=T.length;
+  const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e};
+  const figs=[...document.querySelectorAll('.courbe')];
+  figs.forEach(f=>{
+    const S=SERIES[f.dataset.serie], svg=f.querySelector('svg'), Y=v=>BA-v/S.max*(BA-HA);
+    const W=svg.clientWidth&&svg.clientWidth<460?340:520, G=36, D=W-12, X=i=>G+i*(D-G)/(n-1);
+    svg.setAttribute('viewBox',`0 0 ${W} 230`);
+    const gr=el('g',{class:'grille'},svg), ax=el('g',{class:'axe'},svg);
+    for(let v=0;v<=S.max;v+=S.pas){el('line',{x1:G,x2:D,y1:Y(v),y2:Y(v)},gr);el('text',{x:G-8,y:Y(v)+4,'text-anchor':'end'},ax).textContent=v}
+    T.forEach((_,i)=>{el('text',{x:X(i),y:BA+20,'text-anchor':'middle'},ax).textContent=i+1});
+    el('text',{x:(G+D)/2,y:BA+34,'text-anchor':'middle'},ax).textContent='secteur';
+    const g=el('g',{},svg);
+    const vis=el('line',{class:'viseur',x1:0,x2:0,y1:HA,y2:BA},g);
+    el('path',{class:'ligne',d:S.v.map((v,i)=>(i?'L':'M')+X(i)+' '+Y(v)).join(' '),style:`stroke:${S.coul}`},g);
+    const pts=S.v.map((v,i)=>el('circle',{class:'pt',cx:X(i),cy:Y(v),r:4,style:`fill:${S.coul}`},g));
+    // Étiquettes directes : entrée, extrême, sortie
+    const ext=f.dataset.serie==='t'?S.v.indexOf(Math.min(...S.v)):S.v.indexOf(Math.max(...S.v));
+    [0,ext,n-1].forEach(i=>{const t=el('text',{class:'lab',x:X(i),y:Y(S.v[i])-10,'text-anchor':i===0?'start':i===n-1?'end':'middle'},g);t.textContent=S.v[i]+S.unite});
+    f._maj=i=>{
+      g.classList.toggle('actif',i!==null);
+      pts.forEach((p,k)=>p.setAttribute('r',k===i?6:4));
+      const b=f.querySelector('.bulle');
+      if(i===null){b.style.opacity=0;return}
+      vis.setAttribute('x1',X(i));vis.setAttribute('x2',X(i));
+      const r=svg.getBoundingClientRect(), fr=f.getBoundingClientRect(), k=r.width/W;
+      b.textContent=`Secteur ${i+1} : ${T[i]} °C · ${H[i]} % d'humidité`;
+      b.style.left=Math.min(Math.max(r.left-fr.left+X(i)*k,90),fr.width-90)+'px';
+      b.style.top=(r.top-fr.top+2)+'px'; b.style.opacity=1;
+    };
+    const viser=e=>{const r=svg.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W;const i=Math.max(0,Math.min(n-1,Math.round((x-G)/(D-G)*(n-1))));figs.forEach(o=>o._maj(i))};
+    svg.addEventListener('pointermove',viser);svg.addEventListener('pointerdown',viser);
+    svg.addEventListener('pointerleave',()=>figs.forEach(o=>o._maj(null)));
+  });
+  const tb=document.getElementById('sechTable'), tr=tb.tHead.rows[0], rows=tb.tBodies[0].rows;
+  T.forEach((t,i)=>{tr.insertAdjacentHTML('beforeend',`<th>${i+1}</th>`);rows[0].insertAdjacentHTML('beforeend',`<td>${t}</td>`);rows[1].insertAdjacentHTML('beforeend',`<td>${H[i]}</td>`)});
 })();
 
 // Four tunnel : wagons en mouvement et zones
