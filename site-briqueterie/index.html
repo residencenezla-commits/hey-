@@ -159,7 +159,11 @@ button.btn{font:inherit;font-weight:600;cursor:pointer;background:transparent}
 .usine-films video{display:block;width:100%;height:100%;aspect-ratio:16/9;object-fit:cover}
 .usine-films figcaption{position:absolute;left:0;right:0;bottom:0;padding:28px 14px 12px;color:#fff;font-size:.88rem;background:linear-gradient(transparent,rgba(0,0,0,.72))}
 .usine-films figcaption b{display:block;font-family:Fraunces,serif;font-size:1.05rem}
-.usine-grille{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:32px}
+.usine-halle{margin:32px 0 0;border-radius:18px;overflow:hidden;position:relative;border:1px solid var(--ligne)}
+.usine-halle img{display:block;width:100%;height:auto;aspect-ratio:21/9;object-fit:cover;object-position:50% 60%}
+.usine-halle figcaption{position:absolute;left:0;right:0;bottom:0;padding:40px 18px 14px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.75));font-size:.92rem}
+.usine-halle figcaption b{display:block;font-family:Fraunces,serif;font-size:1.25rem}
+.usine-grille{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:32px}
 .usine-grille figure{margin:0;background:var(--carte);border:1px solid var(--ligne);border-radius:16px;overflow:hidden}
 .usine-grille img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;transition:transform .6s}
 .usine-grille figure:hover img{transform:scale(1.04)}
@@ -742,15 +746,18 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <h2>Une chaîne automatisée, de la brique crue au camion</h2>
       <p class="lead">Filmé et photographié dans notre usine de la ZAC Helouane : empilage des briques crues, séchage, chargement des wagons par robot, palettisation et expédition.</p>
     </div>
+    <figure class="usine-halle reveal"><img src="images/usine-halle.jpg" alt="Vue d'ensemble de la halle de production : robot jaune de déchargement, paquets de briques cuites et ligne de production au fond" loading="lazy" width="1800" height="1350"><figcaption><b>La halle de production</b>À la sortie du four, le robot dépile les briques cuites et forme les paquets.</figcaption></figure>
     <div class="usine-films reveal">
       <figure><video muted loop playsinline preload="none" poster="videos/usine-pince.jpg" aria-label="Vidéo : la pince de l'empileuse saisit une couche de briques crues sur le convoyeur à rouleaux"><source src="videos/usine-pince.webm" type="video/webm"><source src="videos/usine-pince.mp4" type="video/mp4"></video><figcaption><b>L'empileuse en action</b>La pince saisit une couche entière de briques crues.</figcaption></figure>
       <figure><video muted loop playsinline preload="none" poster="videos/usine-convoyeur.jpg" aria-label="Vidéo : des briques cuites avancent sur le convoyeur de sortie"><source src="videos/usine-convoyeur.webm" type="video/webm"><source src="videos/usine-convoyeur.mp4" type="video/mp4"></video><figcaption><b>Sortie de ligne</b>Les briques cuites avancent vers la palettisation.</figcaption></figure>
     </div>
     <div class="usine-grille reveal">
       <figure><img src="images/usine-briques-crues.jpg" alt="Briques crues 12 trous alignées sur le convoyeur, devant les étagères des chariots du séchoir" loading="lazy" width="1400" height="1050"><figcaption><b>Briques crues</b>Tout juste façonnées, devant les étagères des chariots du séchoir.</figcaption></figure>
-      <figure><img src="images/usine-robot.jpg" alt="Robot industriel jaune empilant des briques séchées sur un wagon du four" loading="lazy" width="1050" height="1400"><figcaption><b>Chargement par robot</b>Un robot empile les briques séchées sur les wagons du four.</figcaption></figure>
+      <figure><img src="images/usine-robot.jpg" alt="Robot industriel jaune empilant des briques séchées sur un wagon du four" loading="lazy" width="1050" height="1400"><figcaption><b>Robot de manutention</b>Un robot manipule les briques, de l'enfournement à la palettisation.</figcaption></figure>
       <figure><img src="images/usine-palette.jpg" alt="Palette de briques cuites cerclée sur le convoyeur de sortie" loading="lazy" width="1400" height="1050"><figcaption><b>Palettisation</b>Les briques cuites sont mises en paquets et cerclées en sortie de ligne.</figcaption></figure>
       <figure><img src="images/usine-expedition.jpg" alt="Semi-remorque chargée de paquets de briques dans la cour de l'usine, sous un ciel bleu" loading="lazy" width="1050" height="1400"><figcaption><b>Expédition</b>Chargement d'une semi-remorque dans la cour de l'usine.</figcaption></figure>
+      <figure><img src="images/usine-wagons.jpg" alt="File de wagons du four chargés de briques, vue d'en haut" loading="lazy" width="1400" height="1050"><figcaption><b>Les wagons du four</b>Chargés de briques, ils traversent les 84 m du four l'un derrière l'autre.</figcaption></figure>
+      <figure><img src="images/usine-dessus-four.jpg" alt="Passerelle sur le dessus du four tunnel, avec les gaines de récupération de chaleur" loading="lazy" width="1400" height="1050"><figcaption><b>Sur le four</b>Les gaines qui récupèrent la chaleur du four pour le séchoir.</figcaption></figure>
     </div>
   </div>
 </section>
