@@ -30,29 +30,32 @@ class DlgPdf
 	public static function entete($pdf, $mysoc)
 	{
 		$m = self::MARGE;
-		$pdf->SetTextColor(30, 30, 30);
-		$pdf->SetFont('dejavusans', 'B', 26);
-		$pdf->SetXY($m, 10);
-		$pdf->Cell(60, 12, 'DPR', 0, 0, 'L');
-		$pdf->SetTextColor(180, 71, 43);
-		$pdf->SetFont('dejavusans', 'B', 13);
-		$pdf->SetXY($m + 24, 15);
-		$pdf->Cell(40, 6, 'AXXAM', 0, 0, 'L');
+		$logo = dirname(__DIR__).'/img/logo-dpr-axxam.png';
+		if (is_readable($logo)) {
+			$pdf->Image($logo, $m, 6, 40, 0, 'PNG');   // 40 × 19 mm
+		} else {
+			$pdf->SetFont('dejavusans', 'B', 24);
+			$pdf->SetXY($m, 10);
+			$pdf->Cell(40, 10, 'DPR AXXAM', 0, 0, 'L');
+		}
+		$x = $m + 44;
 		$pdf->SetTextColor(30, 30, 30);
 		$pdf->SetFont('dejavusans', 'I', 8);
-		$pdf->SetXY($m + 52, 16);
+		$pdf->SetXY($x, 13);
 		$pdf->Cell(80, 5, 'Fabrication industrielle de produits rouges', 0, 0, 'L');
-		$pdf->SetFont('dejavusans', 'I', 9);
-		$pdf->SetXY($m, 16);
-		$pdf->Cell(self::LARGEUR, 5, 'La force de la terre', 0, 0, 'R');
+		$pdf->SetTextColor(180, 71, 43);
+		$pdf->SetFont('dejavusans', 'BI', 10);
+		$pdf->SetXY($m, 12.5);
+		$pdf->Cell(self::LARGEUR, 5, 'Le bien-être dans l\'habitat', 0, 0, 'R');
+		$pdf->SetTextColor(30, 30, 30);
 		$pdf->SetDrawColor(30, 30, 30);
 		$pdf->SetLineWidth(0.5);
-		$pdf->Line($m + 50, 22, $m + self::LARGEUR, 22);
-		$pdf->SetFont('dejavusans', '', 8.5);
-		$pdf->SetXY($m + 20, 23.5);
-		$pdf->Cell(self::LARGEUR - 20, 5, 'Briqueterie :   Brique 8 trous  -  Brique 12 trous  -  Hourdis  -  Usine ZAC Helouane, Ighzer Amokrane', 0, 0, 'L');
+		$pdf->Line($x, 19, $m + self::LARGEUR, 19);
+		$pdf->SetFont('dejavusans', '', 8);
+		$pdf->SetXY($x, 20.3);
+		$pdf->Cell(self::LARGEUR - 44, 5, 'Briqueterie :  B8  -  B12  -  Hourdis  -  Usine ZAC Helouane, Ighzer Amokrane', 0, 0, 'L', false, '', 1);
 		$pdf->SetLineWidth(0.2);
-		$pdf->Line($m + 20, 29, $m + self::LARGEUR, 29);
+		$pdf->Line($x, 25.5, $m + self::LARGEUR, 25.5);
 	}
 
 	/** Titre « FACTURE No: … » centré, en italique gras, souligné de tirets. */

@@ -4,7 +4,9 @@
 //         CLIENT="KERDJA BILEL" ADRESSE="..." TEL="..." PAYE="10/10/2026" PRODUIT=B8 QUANTITE=7040
 const fs = require('fs');
 const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, BorderStyle,
-  AlignmentType, ShadingType, PageBreak, TabStopType } = require('docx');
+  AlignmentType, ShadingType, PageBreak, TabStopType, ImageRun } = require('docx');
+const path = require('path');
+const LOGO = fs.readFileSync(path.join(__dirname, '..', 'modules', 'timbredz', 'img', 'logo-dpr-axxam.png'));
 
 const premier = parseInt(process.argv[2] || '1', 10);
 const nombre = parseInt(process.argv[3] || '10', 10);
@@ -21,15 +23,15 @@ const pointille = { style: BorderStyle.DOTTED, size: 6, color: '555555' };
 const cadre = b => ({ top: b, bottom: b, left: b, right: b });
 const cellule = (enfants, w, o = {}) => new TableCell({ children: enfants, width: { size: w, type: WidthType.DXA }, borders: o.borders || cadre(trait), shading: o.fond ? { type: ShadingType.CLEAR, color: 'auto', fill: o.fond } : undefined, margins: { top: 50, bottom: 50, left: 100, right: 100 }, columnSpan: o.span, verticalAlign: o.va });
 // ligne « Libellé : valeur ou pointillés à remplir au stylo »
-const champ = (lib, val) => para([t(lib, { size: 18 }), t(val ? '  ' + val : '  ' + '.'.repeat(Math.max(10, 64 - lib.length)), { mono: true, size: 18, bold: !!val })], { after: 150 });
+const champ = (lib, val) => para([t(lib, { size: 18 }), t(val ? '  ' + val : '  ' + '.'.repeat(Math.max(10, 64 - lib.length)), { mono: true, size: 18, bold: !!val })], { after: 100 });
 
 function bon(n, rempli) {
   const no = String(n).padStart(4, '0');
   const enTete = new Table({
     width: { size: LARGEUR, type: WidthType.DXA }, columnWidths: [5200, 5266],
     rows: [new TableRow({ children: [
-      cellule([para([t('DPR', { bold: true, size: 40 }), t(' AXXAM', { bold: true, size: 22, color: BRIQUE })], { after: 0 }),
-               para(t('Briqueterie · produits rouges', { italics: true, size: 15 }), { after: 0 })], 5200, { borders: sans }),
+      cellule([para(new ImageRun({ type: 'png', data: LOGO, transformation: { width: 134, height: 64 }, altText: { title: 'DPR AXXAM', description: 'Logo DPR AXXAM', name: 'logo' } }), { after: 0 }),
+               para(t('Le bien-être dans l\'habitat', { italics: true, bold: true, size: 17, color: BRIQUE }), { after: 0 })], 5200, { borders: sans }),
       cellule([para(t('SARL DPR AXXAM · ZAC Helouane, Ighzer Amokrane (Béjaïa)', { size: 14 }), { align: AlignmentType.RIGHT, after: 0 }),
                para(t('RC 08B0185858-06/00 · NIF 000806018585831', { size: 14 }), { align: AlignmentType.RIGHT, after: 0 }),
                para(t('Tél. +213 34 19 21 21 · dpr.axxam2022@gmail.com', { size: 14 }), { align: AlignmentType.RIGHT, after: 0 })], 5266, { borders: sans, va: 'bottom' }),
@@ -60,9 +62,9 @@ function bon(n, rempli) {
     rows: [
       new TableRow({ children: ['Cachet de la société et signature du Responsable commercial', 'Visa du magasinier au chargement', 'SERVI — cadre réservé à l\'usine'].map((h, i) =>
         cellule([para(t(h, { size: 15, italics: true, bold: i === 2, color: i === 2 ? BRIQUE : undefined }), { align: AlignmentType.CENTER, after: 0 }),
-                 ...(i === 2 ? [para(t('Servi le ..../..../........', { size: 15, mono: true }), { before: 450, align: AlignmentType.CENTER, after: 0 }),
+                 ...(i === 2 ? [para(t('Servi le ..../..../........', { size: 15, mono: true }), { before: 330, align: AlignmentType.CENTER, after: 0 }),
                                 para(t('Classé en comptabilité ☐', { size: 15 }), { before: 200, align: AlignmentType.CENTER, after: 0 })]
-                             : [para(t(' '), { after: 1250 })])], [3489, 3489, 3488][i], { borders: cadre(i === 2 ? { style: BorderStyle.DOUBLE, size: 6, color: BRIQUE } : pointille) })) }),
+                             : [para(t(' '), { after: 1000 })])], [3489, 3489, 3488][i], { borders: cadre(i === 2 ? { style: BorderStyle.DOUBLE, size: 6, color: BRIQUE } : pointille) })) }),
     ],
   });
   return [

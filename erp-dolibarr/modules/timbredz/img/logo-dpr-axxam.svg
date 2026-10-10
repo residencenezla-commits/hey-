@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 210" width="880" height="420">
+  <title>DPR AXXAM</title>
+  <!-- toit de la maison ; la barre du « d » monte jusqu'au toit -->
+  <path d="M60 88 L214 12 L420 88" fill="none" stroke="#1a1a1a" stroke-width="14" stroke-linejoin="miter"/>
+  <path d="M413 84 V150" stroke="#1a1a1a" stroke-width="14"/>
+  <g fill="none" stroke="#1a1a1a" stroke-width="15">
+    <circle cx="58" cy="148" r="30"/>
+    <path d="M88 82 V180"/>
+    <circle cx="146" cy="148" r="30"/>
+    <path d="M116 118 V202"/>
+    <path d="M196 180 V148 A30 30 0 0 1 256 148"/>
+  </g>
+  <text x="262" y="180" font-family="DejaVu Sans, Arial, sans-serif" font-weight="700" font-size="34" fill="#e3262d">AXXAM</text>
+</svg>
