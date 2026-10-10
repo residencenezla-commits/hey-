@@ -135,7 +135,7 @@ if (process.env.TOUS === '1' && pre.client) {
   const cols = 10, rangs = Math.ceil(nombre / cols), wc = Math.floor(LARGEUR / cols);
   enfants.push(new Table({ width: { size: wc * cols, type: WidthType.DXA }, columnWidths: Array(cols).fill(wc), rows: Array.from({ length: rangs }, (_, r) => new TableRow({ children: Array.from({ length: cols }, (_, c) => {
     const k = r * cols + c; const n = premier + k;
-    return cellule(k < nombre ? [para(t(String(n).padStart(4, '0'), { mono: true, size: 15, bold: true }), { align: AlignmentType.CENTER, after: 0 }), para(t('servi le', { size: 11, color: '777777' }), { align: AlignmentType.CENTER, after: 220 })] : [para(t(''), { after: 0 })], wc);
+    return cellule(k < nombre ? [para(t(String(n).padStart(4, '0'), { mono: true, size: 15, bold: true }), { align: AlignmentType.CENTER, after: 0 }), para(t('servi le', { size: 11, color: '777777' }), { align: AlignmentType.CENTER, after: nombre > 50 ? 40 : 220 })] : [para(t(''), { after: 0 })], wc);
   }) })) }));
 }
 
