@@ -19,7 +19,7 @@ class modTimbreDZ extends DolibarrModules
 		$this->version = '1.0.0';
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
 		$this->picto = 'bill';
-		$this->module_parts = array('triggers' => 1, 'substitutions' => 1);
+		$this->module_parts = array('triggers' => 1, 'substitutions' => 1, 'models' => 1);
 		$this->depends = array('modFacture');
 		$this->config_page_url = array();
 		$this->langfiles = array();

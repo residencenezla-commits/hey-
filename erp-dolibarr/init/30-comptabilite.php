@@ -64,6 +64,14 @@ foreach (array('modAccounting', 'modTimbreDZ') as $m) {
 }
 etape('modules Comptabilité et Timbre DZ activés');
 
+// Modèles PDF « DLG » (facture et bon de livraison au format PC Compta), par défaut
+foreach (array('invoice' => array('FACTURE_ADDON_PDF', 'dlg'), 'shipping' => array('EXPEDITION_ADDON_PDF', 'dlgbl')) as $type => list($const, $nom)) {
+	q($db, "DELETE FROM {$P}document_model WHERE nom = '$nom' AND type = '$type' AND entity = $entite");
+	q($db, "INSERT INTO {$P}document_model (nom, type, entity, libelle) VALUES ('$nom', '$type', $entite, 'DLG')");
+	dolibarr_set_const($db, $const, $nom, 'chaine', 0, '', $entite);
+}
+etape('modèles de facture et de bon de livraison « DLG » activés');
+
 // ------------------------------------------------------------ 2. Plan comptable
 $res = q($db, "SELECT rowid FROM {$P}accounting_system WHERE pcg_version = '".$db->escape($PLAN)."'");
 if ($o = $db->fetch_object($res)) {

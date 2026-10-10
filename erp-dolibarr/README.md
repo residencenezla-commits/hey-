@@ -10,7 +10,7 @@ caisse et fabrication.
 |---|---|
 | Société | SARL DPR AXXAM, capital 294 000 000 DA, RC 08B0185858-06/00, NIF 000806018585831, siège Village Tizi, Tissa, 06020 Semaoun (Béjaïa), usine ZAC Helouane ; devise **dinar (DZD)**, langue française, gérant Ahcene DJENNADI |
 | Clients et fournisseurs | **421 tiers repris de PC Compta** (282 clients, 139 fournisseurs) avec leur code (C005, FL012…), compte général (41100, 40101…), RC, NIF, AI et adresse ; solde au 08/10/2026 en note privée ; une catégorie par compte |
-| Factures et devis | RC, NIF et AI du client imprimés sous son adresse ; capital, RC et NIF de DPR AXXAM en pied de page ; mention « Arrêtée la présente facture à la somme de : … dinars algériens » en toutes lettres |
+| Factures et devis | Modèle **DLG** (comme PC Compta) pour les factures et bons de livraison ; RC, NIF et AI du client imprimés sous son adresse ; capital, RC et NIF de DPR AXXAM en pied de page ; mention « Arrêtée la présente facture à la somme de : … dinars algériens » en toutes lettres |
 | Comptabilité | plan comptable, 31 journaux et 8 748 écritures 2026 de PC Compta ; droit de timbre automatique ; export au format PC Compta (voir plus bas) |
 | TVA | 19 % par défaut (0 % et 9 % disponibles) |
 | Numérotation | Factures **FA2610-0001**, avoirs AV…, acomptes AC… |
@@ -142,6 +142,24 @@ Le même module écrit le **montant en lettres** au bas des factures et devis, p
 « Arrêtée la présente facture à la somme de : soixante mille trois cent quatre-vingt-treize
 dinars algériens, toutes taxes comprises. » Le texte se modifie dans *Accueil › Configuration ›
 Modules › Factures* (« Mention complémentaire »), en gardant la clé `__MONTANT_EN_LETTRES__`.
+
+### Factures et bons de livraison au format DLG
+
+Les factures et les bons de livraison s'impriment par défaut avec le modèle **« dlg »**, qui
+reprend la présentation des documents édités par DLG / PC Compta :
+
+- **Numéro** : « FACTURE No:FA2610-0001 » souligné.
+- **Bloc client** : code PC Compta, adresse, No R.C, No I.F. et No Art.
+- **Informations** : date, No BC (référence client), No BL (bons de livraison liés), règlement.
+- **Tableau** : Référence / Désignation / Un / TVA % / Remise % / Quantité / Prix HT / Montant HT.
+- **Totaux** : récapitulatif de la TVA par taux, Total HT, Remise, Total TVA, droit de timbre,
+  **Net à payer**, puis « ARRETEE LA PRESENTE FACTURE A LA SOMME DE : … » en lettres.
+- **Pied de page** : capital, RC, article d'imposition et NIF de DPR AXXAM.
+
+Le bon de livraison ajoute le véhicule (champ *Numéro de suivi* de l'expédition) et trois cases
+de signature : magasinier, chauffeur, client. Une proforma (facture brouillon) porte le titre
+« FACTURE PROFORMA », un avoir « AVOIR ». Les anciens modèles restent disponibles dans la liste
+*Modèle* de chaque document.
 
 ### Le quotidien comptable
 
