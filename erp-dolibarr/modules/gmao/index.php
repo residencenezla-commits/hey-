@@ -159,7 +159,7 @@ function vAccueil(){
     <div class="kpi"><b>${(D.stats30.arret_min / 60).toFixed(1).replace('.', ',')} h</b><span>d'arrêt sur 30 jours</span></div>
     <div class="kpi ${retard.length ? 'orange' : 'vert'}"><b>${retard.length}</b><span>préventif(s) en retard</span></div>
     <div class="kpi ${sousSeuil.length ? 'orange' : 'vert'}"><b>${sousSeuil.length}</b><span>pièce(s) sous le seuil</span></div>
-    <div class="kpi" title="Durée moyenne d'une panne, 90 derniers jours"><b>${D.fiab.n ? Math.round(D.fiab.mttr_min) + ' min' : '—'}</b><span>MTTR (réparation moyenne)</span></div>
+    <div class="kpi" title="Durée moyenne d'une panne, 90 derniers jours"><b>${+D.fiab.n ? Math.round(D.fiab.mttr_min) + ' min' : '—'}</b><span>MTTR (réparation moyenne)</span></div>
     <div class="kpi" title="Temps moyen de bon fonctionnement entre deux pannes d'une machine, 90 derniers jours"><b>${D.fiab.mtbf_h ? String(D.fiab.mtbf_h).replace('.', ',') + ' h' : '—'}</b><span>MTBF (entre deux pannes)</span></div>
     <div class="kpi"><b>${D.fiab.preventif_30j}</b><span>préventifs faits sur 30 jours</span></div>
   </div>

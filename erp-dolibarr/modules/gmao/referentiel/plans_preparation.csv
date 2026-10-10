@@ -1,76 +1,108 @@
 nom;tag;frequence_j;duree_min;checklist;securite
-PM Quotidien — Caisson doseur n°1;DPR-PRE-DOS-01;1;15;"1. Vérifier l'absence de blocs ou de corps étrangers dans le caisson
-2. Contrôler le tablier : lattes cassées, chaîne détendue (O/N)
-3. Écouter le réducteur : bruit ou vibration anormale (O/N)
-4. Nettoyer l'argile collée sous le tablier";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Quotidien — Laminoir dégrossisseur;DPR-PRE-LAM-01;1;20;"1. Graisser les paliers des cylindres (pompe à graisse, nb de coups selon notice)
-2. Contrôler l'écartement des cylindres à la jauge — noter la valeur en mm
-3. Vérifier racleurs et nettoyage des cylindres
-4. Température des paliers au toucher / thermomètre infrarouge — noter °C";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Hebdomadaire — Laminoir dégrossisseur;DPR-PRE-LAM-01;7;45;"1. Tension et état des courroies (fissures, glissement)
-2. Contrôler l'usure des cylindres (ovalisation, frettes) — noter
-3. Serrage des boulons de bâti et des paliers
-4. Niveau d'huile du réducteur";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Semestriel — Laminoir dégrossisseur;DPR-PRE-LAM-01;182;480;"1. Mesurer le diamètre des cylindres en 3 points — noter
-2. Rectifier ou recharger les cylindres si l'usure dépasse la tolérance constructeur
-3. Remplacer les courroies si usées
-4. Vidange du réducteur (huile selon plaque)";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Quotidien — Laminoir finisseur;DPR-PRE-LAM-02;1;20;"1. Graisser les paliers des cylindres (pompe à graisse, nb de coups selon notice)
-2. Contrôler l'écartement des cylindres à la jauge — noter la valeur en mm
-3. Vérifier racleurs et nettoyage des cylindres
-4. Température des paliers au toucher / thermomètre infrarouge — noter °C";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Hebdomadaire — Laminoir finisseur;DPR-PRE-LAM-02;7;45;"1. Tension et état des courroies (fissures, glissement)
-2. Contrôler l'usure des cylindres (ovalisation, frettes) — noter
-3. Serrage des boulons de bâti et des paliers
-4. Niveau d'huile du réducteur";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Semestriel — Laminoir finisseur;DPR-PRE-LAM-02;182;480;"1. Mesurer le diamètre des cylindres en 3 points — noter
-2. Rectifier ou recharger les cylindres si l'usure dépasse la tolérance constructeur
-3. Remplacer les courroies si usées
-4. Vidange du réducteur (huile selon plaque)";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Quotidien — Désagrégateur / émotteur;DPR-PRE-DES-01;1;15;"1. Graisser les paliers
-2. Retirer pierres et corps étrangers
-3. Bruit / vibration anormale (O/N)";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Mensuel — Désagrégateur / émotteur;DPR-PRE-DES-01;30;60;"1. Contrôler l'usure des dents / couteaux — noter
-2. Serrage des fixations du rotor
-3. Niveau d'huile du réducteur";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Quotidien — Mélangeur humidificateur;DPR-PRE-MEL-01;1;20;"1. Graisser les paliers des arbres
-2. Vérifier le débit d'eau et l'absence de buse bouchée
-3. Nettoyer la pâte durcie dans l'auge";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Mensuel — Mélangeur humidificateur;DPR-PRE-MEL-01;30;120;"1. Mesurer l'usure des pales — remplacer celles hors tolérance
-2. Contrôler le jeu pales / auge
-3. Serrage des bras de pales
-4. Niveau d'huile du réducteur";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Hebdomadaire — Convoyeur n°1;DPR-PRE-CVY-01;7;20;"1. Centrage de la bande et tension
+PM Quotidien — Caisson doseur;DPR-PRE-DOS1;1;15;"1. Absence de blocs / corps étrangers dans le caisson
+2. Chaîne doseuse (M137) : maillons, tension, lattes cassées (O/N)
+3. Piocheur (M138) : dents, bruit
+4. Variateurs 313I1 / 314I1 : pas de défaut affiché";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Quotidien — Laminoir;DPR-PRE-LAM;1;20;"1. Graisser les paliers des cylindres
+2. Écartement des cylindres à la jauge — noter en mm
+3. Températures paliers (infrarouge) — noter °C
+4. Huileur (M139) : niveau d'huile et débit
+5. Démarreurs progressifs 316A1 / 317A1 : pas de défaut";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Hebdomadaire — Laminoir;DPR-PRE-LAM;7;60;"1. Courroies et poulies des 2 moteurs 110 kW : tension, usure
+2. Usure / ovalisation des cylindres — noter
+3. Outils de rectification (M149 / M150) : course et état
+4. Serrage bâti et paliers
+5. Niveau d'huile des réducteurs";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Semestriel — Laminoir;DPR-PRE-LAM;182;480;"1. Mesurer le diamètre des cylindres en 3 points
+2. Rectifier les cylindres (outils de rectification) si hors tolérance
+3. Remplacer les courroies usées
+4. Vidange des réducteurs
+5. Contrôle isolement des moteurs M144 / M145 (mégohmmètre)";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Quotidien — Mélangeur;DPR-FAC-MEL;1;20;"1. Graisser les paliers des arbres
+2. Pompe à huile (M155/1) : pression / débit
+3. Mouillage M156 : débit d'eau, buses non bouchées, régulateur Novatronic sans alarme
+4. Nettoyer la pâte durcie";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Mensuel — Mélangeur;DPR-FAC-MEL;30;120;"1. Usure des pales — remplacer hors tolérance
+2. Jeu pales / auge
+3. Serrage des bras
+4. Variateur M155 : ventilation propre, codes défauts relevés";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Quotidien — Mélangeur-dégazeur de l'étireuse;DPR-FAC-MELDEG;1;20;"1. Pompe à huile (M158/1) : pression
+2. Mouillage M159 : débit, plastomètre, sonde PT100
+3. Étanchéité de la chambre de dégazage";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Quotidien — Étireuse;DPR-FAC-ETI;1;30;"1. Pompe à huile (M163) : niveau et pression
+2. Ventilateur moteur (M163/1) en marche
+3. Valeur du vide — noter (mbar)
+4. Filière : propreté, usure des noyaux
+5. Variateur M160 (315 kW) : pas d'alarme, température";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Mensuel — Étireuse;DPR-FAC-ETI;30;240;"1. Usure de l'hélice — noter
+2. Aspo 1 et 2 (M161 / M162) : état
+3. Courroies / accouplement moteur principal
+4. Nettoyage du variateur et de ses filtres";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Quotidien — Pompe à vide;DPR-FAC-PVIDE;1;15;"1. Niveau d'eau / d'huile de la pompe
+2. Vide atteint — noter (mbar)
+3. Filtre d'aspiration propre
+4. Démarreur progressif 421A1 sans défaut";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Hebdomadaire — Convoyeur n°1;DPR-PRE-CVY1;7;20;"1. Centrage et tension de la bande
 2. Rouleaux bloqués ou bruyants — noter le nombre
-3. État des racleurs et de la jonction de bande
-4. Arrêt d'urgence à câble : essai de fonctionnement";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Hebdomadaire — Convoyeur n°2;DPR-PRE-CVY-02;7;20;"1. Centrage de la bande et tension
+3. Racleurs et jonction de bande
+4. Frein SEW : réglage de l'entrefer, redresseur BGE
+5. Arrêt d'urgence à câble : essai";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Hebdomadaire — Convoyeur n°2;DPR-PRE-CVY2;7;20;"1. Centrage et tension de la bande
 2. Rouleaux bloqués ou bruyants — noter le nombre
-3. État des racleurs et de la jonction de bande
-4. Arrêt d'urgence à câble : essai de fonctionnement";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Hebdomadaire — Convoyeur n°3;DPR-PRE-CVY-03;7;20;"1. Centrage de la bande et tension
+3. Racleurs et jonction de bande
+4. Frein SEW : réglage de l'entrefer, redresseur BGE
+5. Arrêt d'urgence à câble : essai";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Hebdomadaire — Convoyeur n°3;DPR-PRE-CVY3;7;20;"1. Centrage et tension de la bande
 2. Rouleaux bloqués ou bruyants — noter le nombre
-3. État des racleurs et de la jonction de bande
-4. Arrêt d'urgence à câble : essai de fonctionnement";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Hebdomadaire — Convoyeur n°4;DPR-PRE-CVY-04;7;20;"1. Centrage de la bande et tension
+3. Racleurs et jonction de bande
+4. Frein SEW : réglage de l'entrefer, redresseur BGE
+5. Arrêt d'urgence à câble : essai";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Hebdomadaire — Convoyeur n°4;DPR-FAC-CVY4;7;20;"1. Centrage et tension de la bande
 2. Rouleaux bloqués ou bruyants — noter le nombre
-3. État des racleurs et de la jonction de bande
-4. Arrêt d'urgence à câble : essai de fonctionnement";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Hebdomadaire — Convoyeur n°5;DPR-PRE-CVY-05;7;20;"1. Centrage de la bande et tension
+3. Racleurs et jonction de bande
+4. Frein SEW : réglage de l'entrefer, redresseur BGE
+5. Arrêt d'urgence à câble : essai";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Hebdomadaire — Convoyeur n°5;DPR-FAC-CVY5;7;20;"1. Centrage et tension de la bande
 2. Rouleaux bloqués ou bruyants — noter le nombre
-3. État des racleurs et de la jonction de bande
-4. Arrêt d'urgence à câble : essai de fonctionnement";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Hebdomadaire — Convoyeur n°6;DPR-PRE-CVY-06;7;20;"1. Centrage de la bande et tension
+3. Racleurs et jonction de bande
+4. Frein SEW : réglage de l'entrefer, redresseur BGE
+5. Arrêt d'urgence à câble : essai";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Hebdomadaire — Convoyeur n°6;DPR-FAC-CVY6;7;20;"1. Centrage et tension de la bande
 2. Rouleaux bloqués ou bruyants — noter le nombre
-3. État des racleurs et de la jonction de bande
-4. Arrêt d'urgence à câble : essai de fonctionnement";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Hebdomadaire — Excavateur / reprise;DPR-PRE-REP-01;7;60;"1. Tension et graissage de la chaîne à godets
-2. Dents / godets usés ou déformés
-3. Fins de course et sécurités : essai";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
-PM Mensuel — Armoire électrique préparation;DPR-PRE-ARM-01;30;60;"1. Dépoussiérage (aspiration, pas d'air comprimé sur les cartes)
-2. Filtres de ventilation : nettoyer ou remplacer
-3. Codes défauts des variateurs — relever
-4. Serrage des borniers de puissance (une fois par an, hors tension)";"Intervention réservée à un électricien habilité ; armoire consignée ; vérifier l'absence de tension."
-PM Trimestriel — Réducteurs de la préparation;DPR-PRE-LAM-02;91;180;"1. Relever le niveau et l'aspect de l'huile de chaque réducteur de la ligne
-2. Prélever un échantillon sur les réducteurs des laminoirs et du mélangeur
-3. Noter les heures de fonctionnement pour programmer les vidanges";"Consignation électrique (cadenas) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; ne jamais intervenir sur une bande ou un cylindre en mouvement."
+3. Racleurs et jonction de bande
+4. Frein SEW : réglage de l'entrefer, redresseur BGE
+5. Arrêt d'urgence à câble : essai";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Hebdomadaire — Répartiteur double;DPR-PRE-REP;7;20;"1. Mécanisme et bande du répartiteur
+2. Moteur M143 : bruit, échauffement
+3. Fins de course de position : essai";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Hebdomadaire — Navette;DPR-NAV;7;60;"1. Essai des fins de course nord / sud (231MC2, 231MC3) et d'urgence (231MC4, 232MC1)
+2. Détecteurs de rotation (PX) : propreté, distance
+3. Frein SEW du moteur de translation (M130)
+4. Rails et galets : usure, propreté
+5. Arrêt d'urgence à câble (231MC1) et coup de poing (11S2) : essai
+6. Liaison Wi-Fi IWLAN : pas de coupure signalée";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Mensuel — Navette;DPR-NAV;30;120;"1. Tapis 9A / 9B / 10 / 11 : bandes, rouleaux
+2. Lanceurs 10 et 11 (M133 à M136)
+3. Serrage des borniers de l'armoire mobile (hors tension)
+4. Câbles et alimentation de la navette";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Mensuel — Armoire Quadro 1;DPR-ARM-Q1;30;60;"1. Dépoussiérage (aspiration, pas d'air comprimé sur les cartes)
+2. Filtres de ventilation
+3. Codes défauts des variateurs et démarreurs — relever
+4. Échauffement des borniers (caméra thermique si disponible)";"Électricien habilité uniquement ; armoire consignée ; vérifier l'absence de tension."
+PM Mensuel — Armoire Quadro 2;DPR-ARM-Q2;30;60;"1. Dépoussiérage (aspiration, pas d'air comprimé sur les cartes)
+2. Filtres de ventilation
+3. Codes défauts des variateurs et démarreurs — relever
+4. Échauffement des borniers (caméra thermique si disponible)";"Électricien habilité uniquement ; armoire consignée ; vérifier l'absence de tension."
+PM Mensuel — Armoire navette;DPR-ARM-NAV;30;60;"1. Dépoussiérage (aspiration, pas d'air comprimé sur les cartes)
+2. Filtres de ventilation
+3. Codes défauts des variateurs et démarreurs — relever
+4. Échauffement des borniers (caméra thermique si disponible)";"Électricien habilité uniquement ; armoire consignée ; vérifier l'absence de tension."
+PM Trimestriel — Sauvegarde automates;DPR-AUT-Q1;91;60;"1. Sauvegarde du programme des CPU 315-2 et 314-2 (navette)
+2. Sauvegarde du projet de l'écran TP1200
+3. Vérifier la pile / carte mémoire des CPU
+4. Noter la version et ranger la copie hors de l'usine";Ne rien modifier au programme sans l'accord du responsable.
+PM Hebdomadaire — Cercleuse MS500;DPR-CND-CER-01;7;30;"1. Nettoyer les canaux de feuillard
+2. Lame et lame de soudage : usure
+3. Résistance de soudage : température
+4. Ressorts de pinces
+5. Essai de cerclage et tension";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."

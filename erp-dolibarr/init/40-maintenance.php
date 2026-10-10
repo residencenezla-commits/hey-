@@ -1,7 +1,8 @@
 <?php
 /*
  * Module « Maintenance » (GMAO) : activation et chargement de l'atelier de préparation
- * (machines, sous-ensembles, plans préventifs, pièces), seulement si la base est vide.
+ * réel (schémas électriques Marcheluzzo, catalogue MS500 : machines, moteurs, plans, pièces),
+ * seulement si la base est vide. Régénérer les fichiers : python3 gmao-horizon/referentiel_reel.py
  * Relancer à la main :  docker compose exec web php /var/www/scripts/docker-init.d/40-maintenance.php
  * Pour importer ensuite le schéma électrique et les alarmes automate : menu Maintenance > Import.
  */
@@ -25,7 +26,7 @@ if ($o && $o->n > 0) { etape("base déjà remplie ({$o->n} équipements) : rien 
 $dir = '/var/www/html/custom/gmao/referentiel/';
 require_once '/var/www/html/custom/gmao/lib/import.lib.php';
 $r = gmao_importer_equipements($db, file_get_contents($dir.'equipements_preparation.csv'), $E);
-etape("{$r['crees']} équipements de l'atelier de préparation chargés".($r['erreurs'] ? ' ; '.implode(' ; ', $r['erreurs']) : ''));
+etape("{$r['crees']} équipements chargés (schémas électriques E5, E5A, E5B, E4A + cercleuse MS500)".($r['erreurs'] ? ' ; '.implode(' ; ', $r['erreurs']) : ''));
 
 $id = function ($tag) use ($db, $P, $E) {
 	$o = $db->fetch_object($db->query("SELECT rowid FROM {$P}gmao_equipement WHERE tag = '".$db->escape($tag)."' AND entity = $E"));

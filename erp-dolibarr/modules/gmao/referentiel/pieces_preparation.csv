@@ -1,13 +1,219 @@
-nom;reference;tag;unite;seuil_conseille
-Bande transporteuse (largeur à relever);;DPR-PRE-CVY-01;mètre;1 longueur de rouleau entier
-Rouleau porteur de convoyeur;;DPR-PRE-CVY-01;pièce;10
-Rouleau de retour de convoyeur;;DPR-PRE-CVY-01;pièce;5
-Racleur de bande (lame);;DPR-PRE-CVY-01;pièce;4
-Roulement de palier — laminoirs;réf. sur palier;DPR-PRE-LAM-02;pièce;2
-Courroie trapézoïdale — laminoirs;réf. sur courroie;DPR-PRE-LAM-02;pièce;1 jeu complet
-Pale d'usure du mélangeur;;DPR-PRE-MEL-01;pièce;1 jeu
-Dent / couteau de désagrégateur;;DPR-PRE-DES-01;pièce;1 jeu
-Latte de tablier du caisson doseur;;DPR-PRE-DOS-01;pièce;5
-Huile réducteur (grade selon plaque);ex. ISO VG 220/320;DPR-PRE-LAM-02;litre;1 vidange du plus gros réducteur
-Graisse paliers (EP2);;DPR-PRE-LAM-01;kg;1 seau
-Buse de rampe d'eau;;DPR-PRE-MEL-01;pièce;4
+nom;reference;tag;unite;stock;seuil_conseille
+Bande transporteuse (largeur à relever);;DPR-PRE-CVY1;mètre;0;0
+Rouleau porteur de convoyeur;;DPR-PRE-CVY1;pièce;0;10
+Rouleau de retour de convoyeur;;DPR-PRE-CVY1;pièce;0;5
+Racleur de bande (lame);;DPR-PRE-CVY1;pièce;0;4
+Garniture / disque de frein SEW de convoyeur;;DPR-PRE-CVY1;pièce;0;1
+Redresseur de frein SEW BGE;BGE;DPR-PRE-CVY1;pièce;0;1
+Roulement de palier — laminoir;réf. sur palier;DPR-PRE-LAM;pièce;0;2
+Courroie — moteurs du laminoir;réf. sur courroie;DPR-PRE-LAM;jeu;0;1
+Pale d'usure du mélangeur;;DPR-FAC-MEL;pièce;0;0
+Buse de mouillage;;DPR-FAC-MEL;pièce;0;4
+Hélice / pièces d'usure de l'étireuse;;DPR-FAC-ETI;jeu;0;0
+Noyaux de filière (B8 / B12 / hourdis);;DPR-FAC-ETI;jeu;0;1
+Huile réducteurs (grade selon plaque);ISO VG 220/320;DPR-PRE-LAM;litre;0;0
+Graisse paliers EP2;;DPR-PRE-LAM;kg;0;0
+Fin de course de translation de la navette;à relever;DPR-NAV;pièce;0;1
+Détecteur de proximité (PX) de la navette;à relever;DPR-NAV;pièce;0;2
+Couverture;M3 02001;DPR-CND-CER-01-TETE;pièce;0;0
+Plaque avant gauche;M3 02003;DPR-CND-CER-01-TETE;pièce;0;0
+Plaque postérieure gauche;M3 02004;DPR-CND-CER-01-TETE;pièce;0;0
+Couverture;M3 02005;DPR-CND-CER-01-TETE;pièce;0;0
+Épaule gauche;M3 02006;DPR-CND-CER-01-TETE;pièce;0;0
+Plaque postérieure centrale;M3 02007;DPR-CND-CER-01-TETE;pièce;0;0
+Épaule droite;M3 02008;DPR-CND-CER-01-TETE;pièce;0;0
+Plaque postérieure droite;M3 02009;DPR-CND-CER-01-TETE;pièce;0;0
+Plaque support moteur;M3 02010;DPR-CND-CER-01-TETE;pièce;0;0
+Plaque côté droit;M3 02011;DPR-CND-CER-01-TETE;pièce;0;0
+Plaque de base;M3 02013;DPR-CND-CER-01-TETE;pièce;0;0
+Réducteur;M3 02014;DPR-CND-CER-01-TETE;pièce;0;0
+Couverture réducteur;M3 02015;DPR-CND-CER-01-TETE;pièce;0;0
+Support guide feuillard;M3 02018;DPR-CND-CER-01-TETE;pièce;0;0
+Plaque feuillure guidage;M3 02019;DPR-CND-CER-01-TETE;pièce;0;0
+Charnière couverture;M3 02020;DPR-CND-CER-01-TETE;pièce;0;0
+Support réducteur;M3 02021;DPR-CND-CER-01-TETE;pièce;0;0
+Amortisseur;M3 02022;DPR-CND-CER-01-TETE;pièce;0;0
+Support amortisseur;M3 02024;DPR-CND-CER-01-TETE;pièce;0;0
+Goujon;M3 02025;DPR-CND-CER-01-TETE;pièce;0;0
+Plaque;M3 03001;DPR-CND-CER-01-TETE;pièce;0;0
+Roue guide feuillard et contrôle;M3 03003;DPR-CND-CER-01-TETE;pièce;0;0
+Roulement;M3 03005;DPR-CND-CER-01-TETE;pièce;0;0
+Couverture guidage inox;M3 03006;DPR-CND-CER-01-TETE;pièce;0;0
+Plaquette support électro-aimant;M3 03008;DPR-CND-CER-01-TETE;pièce;0;0
+Électro-aimant;M3 03010;DPR-CND-CER-01-TETE;pièce;0;1
+Bloc guide feuillard gauche;M3 03012;DPR-CND-CER-01-TETE;pièce;0;0
+Kugellager;M3 03013;DPR-CND-CER-01-TETE;pièce;0;0
+Roue de renvoi;M3 03014;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot excentrique;M3 03016;DPR-CND-CER-01-TETE;pièce;0;0
+Borne pivot excentrique;M3 03017;DPR-CND-CER-01-TETE;pièce;0;0
+Bloc guide plaque gauche laiton;M3 03018;DPR-CND-CER-01-TETE;pièce;0;0
+Bloc laiton droit;M3 03019;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot roue de renvoi;M3 03020;DPR-CND-CER-01-TETE;pièce;0;0
+Support tauche lancement;M3 03023;DPR-CND-CER-01-TETE;pièce;0;0
+Poignée;M3 03024;DPR-CND-CER-01-TETE;pièce;0;0
+Tirant;M3 03025;DPR-CND-CER-01-TETE;pièce;0;0
+Plaquettes de réglage;M3 03026;DPR-CND-CER-01-TETE;pièce;0;0
+Ressort;M3 03031;DPR-CND-CER-01-TETE;pièce;0;0
+Roue lancement-récupération-trait;M3 04001;DPR-CND-CER-01-TETE;pièce;0;0
+Roue dentée lancement et récupération;M3 04002;DPR-CND-CER-01-TETE;pièce;0;0
+Roue dentée de trait;M3 04003;DPR-CND-CER-01-TETE;pièce;0;0
+viti a funghetto M6x10;M3 04004;DPR-CND-CER-01-TETE;pièce;0;0
+Arbre rapide;M3 04005;DPR-CND-CER-01-TETE;pièce;0;0
+Entretoise;M3 04006;DPR-CND-CER-01-TETE;pièce;0;0
+Roulement;M3 04007;DPR-CND-CER-01-TETE;pièce;0;0
+Support;M3 04008;DPR-CND-CER-01-TETE;pièce;0;0
+Entretoise;M3 04009;DPR-CND-CER-01-TETE;pièce;0;0
+Roulement;M3 04010;DPR-CND-CER-01-TETE;pièce;0;0
+Arbre lent;M3 04011;DPR-CND-CER-01-TETE;pièce;0;0
+Rouleau glissement chaine;M3 04013;DPR-CND-CER-01-TETE;pièce;0;0
+Roulement;M3 04014;DPR-CND-CER-01-TETE;pièce;0;0
+Fourreau de tensionnement;M3 05001;DPR-CND-CER-01-TETE;pièce;0;0
+Tirant de compression;M3 05002;DPR-CND-CER-01-TETE;pièce;0;0
+Ressort de compression /A (douce) / B (dure);M3 05003;DPR-CND-CER-01-TETE;pièce;0;0
+Roulement unidirectionnel;M3 05004;DPR-CND-CER-01-TETE;pièce;0;0
+Roue dentée;M3 05005;DPR-CND-CER-01-TETE;pièce;0;0
+(in numero variabile);M3 05007;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot;M3 05008;DPR-CND-CER-01-TETE;pièce;0;0
+Support;M3 05010;DPR-CND-CER-01-TETE;pièce;0;0
+Chaine;M3 05011;DPR-CND-CER-01-TETE;pièce;0;0
+Tige de contrôle et tensionnement;M3 05012;DPR-CND-CER-01-TETE;pièce;0;0
+Amortisseur â disque;M3 05013;DPR-CND-CER-01-TETE;pièce;0;0
+Roulement;M3 05015;DPR-CND-CER-01-TETE;pièce;0;0
+Rotor frein (coupé);M3 06001;DPR-CND-CER-01-TETE;pièce;0;1
+Roue dentée;M3 06002;DPR-CND-CER-01-TETE;pièce;0;0
+Roulement;M3 06003;DPR-CND-CER-01-TETE;pièce;0;0
+Arbre;M3 06004;DPR-CND-CER-01-TETE;pièce;0;0
+viti M4x10 con grover;M3 06005;DPR-CND-CER-01-TETE;pièce;0;0
+Rondelle d'épaisseur;M3 06006;DPR-CND-CER-01-TETE;pièce;0;0
+Entretoise;M3 06007;DPR-CND-CER-01-TETE;pièce;0;0
+Entretoise;M3 06008;DPR-CND-CER-01-TETE;pièce;0;0
+Arbre;M3 07004;DPR-CND-CER-01-TETE;pièce;0;0
+Rouleau de Tensionnement;M3 08001;DPR-CND-CER-01-TETE;pièce;0;0
+Roue Dentée;M3 08002;DPR-CND-CER-01-TETE;pièce;0;0
+Arbre;M3 08003;DPR-CND-CER-01-TETE;pièce;0;0
+Arbre;M3 08004;DPR-CND-CER-01-TETE;pièce;0;0
+Levier;M3 08005;DPR-CND-CER-01-TETE;pièce;0;0
+Rouleau;M3 08006;DPR-CND-CER-01-TETE;pièce;0;0
+Groupe fourche anti vibration;M3 08007;DPR-CND-CER-01-TETE;pièce;0;0
+Fourche;M3 08008;DPR-CND-CER-01-TETE;pièce;0;0
+Fourche;M3 08008C;DPR-CND-CER-01-TETE;pièce;0;1
+Levier de Poussée;M3 08010;DPR-CND-CER-01-TETE;pièce;0;0
+Roue Dentée;M3 08012;DPR-CND-CER-01-TETE;pièce;0;0
+Petite Plaque Support Senseur;M3 08013;DPR-CND-CER-01-TETE;pièce;0;0
+Détecteur de proximité M5;M3 08014;DPR-CND-CER-01-TETE;pièce;0;1
+Goujon;M3 08015;DPR-CND-CER-01-TETE;pièce;0;0
+Ressort;M3 08016;DPR-CND-CER-01-TETE;pièce;0;0
+Bague feuillure anti-vibration;M3 08017;DPR-CND-CER-01-TETE;pièce;0;0
+vite M8x16;M3 08020;DPR-CND-CER-01-TETE;pièce;0;0
+Goujon synchroniseur;M3 08021;DPR-CND-CER-01-TETE;pièce;0;0
+Fourche;M3 08022;DPR-CND-CER-01-TETE;pièce;0;0
+viti a funghetto;M3 08023;DPR-CND-CER-01-TETE;pièce;0;0
+Ressort;M3 08024;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot support ressort;M3 08025;DPR-CND-CER-01-TETE;pièce;0;0
+Canalina ingresso per reggia da 9/12/16/19mm;M3 10001;DPR-CND-CER-01-TETE;pièce;0;0
+Couverture Guidage Entrée;M3 10002;DPR-CND-CER-01-TETE;pièce;0;0
+Pont Guidage;M3 10003;DPR-CND-CER-01-TETE;pièce;0;0
+Ressort de retour (lame de soudure / guidage);M3 10004;DPR-CND-CER-01-TETE;pièce;0;1
+Pivot;M3 10005;DPR-CND-CER-01-TETE;pièce;0;0
+Couverture guidage sortie;M3 10006;DPR-CND-CER-01-TETE;pièce;0;0
+Guidage sortie feuillard;M3 10007;DPR-CND-CER-01-TETE;pièce;0;0
+Roulement;M3 10008;DPR-CND-CER-01-TETE;pièce;0;0
+Levier guidage sortie;M3 10009;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot;M3 10010;DPR-CND-CER-01-TETE;pièce;0;0
+Levier guidage entrée;M3 10011;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot support Ressort;M3 10012;DPR-CND-CER-01-TETE;pièce;0;0
+Lame de soudage;M3 11001;DPR-CND-CER-01-TETE;pièce;0;1
+Pivot;M3 11002;DPR-CND-CER-01-TETE;pièce;0;0
+Roulement;M3 11003;DPR-CND-CER-01-TETE;pièce;0;0
+Levier plaque épaisse gauche;M3 11004;DPR-CND-CER-01-TETE;pièce;0;0
+Plaque épaisse;M3 11005;DPR-CND-CER-01-TETE;pièce;0;0
+Micro-interrupteur;M3 11006;DPR-CND-CER-01-TETE;pièce;0;1
+Levier Micro-rupteur;M3 11007;DPR-CND-CER-01-TETE;pièce;0;0
+Support Micro-rupteur;M3 11008;DPR-CND-CER-01-TETE;pièce;0;0
+Ressort renvoi levier interrupteur;M3 11009;DPR-CND-CER-01-TETE;pièce;0;0
+Ressort renvoi levier;M3 11010;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot ressort renvoi levier;M3 11011;DPR-CND-CER-01-TETE;pièce;0;0
+Ressort renvoi levier;M3 11012;DPR-CND-CER-01-TETE;pièce;0;0
+Entretoise;M3 11013;DPR-CND-CER-01-TETE;pièce;0;0
+Levier plaque épaisse droite;M3 11014;DPR-CND-CER-01-TETE;pièce;0;0
+Levier support micro interrupteur;M3 11015;DPR-CND-CER-01-TETE;pièce;0;0
+Arbre levier;M3 11016;DPR-CND-CER-01-TETE;pièce;0;0
+Levier lame de soudage;M3 11017;DPR-CND-CER-01-TETE;pièce;0;0
+Ressort;M3 11020;DPR-CND-CER-01-TETE;pièce;0;0
+Ressort renvoi lame de soudage;M3 11021;DPR-CND-CER-01-TETE;pièce;0;0
+Résistance;M3 11022;DPR-CND-CER-01-TETE;pièce;0;1
+Résistance avec thermocouple;M3 11023;DPR-CND-CER-01-TETE;pièce;0;1
+Plaque;M3 11024;DPR-CND-CER-01-TETE;pièce;0;0
+Support lame de soudage droite;M3 11025;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot;M3 11026;DPR-CND-CER-01-TETE;pièce;0;0
+Petite plaque couvre-fils;M3 11027;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot pour roulement;M3 11028;DPR-CND-CER-01-TETE;pièce;0;0
+Graisseur;M3 11029;DPR-CND-CER-01-TETE;pièce;0;0
+Petite bague;M3 11030;DPR-CND-CER-01-TETE;pièce;0;0
+Plaque;M3 12001;DPR-CND-CER-01-TETE;pièce;0;0
+I pince;M3 12002;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot support Ressort;M3 12003;DPR-CND-CER-01-TETE;pièce;0;0
+Ressort renvoi pince;M3 12004;DPR-CND-CER-01-TETE;pièce;0;1
+Téte pince centrale;M3 12005;DPR-CND-CER-01-TETE;pièce;0;0
+Lame;M3 12006;DPR-CND-CER-01-TETE;pièce;0;1
+Chassis groupe pinces;M3 12007;DPR-CND-CER-01-TETE;pièce;0;0
+Entretoise;M3 12008;DPR-CND-CER-01-TETE;pièce;0;0
+II pince;M3 12010;DPR-CND-CER-01-TETE;pièce;0;0
+Pince centrale;M3 12011;DPR-CND-CER-01-TETE;pièce;0;0
+Fourche pince;M3 12012;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot;M3 12014;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot;M3 12015;DPR-CND-CER-01-TETE;pièce;0;0
+A Plaquette groupe pinces;M3 12016;DPR-CND-CER-01-TETE;pièce;0;0
+Pin;M3 12018;DPR-CND-CER-01-TETE;pièce;0;0
+Ressort lame;M3 12020;DPR-CND-CER-01-TETE;pièce;0;0
+Spring;M3 12021;DPR-CND-CER-01-TETE;pièce;0;0
+Ressort interieur pince;M3 12021A;DPR-CND-CER-01-TETE;pièce;0;1
+Came;M3 13001;DPR-CND-CER-01-TETE;pièce;0;0
+Roulement;M3 13002;DPR-CND-CER-01-TETE;pièce;0;0
+Came guidage gauche;M3 13003;DPR-CND-CER-01-TETE;pièce;0;0
+Came plaque gauche;M3 13004;DPR-CND-CER-01-TETE;pièce;0;0
+Arbre;M3 13005;DPR-CND-CER-01-TETE;pièce;0;0
+Came I Pince;M3 13006;DPR-CND-CER-01-TETE;pièce;0;0
+Came soudage;M3 13007;DPR-CND-CER-01-TETE;pièce;0;0
+Came II Pince;M3 13009;DPR-CND-CER-01-TETE;pièce;0;0
+Came plaque droite;M3 13010;DPR-CND-CER-01-TETE;pièce;0;0
+Came guidage droite;M3 13011;DPR-CND-CER-01-TETE;pièce;0;0
+Came de sécuritè;M3 13012;DPR-CND-CER-01-TETE;pièce;0;0
+Came micro rupteur;M3 13013;DPR-CND-CER-01-TETE;pièce;0;0
+Support micro rupteur;M3 13014;DPR-CND-CER-01-TETE;pièce;0;0
+Entretoise micro rupteur;M3 13015;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot came micro;M3 13016;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot;M3 13017;DPR-CND-CER-01-TETE;pièce;0;0
+Entretoise;M3 13018;DPR-CND-CER-01-TETE;pièce;0;0
+Stöpsel;M3 13019;DPR-CND-CER-01-TETE;pièce;0;0
+Poulie tendeur de courroie;M3 14003;DPR-CND-CER-01-TETE;pièce;0;0
+Courroie;M3 14004;DPR-CND-CER-01-TETE;pièce;0;1
+Pivot poulie terndeur de courrioie cout;M3 14005;DPR-CND-CER-01-TETE;pièce;0;0
+Rotor embrayage électromagnétique;M3 14009A;DPR-CND-CER-01-TETE;pièce;0;1
+Rotor embrayage électromagnétique d17;M3 14009B;DPR-CND-CER-01-TETE;pièce;0;1
+Tendeur de courroie;M3 14010;DPR-CND-CER-01-TETE;pièce;0;0
+Ressort tendeur de courroie;M3 14011;DPR-CND-CER-01-TETE;pièce;0;0
+Roulement;M3 14013;DPR-CND-CER-01-TETE;pièce;0;0
+Frein électromagnétique (normal);M3 14014A;DPR-CND-CER-01-TETE;pièce;0;1
+Frein électromagnétique (coupé);M3 14014B;DPR-CND-CER-01-TETE;pièce;0;1
+Tirant;M3 14015;DPR-CND-CER-01-TETE;pièce;0;0
+Fourche sphérique à tige;M3 14016;DPR-CND-CER-01-TETE;pièce;0;0
+Détecteur de proximité M12;M3 14019;DPR-CND-CER-01-TETE;pièce;0;1
+Bloc d'ecoulement;M3 14020;DPR-CND-CER-01-TETE;pièce;0;0
+Tige de controle et tensionnement;M3 14021;DPR-CND-CER-01-TETE;pièce;0;0
+Support capteur;M3 14022;DPR-CND-CER-01-TETE;pièce;0;0
+Arbre réducteur;M3 14023;DPR-CND-CER-01-TETE;pièce;0;0
+Brake plate;M3 14024;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot poulie long;M3 14025;DPR-CND-CER-01-TETE;pièce;0;0
+Pivot;M3 14026;DPR-CND-CER-01-TETE;pièce;0;0
+Induit embrayage électromagnétique;M3 14027;DPR-CND-CER-01-TETE;pièce;0;1
+Aimant embrayage électromagnétique;M3 14028;DPR-CND-CER-01-TETE;pièce;0;1
+Etretoise;M3 14029;DPR-CND-CER-01-TETE;pièce;0;0
+Poignée de reglage;M3 14030;DPR-CND-CER-01-TETE;pièce;0;0
+Couverture inox;M3 14031;DPR-CND-CER-01-TETE;pièce;0;0
+Couverture plaque de bornes;M3 14032;DPR-CND-CER-01-TETE;pièce;0;0
+Indicateur de tensionnement;M3 14033;DPR-CND-CER-01-TETE;pièce;0;0
+Poulie lancement-récupération;M3 14034;DPR-CND-CER-01-TETE;pièce;0;0
+Poulie Moteur;M3 14035;DPR-CND-CER-01-TETE;pièce;0;0
+Riemenscheibe, Untersetzungsgetriebe;M3 14036;DPR-CND-CER-01-TETE;pièce;0;0
+Poulie axe tensionnement;M3 14037;DPR-CND-CER-01-TETE;pièce;0;0
