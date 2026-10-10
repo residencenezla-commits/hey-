@@ -1,6 +1,7 @@
 // Carnet de bons d'enlèvement payés, au format Word (2 bons par feuille A4).
 // Usage : node bons_enlevement_word.js [premier=1] [nombre=10] [fichier.docx]
-//         Variables facultatives pour pré-remplir le premier bon :
+//         Variables facultatives pour pré-remplir le premier bon (TOUS=1 : tous les bons),
+//         PRIX=20.50 : prix TTC unitaire, imprimé seulement sur le bordereau de remise :
 //         CLIENT="KERDJA BILEL" ADRESSE="..." TEL="..." PAYE="10/10/2026" PRODUIT=B8 QUANTITE=7040
 const fs = require('fs');
 const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, BorderStyle,
@@ -88,11 +89,44 @@ function bon(n, rempli) {
 const enfants = [];
 for (let i = 0; i < nombre; i++) {
   const n = premier + i;
-  const rempli = i === 0 ? pre : {};
+  const rempli = (i === 0 || process.env.TOUS === '1') ? pre : {};
   if (i % 2 === 1) enfants.push(para(t('✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -', { size: 14, color: '777777' }), { align: AlignmentType.CENTER, before: 140, after: 140 }));
   else if (i > 0) enfants.push(new Paragraph({ children: [new PageBreak()] }));
   enfants.push(...bon(n, rempli));
 }
+if (process.env.TOUS === '1' && pre.client) {
+  const qte = Number(pre.quantite || 0), prix = Number(process.env.PRIX || 0);
+  const fmt = (v, d = 0) => v.toLocaleString('fr-FR', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/[\u202f\u00a0]/g, ' ');
+  const n1 = String(premier).padStart(4, '0'), n2 = String(premier + nombre - 1).padStart(4, '0');
+  const ligne = (a, b, gras) => new TableRow({ children: [cellule([para(t(a, { size: 19 }), { after: 0 })], 5200), cellule([para(t(b, { mono: true, size: 19, bold: gras }), { align: AlignmentType.RIGHT, after: 0 })], 5266)] });
+  enfants.push(new Paragraph({ children: [new PageBreak()] }));
+  enfants.push(new Table({ width: { size: LARGEUR, type: WidthType.DXA }, columnWidths: [5200, 5266], rows: [new TableRow({ children: [
+    cellule([para(new ImageRun({ type: 'png', data: LOGO, transformation: { width: 128, height: 62 }, altText: { title: 'DPR AXXAM', description: 'Logo DPR AXXAM', name: 'logo' } }), { after: 0 })], 5200, { borders: sans }),
+    cellule([para(t('SARL DPR AXXAM · ZAC Helouane, Ighzer Amokrane (Béjaïa)', { size: 14 }), { align: AlignmentType.RIGHT, after: 0 }), para(t('RC 08B0185858-06/00 · NIF 000806018585831', { size: 14 }), { align: AlignmentType.RIGHT, after: 0 })], 5266, { borders: sans, va: 'bottom' }),
+  ] })] }));
+  enfants.push(para(t(''), { border: { bottom: { style: BorderStyle.SINGLE, size: 10, color: '222222', space: 1 } }, after: 300 }));
+  enfants.push(para(t("BORDEREAU DE REMISE DE BONS D'ENLÈVEMENT PAYÉS", { mono: true, bold: true, italics: true, size: 26 }), { align: AlignmentType.CENTER, after: 300 }));
+  enfants.push(new Table({ width: { size: LARGEUR, type: WidthType.DXA }, columnWidths: [5200, 5266], rows: [
+    ligne('Client', pre.client, true),
+    ligne('Adresse / téléphone', pre.adresse || ''),
+    ligne('Date de remise et de règlement', pre.paye || ''),
+    ligne('Bons remis', `N° ${n1} à N° ${n2}  (${nombre} bons)`, true),
+    ligne('Produit', ({ B8: 'Brique creuse 8 trous (B8)', B12: 'Brique creuse 12 trous (B12)', HOURDIS: 'Hourdis (entrevous) 16' }[pre.produit] || pre.produit)),
+    ligne('Quantité par bon', fmt(qte) + ' pièces'),
+    ligne('Quantité totale', fmt(qte * nombre) + ' pièces', true),
+    ...(prix ? [ligne('Prix unitaire TTC', fmt(prix, 2) + ' DA'), ligne('Montant par bon (TTC)', fmt(qte * prix, 2) + ' DA'), ligne('MONTANT TOTAL RÉGLÉ (TTC)', fmt(qte * prix * nombre, 2) + ' DA', true)] : []),
+  ] }));
+  enfants.push(para(t(`Le client reconnaît avoir reçu les ${nombre} bons d'enlèvement payés N° ${n1} à N° ${n2}. Chaque bon donne droit à un seul enlèvement de la quantité indiquée, à l'usine de la ZAC Helouane. Les bons servis sont gardés par l'usine, marqués SERVI et classés en comptabilité avec ce bordereau.`, { size: 18 }), { before: 300, after: 400 }));
+  enfants.push(new Table({ width: { size: LARGEUR, type: WidthType.DXA }, columnWidths: [5233, 5233], rows: [new TableRow({ children: ['Cachet de la société et signature du Responsable commercial', 'Le client (reçu les bons ci-dessus)'].map(h =>
+    cellule([para(t(h, { size: 16, italics: true }), { align: AlignmentType.CENTER, after: 0 }), para(t(' '), { after: 1600 })], 5233, { borders: cadre(pointille) })) })] }));
+  enfants.push(para(t('Suivi des enlèvements (à remplir par l\'usine) :', { size: 17, bold: true }), { before: 300, after: 100 }));
+  const cols = 10, rangs = Math.ceil(nombre / cols), wc = Math.floor(LARGEUR / cols);
+  enfants.push(new Table({ width: { size: wc * cols, type: WidthType.DXA }, columnWidths: Array(cols).fill(wc), rows: Array.from({ length: rangs }, (_, r) => new TableRow({ children: Array.from({ length: cols }, (_, c) => {
+    const k = r * cols + c; const n = premier + k;
+    return cellule(k < nombre ? [para(t(String(n).padStart(4, '0'), { mono: true, size: 15, bold: true }), { align: AlignmentType.CENTER, after: 0 }), para(t('servi le', { size: 11, color: '777777' }), { align: AlignmentType.CENTER, after: 220 })] : [para(t(''), { after: 0 })], wc);
+  }) })) }));
+}
+
 const doc = new Document({
   creator: 'SARL DPR AXXAM', title: "Bons d'enlèvement payés",
   styles: { default: { document: { run: { font: SANS, size: 19 } } } },
