@@ -11,7 +11,9 @@ const LOGO = fs.readFileSync(path.join(__dirname, '..', 'modules', 'timbredz', '
 // FILIGRANE=force (« La force de la terre ») ou bien (« Le bien-être dans l'habitat ») : slogan en fond de chaque bon
 // DENSITE=moyen ou fort (par défaut) ; images fabriquées par outils/filigranes.py
 const DENSITE = process.env.DENSITE === 'moyen' ? 'moyen' : 'fort';
-const FILIGRANE = ['force', 'bien'].includes(process.env.FILIGRANE) ? fs.readFileSync(path.join(__dirname, '..', 'modules', 'timbredz', 'img', `filigrane-${process.env.FILIGRANE}-${DENSITE}.png`)) : null;
+// DIAGONALE=1 : slogan en grande diagonale, du numéro (en haut à droite) jusqu'en bas à gauche
+const DIAGONALE = process.env.DIAGONALE === '1';
+const FILIGRANE = ['force', 'bien'].includes(process.env.FILIGRANE) ? fs.readFileSync(path.join(__dirname, '..', 'modules', 'timbredz', 'img', `filigrane-${process.env.FILIGRANE}-${DENSITE}${DIAGONALE ? '-diagonale' : ''}.png`)) : null;
 const MM = 36000; // EMU par millimètre
 
 const premier = parseInt(process.argv[2] || '1', 10);
@@ -74,8 +76,8 @@ function bon(n, rempli) {
     ],
   });
   const fond = FILIGRANE ? [new ImageRun({
-    type: 'png', data: FILIGRANE, transformation: { width: 640, height: 352 },
-    floating: { horizontalPosition: { relative: HorizontalPositionRelativeFrom.MARGIN, offset: 5 * MM }, verticalPosition: { relative: VerticalPositionRelativeFrom.PARAGRAPH, offset: 14 * MM },
+    type: 'png', data: FILIGRANE, transformation: DIAGONALE ? { width: 660, height: 412 } : { width: 640, height: 352 },
+    floating: { horizontalPosition: { relative: HorizontalPositionRelativeFrom.MARGIN, offset: (DIAGONALE ? 3 : 5) * MM }, verticalPosition: { relative: VerticalPositionRelativeFrom.PARAGRAPH, offset: (DIAGONALE ? 2 : 14) * MM },
       behindDocument: true, allowOverlap: true, wrap: { type: TextWrappingType.NONE } },
     altText: { title: 'Filigrane', description: 'Slogan DPR AXXAM en fond', name: 'filigrane' } })] : [];
   return [
