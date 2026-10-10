@@ -154,6 +154,15 @@ avec le même numéro. Le numéro suivant est proposé automatiquement sur le m�
 chargement, le magasinier remplit date, matricule, chauffeur et visa, puis perfore le bon.
 Enregistrez aussi le règlement dans l'ERP (facture ou acompte du client).
 
+Version **Word** à remplir au stylo (2 bons par feuille A4, numérotés, cachet de la société,
+date d'enlèvement, chauffeur, matricule, visa du magasinier et cadre « SERVI » pour la
+comptabilité) :
+
+```bash
+node outils/bons_enlevement_word.js 1 10 BONS_ENLEVEMENT.docx        # bons 0001 à 0010
+CLIENT="KERDJA BILEL" PRODUIT=B8 QUANTITE=7040 node outils/bons_enlevement_word.js 1 10
+```
+
 ### Factures et bons de livraison au format DLG
 
 Les factures et les bons de livraison s'impriment par défaut avec le modèle **« dlg »**, qui
