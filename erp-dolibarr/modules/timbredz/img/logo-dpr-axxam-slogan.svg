@@ -1,9 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 214" width="880" height="428">
-  <title>DPR AXXAM</title>
-  <!-- Toit : la hampe du « d » monte jusqu'au toit, le mur droit descend jusqu'à « AXXAM » -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 262" width="880" height="524">
+  <title>DPR AXXAM — Le bien-être dans l'habitat</title>
   <path d="M62 96 L222 16 L414 90" fill="none" stroke="#161616" stroke-width="15" stroke-linejoin="miter" stroke-miterlimit="10"/>
   <path d="M406 86 V148" stroke="#161616" stroke-width="15"/>
-  <!-- d p r : même épaisseur, même hauteur d'x -->
   <g fill="none" stroke="#161616" stroke-width="15">
     <circle cx="51" cy="150" r="29"/>
     <path d="M80 92 V186"/>
@@ -11,6 +9,6 @@
     <path d="M108 121 V210"/>
     <path d="M182 186 V150 A29 29 0 0 1 240 150"/>
   </g>
-  <!-- AXXAM, aligné sur la ligne de base de « dpr » -->
   <text x="252" y="186" font-family="DejaVu Sans, Arial, sans-serif" font-weight="700" font-size="34" letter-spacing="0.5" fill="#d7262e">AXXAM</text>
+  <text x="220" y="250" text-anchor="middle" font-family="DejaVu Serif, Georgia, serif" font-style="italic" font-weight="700" font-size="25" fill="#b4472b">Le bien-être dans l'habitat</text>
 </svg>

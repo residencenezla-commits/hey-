@@ -32,7 +32,7 @@ class DlgPdf
 		$m = self::MARGE;
 		$logo = dirname(__DIR__).'/img/logo-dpr-axxam.png';
 		if (is_readable($logo)) {
-			$pdf->Image($logo, $m, 6, 40, 0, 'PNG');   // 40 × 19 mm
+			$pdf->Image($logo, $m, 5.5, 42, 0, 'PNG');   // 42 × 20 mm
 		} else {
 			$pdf->SetFont('dejavusans', 'B', 24);
 			$pdf->SetXY($m, 10);
@@ -175,10 +175,17 @@ class DlgPdf
 		$l2 = $adr.($mysoc->zip || $mysoc->town ? ', '.trim($mysoc->zip.' '.$mysoc->town) : '')
 			.($mysoc->phone ? '   Tél. / Fax : '.$mysoc->phone : '');
 		$l3 = ($mysoc->email ? 'e-mail : '.$mysoc->email : '').($mysoc->url ? '   Site web : '.preg_replace('#^https?://#', '', $mysoc->url) : '');
-		$pdf->SetFont('dejavusans', '', 7);
+		// logo avec le slogan, à gauche du pied de page
+		$logo = dirname(__DIR__).'/img/logo-dpr-axxam-slogan.png';
+		$x = $m;
+		if (is_readable($logo)) {
+			$pdf->Image($logo, $m, 277, 24, 0, 'PNG');   // 24 × 14 mm
+			$x = $m + 27;
+		}
+		$pdf->SetFont('dejavusans', '', 6.8);
 		foreach (array($l1, $l2, $l3) as $k => $l) {
-			$pdf->SetXY($m, 277.5 + $k * 3.6);
-			$pdf->Cell(self::LARGEUR, 3.6, $l, 0, 0, 'C', false, '', 1);
+			$pdf->SetXY($x, 278 + $k * 3.6);
+			$pdf->Cell($m + self::LARGEUR - $x, 3.6, $l, 0, 0, 'C', false, '', 1);
 		}
 		if ($nbPages > 1) {
 			$pdf->SetXY($m, 271);
