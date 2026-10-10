@@ -9,7 +9,7 @@ const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthT
 const premier = parseInt(process.argv[2] || '1', 10);
 const nombre = parseInt(process.argv[3] || '10', 10);
 const sortie = process.argv[4] || 'BONS_ENLEVEMENT.docx';
-const pre = { client: process.env.CLIENT || '', adresse: [process.env.ADRESSE, process.env.TEL && 'Tél. ' + process.env.TEL].filter(Boolean).join(' — '), paye: process.env.PAYE || '', produit: process.env.PRODUIT || '', quantite: process.env.QUANTITE || '' };
+const pre = { client: process.env.CLIENT || '', adresse: [process.env.ADRESSE, process.env.TEL && 'Tél. ' + process.env.TEL].filter(Boolean).join(' — '), paye: process.env.PAYE || '', date: process.env.DATE || process.env.PAYE || '', produit: process.env.PRODUIT || '', quantite: process.env.QUANTITE || '' };
 
 const LARGEUR = 10466;            // A4 (11906) − marges 720 × 2
 const MONO = 'DejaVu Sans Mono', SANS = 'DejaVu Sans', BRIQUE = 'B4472B';
@@ -40,7 +40,8 @@ function bon(n, rempli) {
     rows: [new TableRow({ children: [
       cellule([para(t("BON D'ENLÈVEMENT PAYÉ", { mono: true, bold: true, italics: true, size: 28 }), { after: 0 }),
                para(t('Marchandise réglée d\'avance — à présenter au chargement', { size: 15, italics: true }), { after: 0 })], 7466, { borders: sans }),
-      cellule([para(t('N° ' + no, { mono: true, bold: true, size: 30 }), { align: AlignmentType.CENTER, after: 0 })], 3000, { va: 'center' }),
+      cellule([para(t('N° ' + no, { mono: true, bold: true, size: 30 }), { align: AlignmentType.CENTER, after: 0 }),
+               para(t('Date : ' + (rempli.date || '..../..../........'), { mono: true, size: 18, bold: !!rempli.date }), { align: AlignmentType.CENTER, before: 40, after: 0 })], 3000, { va: 'center' }),
     ] })],
   });
   const produits = new Table({
