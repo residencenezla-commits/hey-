@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bons de chargement payés</title>
+<style>
+:root{--brique:#b4472b;--encre:#1e1e1e;--gris:#666;--ligne:#bbb;--fond:#f4efe9}
+*{box-sizing:border-box}
+body{margin:0;font-family:"DejaVu Sans",Arial,sans-serif;background:var(--fond);color:var(--encre)}
+.saisie{max-width:900px;margin:20px auto;background:#fff;border-radius:12px;padding:20px 24px;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.saisie h1{margin:0 0 4px;font-size:1.4rem}
+.saisie p{margin:0 0 14px;color:var(--gris);font-size:.9rem}
+.champs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 14px}
+.champs label{display:grid;gap:3px;font-size:.82rem;color:var(--gris)}
+.champs input,.champs select{font:inherit;font-size:.95rem;padding:7px 9px;border:1px solid var(--ligne);border-radius:7px;color:var(--encre);min-width:0}
+.champs .large{grid-column:span 2}
+.total{margin-top:12px;font-size:.95rem}
+.boutons{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.boutons button{font:inherit;padding:9px 16px;border-radius:8px;border:1px solid var(--brique);background:#fff;color:var(--brique);cursor:pointer}
+.boutons button.principal{background:var(--brique);color:#fff}
+@media (max-width:700px){.champs{grid-template-columns:1fr 1fr}.champs .large{grid-column:span 2}}
+
+/* Feuille A4 : bon client en haut, souche en bas */
+.feuille{width:210mm;height:297mm;margin:16px auto;background:#fff;padding:9mm 12mm;display:grid;grid-template-rows:1fr 1fr;box-shadow:0 2px 12px rgba(0,0,0,.12)}
+.bon{position:relative;padding:4mm 0;display:flex;flex-direction:column}
+.bon+.bon{border-top:1.2px dashed #555}
+.bon+.bon::before{content:"✂  détacher ici";position:absolute;top:-2.6mm;left:50%;transform:translateX(-50%);background:#fff;padding:0 3mm;font-size:8pt;color:#555}
+.ent{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:1.6px solid var(--encre);padding-bottom:1.5mm}
+.logo{font-weight:800;font-size:22pt;letter-spacing:-.5px;line-height:1}
+.logo span{color:var(--brique);font-size:11pt;margin-left:1.5mm}
+.ent .soc{text-align:right;font-size:7.5pt;line-height:1.35}
+.titre{display:flex;justify-content:space-between;align-items:center;margin:4mm 0 3mm}
+.titre h2{margin:0;font-family:"DejaVu Sans Mono",Consolas,monospace;font-style:italic;font-size:15pt;border-bottom:1px dashed var(--encre);padding-bottom:1mm}
+.no{font-family:"DejaVu Sans Mono",Consolas,monospace;font-size:15pt;font-weight:700;border:1.6px solid var(--encre);padding:1mm 3mm}
+.paye{position:absolute;right:6mm;top:36mm;transform:rotate(-14deg);border:2.2px solid var(--brique);color:var(--brique);font-weight:800;font-size:17pt;padding:1mm 4mm;letter-spacing:2px;opacity:.85}
+.exemplaire{font-size:8pt;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gris);margin-bottom:2mm}
+table.info{width:100%;border-collapse:collapse;font-family:"DejaVu Sans Mono",Consolas,monospace;font-size:9.5pt}
+table.info td{padding:1.1mm 0;vertical-align:top}
+table.info td:first-child{width:38mm;color:#333}
+table.produit{width:100%;border-collapse:collapse;margin:3mm 0;font-family:"DejaVu Sans Mono",Consolas,monospace;font-size:10pt}
+table.produit th,table.produit td{border:1px solid var(--encre);padding:1.6mm 2mm}
+table.produit th{font-weight:400;font-size:8.5pt;background:#f2f2f2}
+table.produit td.q{text-align:right;font-weight:700;font-size:13pt}
+.mention{font-size:8.5pt;line-height:1.45;border-left:3px solid var(--brique);padding:1mm 0 1mm 3mm;margin-bottom:3mm}
+.charge{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5mm;margin-top:auto}
+.charge div{border:1px dotted #555;height:17mm;padding:1mm 1.5mm;font-size:7.5pt;color:#333}
+.pied{font-size:6.5pt;color:#444;text-align:center;margin-top:2.5mm}
+@media print{
+  @page{size:A4;margin:0}
+  body{background:#fff}
+  .saisie{display:none}
+  .feuille{margin:0;box-shadow:none;page-break-after:always}
+}
+</style>
+</head>
+<body>
+<section class="saisie">
+  <h1>Bons de chargement payés</h1>
+  <p>Remplissez, vérifiez l'aperçu, puis « Imprimer » (ou enregistrer en PDF). Une feuille A4 par bon : le bon remis au client en haut, la souche gardée à l'usine en bas. Le prix n'apparaît que sur la souche.</p>
+  <div class="champs">
+    <label>Premier numéro<input id="numero" type="number" min="1" value="1"></label>
+    <label>Nombre de bons<input id="nombre" type="number" min="1" max="50" value="1"></label>
+    <label>Date d'émission<input id="date" type="date"></label>
+    <label class="large">Client<input id="client" value="KERDJA BILEL"></label>
+    <label>Code client<input id="code" placeholder="ex. C215"></label>
+    <label class="large">Adresse<input id="adresse" placeholder="Adresse du client"></label>
+    <label>Téléphone<input id="tel"></label>
+    <label>Produit<select id="produit">
+      <option value="B8|Brique creuse 8 trous (B8)">B8 – Brique 8 trous</option>
+      <option value="B12|Brique creuse 12 trous (B12)">B12 – Brique 12 trous</option>
+      <option value="HOURDIS|Hourdis (entrevous) 16">Hourdis 16</option>
+    </select></label>
+    <label>Quantité par bon (pièces)<input id="quantite" type="number" min="1" value="7040"></label>
+    <label>Prix unitaire TTC (DA)<input id="prix" type="number" min="0" step="0.01" value="21.50"></label>
+    <label>Mode de règlement<select id="reglement"><option>Espèces</option><option>Virement bancaire</option><option>Chèque</option><option>Versement bancaire</option></select></label>
+    <label>Réf. du règlement / facture<input id="refreg" placeholder="ex. FA2610-0012"></label>
+    <label>Valable jusqu'au<input id="validite" type="date"></label>
+  </div>
+  <div class="total" id="total"></div>
+  <div class="boutons">
+    <button class="principal" onclick="window.print()">Imprimer / PDF</button>
+    <button onclick="suivant()">Préparer le bon suivant</button>
+  </div>
+</section>
+<div id="feuilles"></div>
+<script>
+const $=id=>document.getElementById(id);
+const fmt=(v,d=0)=>Number(v).toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d}).replace(/ /g,' ');
+const dateFr=s=>s?s.split('-').reverse().join('/'):'';
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function lettres(n){ // nombre entier en toutes lettres (français)
+  const u=['zéro','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','onze','douze','treize','quatorze','quinze','seize'];
+  const d=['','dix','vingt','trente','quarante','cinquante','soixante'];
+  function cent(n){
+    if(n<17)return u[n]; if(n<20)return 'dix-'+u[n-10];
+    if(n<70){const t=Math.floor(n/10),r=n%10;return d[t]+(r===0?'':r===1?' et un':'-'+u[r])}
+    if(n<80)return 'soixante'+(n===71?' et onze':'-'+cent(n-60));
+    if(n===80)return 'quatre-vingts'; return 'quatre-vingt-'+cent(n-80);
+  }
+  function mille(n){const c=Math.floor(n/100),r=n%100;let s='';if(c)s=(c>1?u[c]+' cent':'cent')+(c>1&&r===0?'s':'');if(r)s+=(s?' ':'')+cent(r);return s}
+  if(n===0)return 'zéro';let s='';const M=Math.floor(n/1e6),K=Math.floor(n%1e6/1000),R=n%1000;
+  if(M)s+=mille(M)+(M>1?' millions':' million');
+  if(K)s+=(s?' ':'')+(K===1?'mille':mille(K).replace(/s$/,'')+' mille');
+  if(R)s+=(s?' ':'')+mille(R);return s;
+}
+function bon(n,souche,v){
+  const total=v.quantite*v.prix;
+  return `<div class="bon">
+    <div class="ent"><div class="logo">DPR<span>AXXAM</span></div>
+      <div class="soc">SARL DPR AXXAM · Briqueterie · ZAC Helouane, Ighzer Amokrane (Béjaïa)<br>RC 08B0185858-06/00 · NIF 000806018585831 · Tél. +213 34 19 21 21</div></div>
+    <div class="titre"><h2>BON DE CHARGEMENT PAYÉ</h2><div class="no">No ${String(n).padStart(4,'0')}</div></div>
+    <div class="paye">PAYÉ</div>
+    <div class="exemplaire">${souche?'Souche — à conserver par DPR AXXAM':'Exemplaire client — à présenter au chargement'}</div>
+    <table class="info">
+      <tr><td>Date d'émission</td><td>: ${dateFr(v.date)}</td></tr>
+      <tr><td>Client</td><td>: <b>${esc(v.client.toUpperCase())}</b>${v.code?' ('+esc(v.code)+')':''}</td></tr>
+      ${v.adresse?`<tr><td>Adresse</td><td>: ${esc(v.adresse.toUpperCase())}</td></tr>`:''}
+      ${v.tel?`<tr><td>Téléphone</td><td>: ${esc(v.tel)}</td></tr>`:''}
+      ${v.validite?`<tr><td>Valable jusqu'au</td><td>: ${dateFr(v.validite)}</td></tr>`:''}
+      ${souche?`<tr><td>Règlement</td><td>: ${esc(v.reglement)}${v.refreg?' — '+esc(v.refreg):''}</td></tr>`:''}
+    </table>
+    <table class="produit"><tr><th style="width:22%">Référence</th><th>Désignation</th><th style="width:28%">Quantité à charger</th></tr>
+      <tr><td>${esc(v.ref)}</td><td>${esc(v.libelle)}</td><td class="q">${fmt(v.quantite)} pièces</td></tr>
+      ${souche?`<tr><td colspan="2">Prix unitaire TTC : ${fmt(v.prix,2)} DA</td><td class="q" style="font-size:10.5pt">${fmt(total,2)} DA</td></tr>`:''}
+    </table>
+    <div class="mention">${souche
+      ?`Montant réglé : <b>${lettres(Math.floor(total)).toUpperCase()} DINARS${Math.round(total%1*100)?' ET '+lettres(Math.round(total%1*100)).toUpperCase()+' CENTIMES':''}</b>, toutes taxes comprises.`
+      :`<b>Bon au porteur, déjà payé.</b> La personne qui présente ce bon peut charger la quantité indiquée, une seule fois. Le bon est perforé et conservé par l'usine après le chargement. Prix réglé, non indiqué sur ce bon.`}</div>
+    <div class="charge"><div>Date du chargement</div><div>Matricule du camion</div><div>Nom du chauffeur / porteur</div><div>Visa du magasinier</div></div>
+    <div class="pied">Tout bon raturé, photocopié ou non perforé est nul. Quantité livrable dans la limite du stock disponible, aux heures d'ouverture de l'usine.</div>
+  </div>`;
+}
+function valeurs(){
+  const [ref,libelle]=$('produit').value.split('|');
+  return {date:$('date').value,client:$('client').value.trim(),code:$('code').value.trim(),adresse:$('adresse').value.trim(),tel:$('tel').value.trim(),
+    ref,libelle,quantite:+$('quantite').value||0,prix:+$('prix').value||0,reglement:$('reglement').value,refreg:$('refreg').value.trim(),validite:$('validite').value};
+}
+function rendre(){
+  const v=valeurs(), n0=Math.max(1,+$('numero').value||1), nb=Math.min(50,Math.max(1,+$('nombre').value||1));
+  let h='';for(let i=0;i<nb;i++)h+=`<div class="feuille">${bon(n0+i,false,v)}${bon(n0+i,true,v)}</div>`;
+  $('feuilles').innerHTML=h;
+  const t=v.quantite*v.prix*nb;
+  $('total').innerHTML=`${nb} bon${nb>1?'s':''} n° ${String(n0).padStart(4,'0')}${nb>1?' à '+String(n0+nb-1).padStart(4,'0'):''} · ${fmt(v.quantite*nb)} pièces · montant réglé <b>${fmt(t,2)} DA TTC</b>`;
+  try{localStorage.setItem('dpr-bons-dernier',String(n0+nb-1))}catch(e){}
+}
+function suivant(){let d=+$('numero').value+(+$('nombre').value||1);$('numero').value=d;rendre()}
+// valeurs par défaut : aujourd'hui, validité 5 mois, numéro qui suit le dernier imprimé sur ce poste
+const auj=new Date(); $('date').value=auj.toISOString().slice(0,10);
+const fin=new Date(auj); fin.setMonth(fin.getMonth()+5); $('validite').value=fin.toISOString().slice(0,10);
+const q=new URLSearchParams(location.search);
+for(const [k,v] of q) if($(k)) $(k).value=v;
+if(!q.has('numero')){try{const d=+localStorage.getItem('dpr-bons-dernier');if(d)$('numero').value=d+1}catch(e){}}
+document.querySelectorAll('.champs input,.champs select').forEach(e=>e.addEventListener('input',rendre));
+rendre();
+</script>
+</body>
+</html>

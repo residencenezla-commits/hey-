@@ -50,6 +50,7 @@ Les autres postes du réseau de l'usine ouvrent `http://ADRESSE-IP-DU-PC:8080`
 | `importer_pccompta.bat` | Recharge un export de PC Compta (glisser le fichier dessus) |
 | `tableau_de_bord.bat` | Calcule et ouvre le tableau de bord de gestion |
 | `dossier_comptable.bat` | Bilan, TCR, balances, grand livre et G50 (Excel + page à imprimer) |
+| `outils/bons_chargement.html` | Bons de chargement payés d'avance (2 parties par feuille A4 : bon client + souche) |
 
 ### Sur un serveur Linux
 
@@ -142,6 +143,16 @@ Le même module écrit le **montant en lettres** au bas des factures et devis, p
 « Arrêtée la présente facture à la somme de : soixante mille trois cent quatre-vingt-treize
 dinars algériens, toutes taxes comprises. » Le texte se modifie dans *Accueil › Configuration ›
 Modules › Factures* (« Mention complémentaire »), en gardant la clé `__MONTANT_EN_LETTRES__`.
+
+### Bons de chargement payés d'avance
+
+Pour un client qui paie ses briques à l'avance, ouvrez `outils/bons_chargement.html` dans le
+navigateur (sans Internet ni ERP) : client, produit, quantité par bon, prix TTC, nombre de bons,
+validité. Chaque feuille A4 porte le **bon client** en haut (bon au porteur, sans prix, à
+présenter au chargement) et la **souche** en bas (avec le prix et le montant réglé en lettres),
+avec le même numéro. Le numéro suivant est proposé automatiquement sur le même poste. Au
+chargement, le magasinier remplit date, matricule, chauffeur et visa, puis perfore le bon.
+Enregistrez aussi le règlement dans l'ERP (facture ou acompte du client).
 
 ### Factures et bons de livraison au format DLG
 
