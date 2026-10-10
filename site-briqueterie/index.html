@@ -154,6 +154,11 @@ button.btn{font:inherit;font-weight:600;cursor:pointer;background:transparent}
 .temp{display:inline-block;margin-top:10px;font-weight:600;color:var(--four)}
 
 /* L'usine en images */
+.usine-films{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-top:32px}
+.usine-films figure{margin:0;position:relative;border-radius:16px;overflow:hidden;background:#000;border:1px solid var(--ligne)}
+.usine-films video{display:block;width:100%;height:100%;aspect-ratio:16/9;object-fit:cover}
+.usine-films figcaption{position:absolute;left:0;right:0;bottom:0;padding:28px 14px 12px;color:#fff;font-size:.88rem;background:linear-gradient(transparent,rgba(0,0,0,.72))}
+.usine-films figcaption b{display:block;font-family:Fraunces,serif;font-size:1.05rem}
 .usine-grille{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:32px}
 .usine-grille figure{margin:0;background:var(--carte);border:1px solid var(--ligne);border-radius:16px;overflow:hidden}
 .usine-grille img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;transition:transform .6s}
@@ -411,6 +416,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .kpis{grid-template-columns:1fr}
   .ligne-prod,.simulateur,.phases,.carriere-intro,.four-bas,.courbes{grid-template-columns:1fr}
   .usine-grille{grid-template-columns:1fr 1fr}
+  .usine-films{grid-template-columns:1fr}
   .sech-faits{grid-template-columns:1fr 1fr}
   .four-info{grid-template-columns:1fr 1fr}
   .carriere-photo,.carriere-photo img{max-height:420px}
@@ -734,7 +740,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="reveal">
       <p class="eyebrow">L'usine en images</p>
       <h2>Une chaîne automatisée, de la brique crue au camion</h2>
-      <p class="lead">Des photos prises dans notre usine de la ZAC Helouane : séchage, chargement des wagons par robot, palettisation et expédition.</p>
+      <p class="lead">Filmé et photographié dans notre usine de la ZAC Helouane : empilage des briques crues, séchage, chargement des wagons par robot, palettisation et expédition.</p>
+    </div>
+    <div class="usine-films reveal">
+      <figure><video muted loop playsinline preload="none" poster="videos/usine-pince.jpg" aria-label="Vidéo : la pince de l'empileuse saisit une couche de briques crues sur le convoyeur à rouleaux"><source src="videos/usine-pince.webm" type="video/webm"><source src="videos/usine-pince.mp4" type="video/mp4"></video><figcaption><b>L'empileuse en action</b>La pince saisit une couche entière de briques crues.</figcaption></figure>
+      <figure><video muted loop playsinline preload="none" poster="videos/usine-convoyeur.jpg" aria-label="Vidéo : des briques cuites avancent sur le convoyeur de sortie"><source src="videos/usine-convoyeur.webm" type="video/webm"><source src="videos/usine-convoyeur.mp4" type="video/mp4"></video><figcaption><b>Sortie de ligne</b>Les briques cuites avancent vers la palettisation.</figcaption></figure>
     </div>
     <div class="usine-grille reveal">
       <figure><img src="images/usine-briques-crues.jpg" alt="Briques crues 12 trous alignées sur le convoyeur, devant les étagères des chariots du séchoir" loading="lazy" width="1400" height="1050"><figcaption><b>Briques crues</b>Tout juste façonnées, devant les étagères des chariots du séchoir.</figcaption></figure>
@@ -1171,6 +1181,14 @@ addEventListener('scroll',()=>{const h=document.documentElement;prog.style.width
   function cadrer(z){if(defile.scrollWidth>defile.clientWidth)defile.scrollTo({left:centres[z]/1000*svg.clientWidth-defile.clientWidth/2,behavior:'smooth'})}
   btns.forEach(b=>{b.addEventListener('click',()=>{zone(b.dataset.z);cadrer(b.dataset.z)});b.addEventListener('mouseenter',()=>zone(b.dataset.z))});
   zone('1');
+})();
+
+// Usine : les vidéos ne jouent que lorsqu'elles sont visibles (et pas si l'animation est réduite)
+(function(){
+  const vids=[...document.querySelectorAll('.usine-films video')];
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){vids.forEach(v=>v.controls=true);return}
+  const o=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target;if(e.isIntersecting){v.play().catch(()=>{v.controls=true})}else v.pause()}),{threshold:.25});
+  vids.forEach(v=>o.observe(v));
 })();
 
 // Four : courbe de cuisson relevée et consigne (thermocouples 1 à 21)
