@@ -168,7 +168,7 @@ window.render=function(t){
   $('fhalo').setAttribute('r',140+12*Math.sin(tt*6));
   const cuisson=lin(t,7.6,10.4);
   [...bf.children].forEach((r,i)=>{const x=((t-7.2)*45+i*62)%310+45;r.setAttribute('x',x);const c=clamp((x-100)/170);r.setAttribute('fill',`rgb(${Math.round(201-(201-224)*c)},${Math.round(138-(138-89)*c)},${Math.round(99-(99-47)*c)})`)});
-  $('temp').textContent=Math.round(1000*eo(cuisson)).toLocaleString('fr-FR');
+  $('temp').textContent=Math.round(820*eo(cuisson)).toLocaleString('fr-FR');
 
   // S4 10.6 - 15 produits
   $('s4').style.opacity=fen(t,10.6,15,.4);
