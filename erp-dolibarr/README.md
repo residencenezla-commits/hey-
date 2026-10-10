@@ -20,6 +20,7 @@ caisse et fabrication.
 | Caisse | Compte « Caisse usine » en DZD |
 | Catégories clients | Particuliers · Entreprises du bâtiment · Revendeurs / dépôts · Promoteurs et marchés publics |
 | Catégories fournisseurs | Énergie · Pièces de rechange · Transport · Emballage · Argile |
+| Maintenance | Module GMAO : machines, moteurs et repères du schéma électrique, pannes, préventif, pièces, alarmes automate |
 | Modules actifs | Tiers, devis, commandes, bons de livraison, factures, achats, produits, stocks, banque/caisse, nomenclatures et ordres de fabrication, charges sociales et fiscales, salaires, agenda, import/export |
 
 Tous les prix sont à **0** : vous les saisissez vous-même (voir plus bas).
@@ -247,6 +248,29 @@ PC Compta, sans écart.
 
 La comptabilité légale (déclarations, bilan) reste tenue dans PC Compta ; l'ERP lui envoie
 les écritures du quotidien et garde une copie complète et contrôlée de la comptabilité.
+
+## Maintenance de l'usine (GMAO)
+
+Menu **Maintenance** de l'ERP (ou `http://serveur:8080/custom/gmao/index.php`), utilisable
+aussi sur téléphone par les techniciens, avec le même identifiant que l'ERP.
+
+| Onglet | Rôle |
+|---|---|
+| Tableau de bord | Gros bouton **Déclarer une panne**, machines en panne, heures d'arrêt sur 30 jours, préventif en retard, pièces à commander, machines qui arrêtent le plus |
+| Machines et moteurs | Arborescence site › atelier › zone › machine › moteur / organe. **Recherche** par nom, tag, repère du schéma (QM051, KM12, variateur DP57…), armoire, folio ou code d'alarme. Fiche : repères, folio, puissance, alarmes, préventif, pièces, historique |
+| Préventif | Échéances, checklist à cocher, relevés ; chaque réalisation va dans l'historique |
+| Pièces | Stock, seuil d'alerte, entrées et sorties |
+| Alarmes automate | Code affiché sur le pupitre → machine, causes probables, que faire ; bouton « Panne » |
+| Journal | Dernières interventions, clôture avec cause, travaux, pièces et minutes d'arrêt |
+| Import | Copier-coller depuis Excel de la liste des moteurs du **schéma électrique** et des **alarmes du programme automate** (réimport sans doublon) |
+
+L'atelier de préparation est chargé au premier démarrage (71 équipements, 20 plans, 12 pièces :
+liste type, à corriger avec le plan d'implantation). Sur une installation déjà en service :
+`docker compose up -d` puis `docker compose exec web php /var/www/scripts/docker-init.d/40-maintenance.php`.
+
+Droits (Utilisateurs › onglet Permissions) : *Consulter*, *Déclarer pannes et interventions*,
+*Gérer machines, plans, pièces et alarmes*. Toutes les données sont dans la base de l'ERP et
+partent dans la même sauvegarde.
 
 ## Sauvegarde
 

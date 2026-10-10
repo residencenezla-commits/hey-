@@ -67,6 +67,8 @@ services:
       - ./avant-demarrage:/var/www/scripts/before-starting.d:ro
       # Module « Timbre DZ » (droit de timbre algérien)
       - ./modules/timbredz:/var/www/html/custom/timbredz:ro
+      # Module « Maintenance » (GMAO : machines, moteurs, pannes, préventif, pièces, alarmes)
+      - ./modules/gmao:/var/www/html/custom/gmao:ro
       # Outils (export vers PC Compta…) et dossier des fichiers exportés
       - ./outils:/var/www/scripts/outils:ro
       - ./exports:/var/www/exports
