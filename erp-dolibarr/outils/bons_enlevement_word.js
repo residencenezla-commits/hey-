@@ -23,14 +23,14 @@ const pointille = { style: BorderStyle.DOTTED, size: 6, color: '555555' };
 const cadre = b => ({ top: b, bottom: b, left: b, right: b });
 const cellule = (enfants, w, o = {}) => new TableCell({ children: enfants, width: { size: w, type: WidthType.DXA }, borders: o.borders || cadre(trait), shading: o.fond ? { type: ShadingType.CLEAR, color: 'auto', fill: o.fond } : undefined, margins: { top: 50, bottom: 50, left: 100, right: 100 }, columnSpan: o.span, verticalAlign: o.va });
 // ligne « Libellé : valeur ou pointillés à remplir au stylo »
-const champ = (lib, val) => para([t(lib, { size: 18 }), t(val ? '  ' + val : '  ' + '.'.repeat(Math.max(10, 64 - lib.length)), { mono: true, size: 18, bold: !!val })], { after: 100 });
+const champ = (lib, val) => para([t(lib, { size: 18 }), t(val ? '  ' + val : '  ' + '.'.repeat(Math.max(10, 64 - lib.length)), { mono: true, size: 18, bold: !!val })], { after: 80 });
 
 function bon(n, rempli) {
   const no = String(n).padStart(4, '0');
   const enTete = new Table({
     width: { size: LARGEUR, type: WidthType.DXA }, columnWidths: [5200, 5266],
     rows: [new TableRow({ children: [
-      cellule([para(new ImageRun({ type: 'png', data: LOGO, transformation: { width: 134, height: 64 }, altText: { title: 'DPR AXXAM', description: 'Logo DPR AXXAM', name: 'logo' } }), { after: 0 }),
+      cellule([para(new ImageRun({ type: 'png', data: LOGO, transformation: { width: 128, height: 62 }, altText: { title: 'DPR AXXAM', description: 'Logo DPR AXXAM', name: 'logo' } }), { after: 0 }),
                para(t('Le bien-être dans l\'habitat', { italics: true, bold: true, size: 17, color: BRIQUE }), { after: 0 })], 5200, { borders: sans }),
       cellule([para(t('SARL DPR AXXAM · ZAC Helouane, Ighzer Amokrane (Béjaïa)', { size: 14 }), { align: AlignmentType.RIGHT, after: 0 }),
                para(t('RC 08B0185858-06/00 · NIF 000806018585831', { size: 14 }), { align: AlignmentType.RIGHT, after: 0 }),
