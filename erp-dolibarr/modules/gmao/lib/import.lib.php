@@ -124,3 +124,38 @@ function gmao_importer_alarmes($db, $texte, $E)
 	$db->commit();
 	return array('ok' => 1, 'crees' => $crees, 'mis_a_jour' => $maj, 'erreurs' => $erreurs);
 }
+
+/** Colonnes : nom ; reference ; tag (équipement) ; unite ; stock ; seuil ; emplacement ; fournisseur ; cout. Mise à jour si même référence. */
+function gmao_importer_pieces($db, $texte, $E)
+{
+	$P = MAIN_DB_PREFIX;
+	$crees = 0; $maj = 0; $erreurs = array();
+	$db->begin();
+	foreach (gmao_lire_csv($texte) as $n => $l) {
+		$nom = gmao_val($l, array('nom', 'designation', 'libelle'));
+		if ($nom === '') { $erreurs[] = 'Ligne '.($n + 2).' : nom manquant'; continue; }
+		$ref = gmao_val($l, array('reference', 'ref', 'code'));
+		$eq = 'NULL';
+		$tag = strtoupper(preg_replace('/\s+/', '', gmao_val($l, array('tag', 'equipement', 'machine'))));
+		if ($tag !== '') {
+			$r = $db->query("SELECT rowid FROM {$P}gmao_equipement WHERE tag = '".$db->escape($tag)."' AND entity = $E");
+			if ($o = $db->fetch_object($r)) $eq = (int) $o->rowid; else $erreurs[] = "Pièce $ref : équipement $tag introuvable";
+		}
+		$num = function ($x) { $x = str_replace(',', '.', $x); return is_numeric($x) ? (float) $x : 0; };
+		$v = function ($x, $max = 255) use ($db) { return $x === '' ? 'NULL' : "'".$db->escape(mb_substr($x, 0, $max))."'"; };
+		$champs = array('nom' => $v($nom), 'reference' => $v($ref, 128), 'fk_equipement' => $eq, 'unite' => $v(gmao_val($l, 'unite') ?: 'pièce', 16),
+			'seuil' => $num(gmao_val($l, 'seuil')), 'emplacement' => $v(gmao_val($l, array('emplacement', 'casier')), 128),
+			'fournisseur' => $v(gmao_val($l, 'fournisseur')), 'cout' => gmao_val($l, 'cout') === '' ? 'NULL' : $num(gmao_val($l, 'cout')));
+		$o = null;
+		if ($ref !== '') { $r = $db->query("SELECT rowid FROM {$P}gmao_piece WHERE reference = '".$db->escape($ref)."' AND entity = $E"); $o = $db->fetch_object($r); }
+		if ($o) {
+			$set = array(); foreach ($champs as $k => $x) if ($x !== 'NULL') $set[] = "$k = $x";
+			$db->query("UPDATE {$P}gmao_piece SET ".implode(', ', $set)." WHERE rowid = ".(int) $o->rowid); $maj++;
+		} else {
+			$champs['stock'] = $num(gmao_val($l, 'stock')); $champs['entity'] = $E;
+			$db->query("INSERT INTO {$P}gmao_piece (".implode(', ', array_keys($champs)).") VALUES (".implode(', ', $champs).")"); $crees++;
+		}
+	}
+	$db->commit();
+	return array('ok' => 1, 'crees' => $crees, 'mis_a_jour' => $maj, 'erreurs' => $erreurs);
+}

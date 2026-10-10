@@ -77,10 +77,17 @@ switch ($action) {
 		$stats = lignes($db, "SELECT COUNT(*) AS pannes, COALESCE(SUM(arret_min), 0) AS arret_min FROM {$P}gmao_intervention WHERE entity = $E AND type = 'panne' AND date_debut >= CURDATE() - INTERVAL 30 DAY");
 		$top = lignes($db, "SELECT fk_equipement AS equipement, COUNT(*) AS pannes, COALESCE(SUM(arret_min), 0) AS arret_min FROM {$P}gmao_intervention
 			WHERE entity = $E AND type = 'panne' AND date_debut >= CURDATE() - INTERVAL 90 DAY GROUP BY fk_equipement ORDER BY arret_min DESC, pannes DESC LIMIT 8");
+		// MTTR = durée moyenne d'une panne ; MTBF = temps moyen entre deux pannes (90 jours de calendrier / nb de pannes, par machine en panne)
+		$fiab = lignes($db, "SELECT COUNT(*) AS n, COALESCE(AVG(NULLIF(arret_min, 0)), 0) AS mttr_min, COUNT(DISTINCT fk_equipement) AS machines
+			FROM {$P}gmao_intervention WHERE entity = $E AND type = 'panne' AND date_debut >= CURDATE() - INTERVAL 90 DAY");
+		$fiab = $fiab[0];
+		$fiab['mtbf_h'] = $fiab['n'] > 0 ? round(90 * 24 * $fiab['machines'] / $fiab['n'], 1) : null;
+		$prev = lignes($db, "SELECT COUNT(*) AS faits FROM {$P}gmao_intervention WHERE entity = $E AND type = 'preventif' AND date_debut >= CURDATE() - INTERVAL 30 DAY");
+		$fiab['preventif_30j'] = (int) $prev[0]['faits'];
 		$recentes = lignes($db, "SELECT rowid AS id, fk_equipement AS equipement, type, date_debut, date_fin, arret_min, symptome, cause, action, technicien, statut FROM {$P}gmao_intervention WHERE entity = $E ORDER BY date_debut DESC LIMIT 30");
 		repondre(array(
 			'equipements' => $eq, 'plans' => $plans, 'pieces' => $pieces, 'alarmes' => $alarmes,
-			'ouvertes' => $ouvertes, 'stats30' => $stats[0], 'top90' => $top, 'recentes' => $recentes,
+			'ouvertes' => $ouvertes, 'stats30' => $stats[0], 'fiab' => $fiab, 'top90' => $top, 'recentes' => $recentes,
 			'droits' => array('ecrire' => $user->admin || $user->hasRight('gmao', 'ecrire'), 'gerer' => $user->admin || $user->hasRight('gmao', 'gerer')),
 			'utilisateur' => trim($user->firstname.' '.$user->lastname) ?: $user->login,
 			'jeton' => newToken(),
@@ -257,7 +264,7 @@ switch ($action) {
 		$quoi = GETPOST('quoi', 'aZ09');
 		$texte = isset($_POST['csv']) ? (string) $_POST['csv'] : '';
 		if (trim($texte) === '') erreur('Collez le contenu du fichier CSV.');
-		$r = $quoi === 'alarmes' ? gmao_importer_alarmes($db, $texte, $E) : gmao_importer_equipements($db, $texte, $E);
+		$r = $quoi === 'alarmes' ? gmao_importer_alarmes($db, $texte, $E) : ($quoi === 'pieces' ? gmao_importer_pieces($db, $texte, $E) : gmao_importer_equipements($db, $texte, $E));
 		repondre($r);
 		break;
 

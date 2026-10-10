@@ -149,7 +149,7 @@ function boutonPanne(){ return D.droits.ecrire ? '<button class="btn panne" oncl
 function vAccueil(){
   const enPanne = D.equipements.filter(e => e.statut === 'panne');
   const retard = D.plans.filter(p => +p.actif && etatPlan(p)[0] === 'retard');
-  const sousSeuil = D.pieces.filter(p => +p.stock <= +p.seuil);
+  const sousSeuil = D.pieces.filter(p => +p.seuil > 0 && +p.stock <= +p.seuil);
   const aFaire = D.plans.filter(p => +p.actif && etatPlan(p)[0] !== '').slice(0, 12);
   $('#vue').innerHTML = `
   <div class="grand">${boutonPanne()}</div>
@@ -159,6 +159,9 @@ function vAccueil(){
     <div class="kpi"><b>${(D.stats30.arret_min / 60).toFixed(1).replace('.', ',')} h</b><span>d'arrêt sur 30 jours</span></div>
     <div class="kpi ${retard.length ? 'orange' : 'vert'}"><b>${retard.length}</b><span>préventif(s) en retard</span></div>
     <div class="kpi ${sousSeuil.length ? 'orange' : 'vert'}"><b>${sousSeuil.length}</b><span>pièce(s) sous le seuil</span></div>
+    <div class="kpi" title="Durée moyenne d'une panne, 90 derniers jours"><b>${D.fiab.n ? Math.round(D.fiab.mttr_min) + ' min' : '—'}</b><span>MTTR (réparation moyenne)</span></div>
+    <div class="kpi" title="Temps moyen de bon fonctionnement entre deux pannes d'une machine, 90 derniers jours"><b>${D.fiab.mtbf_h ? String(D.fiab.mtbf_h).replace('.', ',') + ' h' : '—'}</b><span>MTBF (entre deux pannes)</span></div>
+    <div class="kpi"><b>${D.fiab.preventif_30j}</b><span>préventifs faits sur 30 jours</span></div>
   </div>
   <div class="deux">
     <section class="carte"><h2>Interventions en cours</h2>${D.ouvertes.length ? `<div class="defile"><table><tr><th>Depuis</th><th>Machine</th><th>Symptôme</th><th></th></tr>
@@ -242,11 +245,12 @@ function vPreventif(){
   <td>${esc(nomEq(p.equipement))}</td><td>${p.frequence_j} j</td><td>${jour(p.derniere) || '—'}</td><td>${D.droits.ecrire ? `<button class="btn petit plein" onclick="fPlanVoir(${p.id})">Faire</button>` : ''}</td></tr>`; }).join('') || '<tr><td colspan="6" class="vide">Aucun plan.</td></tr>'}</table></section>`;
 }
 function vPieces(){
-  $('#vue').innerHTML = `<div class="grand">${D.droits.gerer ? '<button class="btn" onclick="fPiece()">+ Pièce</button>' : ''}</div>
+  $('#vue').innerHTML = `<input class="recherche" id="qp" type="search" placeholder="Chercher une pièce : nom, référence, machine"><div class="grand">${D.droits.gerer ? '<button class="btn" onclick="fPiece()">+ Pièce</button>' : ''}</div>
   <section class="carte defile"><table><tr><th>Pièce</th><th>Référence</th><th>Machine</th><th>Stock</th><th>Seuil</th><th>Casier</th><th></th></tr>
-  ${D.pieces.map(p => `<tr><td>${esc(p.nom)}</td><td class="tag">${esc(p.reference || '')}</td><td>${p.equipement ? esc(nomEq(p.equipement)) : ''}</td>
-  <td><b style="color:${+p.stock <= +p.seuil ? 'var(--panne)' : 'inherit'}">${+p.stock}</b> ${esc(p.unite || '')}</td><td>${+p.seuil}</td><td>${esc(p.emplacement || '')}</td>
+  ${D.pieces.map(p => `<tr data-q="${esc((p.nom + ' ' + (p.reference || '') + ' ' + (p.equipement ? nomEq(p.equipement) : '')).toLowerCase())}"><td>${esc(p.nom)}</td><td class="tag">${esc(p.reference || '')}</td><td>${p.equipement ? esc(nomEq(p.equipement)) : ''}</td>
+  <td><b style="color:${+p.seuil > 0 && +p.stock <= +p.seuil ? 'var(--panne)' : 'inherit'}">${+p.stock}</b> ${esc(p.unite || '')}</td><td>${+p.seuil}</td><td>${esc(p.emplacement || '')}</td>
   <td style="white-space:nowrap">${D.droits.ecrire ? `<button class="btn petit" onclick="mvt(${p.id},-1)">− sortie</button> <button class="btn petit" onclick="mvt(${p.id},1)">+ entrée</button>` : ''}${D.droits.gerer ? ` <button class="btn petit" onclick="fPiece(${p.id})">✎</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="7" class="vide">Aucune pièce.</td></tr>'}</table></section>`;
+  $('#qp').addEventListener('input', e => { const q = e.target.value.trim().toLowerCase(); document.querySelectorAll('tr[data-q]').forEach(tr => tr.hidden = q && !tr.dataset.q.includes(q)); });
 }
 function vAlarmes(){
   $('#vue').innerHTML = `<input class="recherche" id="qa" type="search" placeholder="Code ou texte de l'alarme affichée sur l'écran">
@@ -274,7 +278,12 @@ function vImport(){
     <p>Export de la liste des messages du programme (WinCC / pupitre) : une alarme par ligne.</p>
     <p class="tag">code;texte;tag;causes;remede</p>
     <p class="tag">A039;Ventilatore assiale mandata linea B allarme da inverter;DPR-SEC-VENT-B;Défaut variateur;Lire le code défaut du variateur, réarmer</p>
-    <textarea id="csvAl" rows="10" placeholder="Collez ici"></textarea><div class="actions"><button class="btn plein" onclick="importer('alarmes','csvAl')">Importer</button></div></section></div>`;
+    <textarea id="csvAl" rows="10" placeholder="Collez ici"></textarea><div class="actions"><button class="btn plein" onclick="importer('alarmes','csvAl')">Importer</button></div></section>
+  <section class="carte"><h2>Pièces de rechange (catalogues constructeur)</h2>
+    <p>Une pièce par ligne. Une référence déjà présente est mise à jour, sans toucher au stock.</p>
+    <p class="tag">nom;reference;tag;unite;stock;seuil;emplacement;fournisseur;cout</p>
+    <p class="tag">Lame de soudage;M3 11001;DPR-CND-CER-01-TETE;pièce;2;1;Casier C4;Messersì;</p>
+    <textarea id="csvPi" rows="10" placeholder="Collez ici"></textarea><div class="actions"><button class="btn plein" onclick="importer('pieces','csvPi')">Importer</button></div></section></div>`;
 }
 async function importer(quoi, champ){
   const r = await envoyer('import', {quoi, csv: $('#' + champ).value});
