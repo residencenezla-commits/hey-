@@ -25,8 +25,8 @@ etape('module activé (menu « Primes »)');
 $P = MAIN_DB_PREFIX; $E = (int) $conf->entity;
 $o = $db->fetch_object($db->query("SELECT COUNT(*) AS n FROM {$P}prime_equipe WHERE entity = $E"));
 if ($o && !$o->n) {
-	foreach (array('Équipe A', 'Équipe B', 'Équipe C') as $n) $db->query("INSERT INTO {$P}prime_equipe (entity, nom) VALUES ($E, '".$db->escape($n)."')");
-	etape('équipes A, B, C créées (à renommer au besoin dans l\'onglet Personnel)');
+	foreach (array('Équipe A', 'Équipe B', 'Équipe C', 'Équipe D') as $n) $db->query("INSERT INTO {$P}prime_equipe (entity, nom) VALUES ($E, '".$db->escape($n)."')");
+	etape('équipes A, B, C, D créées (à renommer au besoin dans l\'onglet Personnel)');
 }
 
 // 500231 lire, 500232 saisir, 500233 valider, 500234 etat, 500235 gerer

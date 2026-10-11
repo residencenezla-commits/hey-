@@ -341,12 +341,20 @@ switch ($op) {
 		break;
 
 	case 'employes_lot':
-		// un nom par ligne, éventuellement « Nom ; poste ; matricule »,
+		// un nom par ligne, éventuellement « Nom ; poste ; matricule ; équipe »,
 		// ou lignes copiées depuis la liste des salariés de la paie (MATRICULE, NOM, PRENOM, D.ENTREE, ADRESSE, NAISSANCE, LIEU, FONCTION) ;
 		// un matricule déjà connu met la personne à jour au lieu de la créer en double
 		exiger('gerer');
-		$eq = GETPOSTINT('equipe');
+		$eq0 = GETPOSTINT('equipe');
 		$crees = $maj = 0;
+		$equipe_de = function ($nom) use ($db, $P, $E) {  // 4e colonne « Équipe X » : retrouvée, ou créée si elle n'existe pas
+			$nom = mb_substr(trim($nom), 0, 64);
+			if ($nom === '') return 0;
+			$o = lignes($db, "SELECT rowid FROM {$P}prime_equipe WHERE entity = $E AND nom = '".$db->escape($nom)."'");
+			if ($o) return (int) $o[0]['rowid'];
+			$db->query("INSERT INTO {$P}prime_equipe (entity, nom) VALUES ($E, '".$db->escape($nom)."')");
+			return (int) $db->last_insert_id("{$P}prime_equipe");
+		};
 		foreach (preg_split('/\R/', txt('liste')) as $l) {
 			$c = array_map('trim', preg_split('/[;\t]/', $l));
 			if ($c[0] === '' || strtoupper($c[0]) === 'MATRICULE') continue;
@@ -355,10 +363,14 @@ switch ($op) {
 			} else {
 				list($nom, $poste, $mat) = array($c[0], $c[1] ?? '', $c[2] ?? '');
 			}
+			$eq = !empty($c[3]) && count($c) < 8 ? $equipe_de($c[3]) : $eq0;
 			$nom = mb_substr($nom, 0, 128); $poste = mb_convert_case(mb_substr($poste, 0, 64), MB_CASE_LOWER, 'UTF-8'); $mat = strtoupper(mb_substr($mat, 0, 32));
-			$ex = $mat !== '' ? lignes($db, "SELECT rowid FROM {$P}prime_employe WHERE entity = $E AND matricule = '".$db->escape($mat)."'") : array();
+			$ex = $mat !== '' ? lignes($db, "SELECT rowid FROM {$P}prime_employe WHERE entity = $E AND matricule = '".$db->escape($mat)."'")
+				: array();
+			// pas encore de matricule connu : on reprend la personne du même nom saisie sans matricule
+			if (!$ex) $ex = lignes($db, "SELECT rowid FROM {$P}prime_employe WHERE entity = $E AND (matricule IS NULL OR matricule = '') AND UPPER(nom) = UPPER('".$db->escape($nom)."')");
 			if ($ex) {
-				$db->query("UPDATE {$P}prime_employe SET nom = '".$db->escape($nom)."', poste = ".sqlv($db, $poste).", actif = 1".($eq ? ", fk_equipe = $eq" : '')." WHERE rowid = ".(int) $ex[0]['rowid']);
+				$db->query("UPDATE {$P}prime_employe SET nom = '".$db->escape($nom)."', poste = ".sqlv($db, $poste).", matricule = ".sqlv($db, $mat).", actif = 1".($eq ? ", fk_equipe = $eq" : '')." WHERE rowid = ".(int) $ex[0]['rowid']);
 				$maj++;
 			} else {
 				$db->query("INSERT INTO {$P}prime_employe (entity, nom, poste, matricule, fk_equipe) VALUES ($E, '".$db->escape($nom)."', ".sqlv($db, $poste).", ".sqlv($db, $mat).", ".($eq ?: 'NULL').")");
