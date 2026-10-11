@@ -340,18 +340,32 @@ switch ($op) {
 		repondre(array('ok' => 1));
 		break;
 
-	case 'employes_lot':  // un nom par ligne, éventuellement « Nom ; poste ; matricule »
+	case 'employes_lot':
+		// un nom par ligne, éventuellement « Nom ; poste ; matricule »,
+		// ou lignes copiées depuis la liste des salariés de la paie (MATRICULE, NOM, PRENOM, D.ENTREE, ADRESSE, NAISSANCE, LIEU, FONCTION) ;
+		// un matricule déjà connu met la personne à jour au lieu de la créer en double
 		exiger('gerer');
-		$eq = GETPOSTINT('equipe') ?: 'NULL';
-		$n = 0;
+		$eq = GETPOSTINT('equipe');
+		$crees = $maj = 0;
 		foreach (preg_split('/\R/', txt('liste')) as $l) {
 			$c = array_map('trim', preg_split('/[;\t]/', $l));
-			if ($c[0] === '') continue;
-			$db->query("INSERT INTO {$P}prime_employe (entity, nom, poste, matricule, fk_equipe) VALUES ($E, '".$db->escape(mb_substr($c[0], 0, 128))."', "
-				.sqlv($db, mb_substr($c[1] ?? '', 0, 64)).", ".sqlv($db, mb_substr($c[2] ?? '', 0, 32)).", $eq)");
-			$n++;
+			if ($c[0] === '' || strtoupper($c[0]) === 'MATRICULE') continue;
+			if (count($c) >= 8 && preg_match('/^[A-Z]{2,4}\d+$/i', $c[0])) {
+				list($nom, $poste, $mat) = array(trim(preg_replace('/\s+/', ' ', $c[1].' '.mb_convert_case($c[2], MB_CASE_TITLE, 'UTF-8'))), $c[7], $c[0]);
+			} else {
+				list($nom, $poste, $mat) = array($c[0], $c[1] ?? '', $c[2] ?? '');
+			}
+			$nom = mb_substr($nom, 0, 128); $poste = mb_convert_case(mb_substr($poste, 0, 64), MB_CASE_LOWER, 'UTF-8'); $mat = strtoupper(mb_substr($mat, 0, 32));
+			$ex = $mat !== '' ? lignes($db, "SELECT rowid FROM {$P}prime_employe WHERE entity = $E AND matricule = '".$db->escape($mat)."'") : array();
+			if ($ex) {
+				$db->query("UPDATE {$P}prime_employe SET nom = '".$db->escape($nom)."', poste = ".sqlv($db, $poste).", actif = 1".($eq ? ", fk_equipe = $eq" : '')." WHERE rowid = ".(int) $ex[0]['rowid']);
+				$maj++;
+			} else {
+				$db->query("INSERT INTO {$P}prime_employe (entity, nom, poste, matricule, fk_equipe) VALUES ($E, '".$db->escape($nom)."', ".sqlv($db, $poste).", ".sqlv($db, $mat).", ".($eq ?: 'NULL').")");
+				$crees++;
+			}
 		}
-		repondre(array('ok' => 1, 'n' => $n));
+		repondre(array('ok' => 1, 'n' => $crees + $maj, 'crees' => $crees, 'maj' => $maj));
 		break;
 
 	case 'regle':

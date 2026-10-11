@@ -376,7 +376,7 @@ function vPersonnel(v){
     <div class="barre">${R.equipes.map(e => `<span class="badge ${+e.actif ? 'valide' : ''}" style="font-size:.9rem">${esc(e.nom)}</span>`).join(' ') || '<span class="vide">aucune</span>'}</div>
     <form id="fe" class="barre"><label>Nouvelle équipe<input name="nom" required placeholder="Équipe A"></label><button class="btn plein">Ajouter</button></form></div>
   <div class="carte"><h2>Ajouter du personnel en une fois</h2>
-    <form id="fl" class="champs"><label class="large">Un nom par ligne (facultatif : « Nom ; poste ; matricule »)<textarea name="liste" rows="5" placeholder="BENALI Karim ; dépileur ; 0123"></textarea></label>
+    <form id="fl" class="champs"><label class="large">Un nom par ligne (« Nom ; poste ; matricule »), ou coller directement les lignes copiées de la liste des salariés (Excel de la paie) — un matricule déjà connu est mis à jour, pas dupliqué<textarea name="liste" rows="5" placeholder="BENALI Karim ; dépileur ; 0123"></textarea></label>
     <label>Équipe<select name="equipe">${opts('')}</select></label><div style="align-self:end"><button class="btn plein">Ajouter la liste</button></div></form></div>
   <div class="carte defile"><h2>Personnel (${R.employes.filter(e => +e.actif).length} actifs)</h2>
     <table><thead><tr><th>Matricule</th><th>Nom et prénom</th><th>Poste</th><th>Équipe</th><th>Actif</th><th></th></tr></thead><tbody>
@@ -385,7 +385,7 @@ function vPersonnel(v){
       <td><input type="checkbox" name="actif" ${+e.actif ? 'checked' : ''}></td><td><button class="btn petit" data-enr>Enregistrer</button></td></tr>`).join('') || '<tr><td colspan="6" class="vide">Aucun employé.</td></tr>'}
     </tbody></table></div>`;
   $('#fe').onsubmit = async e => { e.preventDefault(); try { await envoyer('equipe', Object.fromEntries(new FormData(e.target))); await charger(); message('Équipe ajoutée'); } catch (x) {} };
-  $('#fl').onsubmit = async e => { e.preventDefault(); try { const r = await envoyer('employes_lot', Object.fromEntries(new FormData(e.target))); await charger(); message(r.n + ' personne(s) ajoutée(s)'); } catch (x) {} };
+  $('#fl').onsubmit = async e => { e.preventDefault(); try { const r = await envoyer('employes_lot', Object.fromEntries(new FormData(e.target))); await charger(); message(r.crees + ' ajoutée(s), ' + r.maj + ' mise(s) à jour'); } catch (x) {} };
   v.querySelectorAll('[data-enr]').forEach(b => b.onclick = async () => {
     const tr = b.closest('tr'), g = n => tr.querySelector(`[name=${n}]`);
     try { await envoyer('employe', {id: tr.dataset.id, matricule: g('matricule').value, nom: g('nom').value, poste: g('poste').value, equipe: g('equipe').value, actif: g('actif').checked ? 1 : 0}); await charger(); message('Enregistré'); } catch (x) {}

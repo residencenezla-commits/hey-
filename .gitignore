@@ -5,3 +5,4 @@ v*_results*/
 *.csv
 *.log
 !erp-dolibarr/modules/gmao/referentiel/*.csv
+personnel_primes_*.txt
