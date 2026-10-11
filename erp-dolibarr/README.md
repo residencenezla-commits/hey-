@@ -272,6 +272,29 @@ Droits (Utilisateurs › onglet Permissions) : *Consulter*, *Déclarer pannes et
 *Gérer machines, plans, pièces et alarmes*. Toutes les données sont dans la base de l'ERP et
 partent dans la même sauvegarde.
 
+## Prime de rendement des équipes (menu « Primes »)
+
+Règle : objectif **10 wagons dépilés** par équipe et par poste, **1 500 DA** par wagon au-delà,
+partagés à parts égales entre les présents, si la casse est sous le seuil (5 % par défaut, à fixer
+par la direction), les paquets bien cerclés, la sécurité et la propreté respectées, et la fiche
+validée par le contrôleur. Pas de part en cas d'absence ou de retard injustifié.
+
+Qui fait quoi : il suffit de mettre chaque utilisateur dans son groupe (Accueil > Utilisateurs & groupes),
+les groupes sont créés à l'installation :
+
+| Groupe | Ce qu'il fait |
+|---|---|
+| Chefs d'équipe | saisit chaque jour la fiche du poste (wagons dépilés, présents, casse) — sur téléphone |
+| Contrôleurs | vérifie, corrige, **valide** ou **refuse** la fiche (avec motif) |
+| Comptabilité | voit l'**état mensuel par employé**, l'imprime (avec émargement) ou le télécharge pour Excel |
+| Direction | tout, plus personnel, équipes, règle de la prime et **clôture du mois** |
+
+La prime se calcule toute seule à chaque fiche validée ; l'état du mois est donc toujours à jour.
+À la fin du mois, la direction clique « Clôturer et transmettre à la comptabilité » (possible
+seulement quand le mois est terminé et que plus aucune fiche n'attend le contrôleur) :
+l'état devient définitif et plus aucune fiche du mois ne peut être modifiée.
+Une fiche validée garde la règle du jour où elle a été saisie, même si la règle change ensuite.
+
 ## Sauvegarde
 
 Tout est dans le dossier `donnees/` (base de données, PDF, pièces jointes).

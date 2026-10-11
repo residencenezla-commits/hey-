@@ -69,6 +69,8 @@ services:
       - ./modules/timbredz:/var/www/html/custom/timbredz:ro
       # Module « Maintenance » (GMAO : machines, moteurs, pannes, préventif, pièces, alarmes)
       - ./modules/gmao:/var/www/html/custom/gmao:ro
+      # Module « Primes » (prime de rendement : fiches des postes, contrôle, état pour la paie)
+      - ./modules/prime:/var/www/html/custom/prime:ro
       # Outils (export vers PC Compta…) et dossier des fichiers exportés
       - ./outils:/var/www/scripts/outils:ro
       - ./exports:/var/www/exports
