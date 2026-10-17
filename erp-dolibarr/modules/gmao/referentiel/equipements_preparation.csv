@@ -135,5 +135,20 @@ DPR-HSE-AU;Arrêts d'urgence et arrêts à câble de la ligne;machine;DPR-HSE;;;
 DPR-HSE-CEL;Clôtures et portes verrouillées des cellules robots;machine;DPR-HSE;;;;;;A;;;Empileuse et déchargement.
 DPR-HSE-FOSSE;Garde-corps de la fosse à argile (−3,000 m) et passerelles des tapis;machine;DPR-HSE;;;;;;A;;;Passerelles latérales du tapis REF. 120.
 DPR-HSE-CIRC;Circulation des camions et chariots (sens unique, marquage, miroirs);machine;DPR-HSE;;;;;;B;;;Boucle de circulation du plan 86S-13-027E.
-DPR-HSE-COMP;Compresseurs d'air 7,5 bar et réservoirs;machine;DPR-HSE;;;;;;B;;;"2 compresseurs, un en marche et un en secours ; réservoirs sous pression."
 DPR-HSE-EPI;Stock d'équipements de protection individuelle;machine;DPR-HSE;;;;;;A;;;Casques, chaussures, gants, lunettes, bouchons, masques FFP2/FFP3, vêtements anti-chaleur.
+DPR-UTL;Utilités (air comprimé, eau, gaz);atelier;DPR-SITE;;;;;;A;;;Réseaux qui alimentent toute la ligne.
+DPR-UTL-COMP;Salle des compresseurs (2 compresseurs 7,5 bar, réservoirs);machine;DPR-UTL;;;;;;A;;;Schéma C1361AS700 005 « Impianto aria schematico » (indicatif : à vérifier sur site). Offre 2015-063 : 2 compresseurs à 7,5 bar, un en marche et un en secours ou en alternance. Réservoirs = appareils à pression : contrôle réglementaire.
+DPR-UTL-AIR;"Réseau d'air comprimé en tube 2""1/2 (boucle de la halle)";machine;DPR-UTL;;;;;;A;;;Schéma C1361AS700 005 « Impianto aria schematico » (indicatif : à vérifier sur site). Départ de la salle des compresseurs, collecteur le long de la halle, 13 points de raccordement A1 à A13.
+DPR-AIR-A1;Point de raccordement air A1 — ligne des paquets;organe;DPR-UTL-AIR;;A1;;;;B;;;Alimente : cercleuses et transporteurs des paquets finis. Vanne d'isolement, filtre-régulateur et purge à relever sur place.
+DPR-AIR-A2;Point de raccordement air A2 — déchargement du cuit;organe;DPR-UTL-AIR;;A2;;;;B;;;Alimente : robots de déchargement. Vanne d'isolement, filtre-régulateur et purge à relever sur place.
+DPR-AIR-A3;Point de raccordement air A3 — ligne de déchargeuse;organe;DPR-UTL-AIR;;A3;;;;B;;;Alimente : déchargement du séchoir. Vanne d'isolement, filtre-régulateur et purge à relever sur place.
+DPR-AIR-A4;Point de raccordement air A4 — étireuse;organe;DPR-UTL-AIR;;A4;;;;B;;;Alimente : coupe et vérin d'escamotage du tapis. Vanne d'isolement, filtre-régulateur et purge à relever sur place.
+DPR-AIR-A5;Point de raccordement air A5 — malaxeur d'argile;organe;DPR-UTL-AIR;;A5;;;;B;;;Alimente : mélangeurs. Vanne d'isolement, filtre-régulateur et purge à relever sur place.
+DPR-AIR-A6;Point de raccordement air A6 — ligne de chargement;organe;DPR-UTL-AIR;;A6;;;;B;;;Alimente : chargement des wagons séchoir. Vanne d'isolement, filtre-régulateur et purge à relever sur place.
+DPR-AIR-A7;Point de raccordement air A7 — four;organe;DPR-UTL-AIR;;A7;;;;B;;;Alimente : vannes pneumatiques et refroidissement rapide. Vanne d'isolement, filtre-régulateur et purge à relever sur place.
+DPR-AIR-A8;Point de raccordement air A8 — ligne de déchargement;organe;DPR-UTL-AIR;;A8;;;;B;;;Alimente : déchargement des wagons. Vanne d'isolement, filtre-régulateur et purge à relever sur place.
+DPR-AIR-A9;Point de raccordement air A9 — empileuse;organe;DPR-UTL-AIR;;A9;;;;B;;;Alimente : pince et pousseur pneumatique. Vanne d'isolement, filtre-régulateur et purge à relever sur place.
+DPR-AIR-A10;Point de raccordement air A10 — laminoir (1er point);organe;DPR-UTL-AIR;;A10;;;;B;;;Alimente : laminoir. Vanne d'isolement, filtre-régulateur et purge à relever sur place.
+DPR-AIR-A11;Point de raccordement air A11 — caissons doseurs;organe;DPR-UTL-AIR;;A11;;;;B;;;Alimente : caissons doseurs. Vanne d'isolement, filtre-régulateur et purge à relever sur place.
+DPR-AIR-A12;Point de raccordement air A12 — laminoir (2e point);organe;DPR-UTL-AIR;;A12;;;;B;;;Alimente : laminoir. Vanne d'isolement, filtre-régulateur et purge à relever sur place.
+DPR-AIR-A13;Point de raccordement air A13 — filtre à poussière;organe;DPR-UTL-AIR;;A13;;;;B;;;Alimente : décolmatage des manches. Vanne d'isolement, filtre-régulateur et purge à relever sur place.

@@ -188,10 +188,27 @@ for t, n, cr, nt in (
     ('DPR-HSE-CEL', 'Clôtures et portes verrouillées des cellules robots', 'A', 'Empileuse et déchargement.'),
     ('DPR-HSE-FOSSE', 'Garde-corps de la fosse à argile (−3,000 m) et passerelles des tapis', 'A', 'Passerelles latérales du tapis REF. 120.'),
     ('DPR-HSE-CIRC', 'Circulation des camions et chariots (sens unique, marquage, miroirs)', 'B', 'Boucle de circulation du plan 86S-13-027E.'),
-    ('DPR-HSE-COMP', 'Compresseurs d\'air 7,5 bar et réservoirs', 'B', '2 compresseurs, un en marche et un en secours ; réservoirs sous pression.'),
     ('DPR-HSE-EPI', 'Stock d\'équipements de protection individuelle', 'A', 'Casques, chaussures, gants, lunettes, bouchons, masques FFP2/FFP3, vêtements anti-chaleur.'),
 ):
     ajout(tag=t, nom=n, type='machine', parent='DPR-HSE', criticite=cr, notes=nt)
+
+# ------------------------------------------------------------------ air comprimé (schéma Marcheluzzo C1361AS700 005 rév. A du 21/12/2015)
+AIR = 'Schéma C1361AS700 005 « Impianto aria schematico » (indicatif : à vérifier sur site).'
+ajout(tag='DPR-UTL', nom='Utilités (air comprimé, eau, gaz)', type='atelier', parent='DPR-SITE', criticite='A', notes='Réseaux qui alimentent toute la ligne.')
+ajout(tag='DPR-UTL-COMP', nom="Salle des compresseurs (2 compresseurs 7,5 bar, réservoirs)", type='machine', parent='DPR-UTL', criticite='A',
+      notes=AIR + ' Offre 2015-063 : 2 compresseurs à 7,5 bar, un en marche et un en secours ou en alternance. Réservoirs = appareils à pression : contrôle réglementaire.')
+ajout(tag='DPR-UTL-AIR', nom='Réseau d\'air comprimé en tube 2"1/2 (boucle de la halle)', type='machine', parent='DPR-UTL', criticite='A',
+      notes=AIR + ' Départ de la salle des compresseurs, collecteur le long de la halle, 13 points de raccordement A1 à A13.')
+for n, (zone, desservi) in enumerate([
+        ('ligne des paquets', 'cercleuses et transporteurs des paquets finis'), ('déchargement du cuit', 'robots de déchargement'),
+        ('ligne de déchargeuse', 'déchargement du séchoir'), ('étireuse', 'coupe et vérin d\'escamotage du tapis'),
+        ("malaxeur d'argile", 'mélangeurs'), ('ligne de chargement', 'chargement des wagons séchoir'),
+        ('four', 'vannes pneumatiques et refroidissement rapide'), ('ligne de déchargement', 'déchargement des wagons'),
+        ('empileuse', 'pince et pousseur pneumatique'), ('laminoir (1er point)', 'laminoir'),
+        ('caissons doseurs', 'caissons doseurs'), ('laminoir (2e point)', 'laminoir'), ('filtre à poussière', 'décolmatage des manches'),
+    ], 1):
+    ajout(tag=f'DPR-AIR-A{n}', nom=f'Point de raccordement air A{n} — {zone}', type='organe', parent='DPR-UTL-AIR', repere=f'A{n}', criticite='B',
+          notes=f'Alimente : {desservi}. Vanne d\'isolement, filtre-régulateur et purge à relever sur place.')
 
 tags = [l['tag'] for l in L]
 assert len(tags) == len(set(tags)), 'tag en double'
@@ -247,6 +264,11 @@ plan('Essai Mensuel — Détection gaz et coupure', 'DPR-HSE-DGAZ', 30, 30, ["Es
 plan('Essai Hebdomadaire — Arrêts d\'urgence', 'DPR-HSE-AU', 7, 30, ["Essai d'un arrêt à câble par tapis (rotation)", "Essai des coups de poing de la ligne", "Réarmement : la machine ne redémarre pas seule"])
 plan('Contrôle Mensuel — Garde-corps, passerelles et circulation', 'DPR-HSE-FOSSE', 30, 30, ["Garde-corps de la fosse à argile : complets et fixés", "Passerelles des tapis : caillebotis, plinthes", "Marquage au sol et miroirs de la boucle camions", "Éclairage des zones de passage"], "Harnais si travail près du vide.")
 plan('Contrôle Mensuel — Stock d\'EPI', 'DPR-HSE-EPI', 30, 30, ["Compter les EPI en stock (casques, chaussures, gants, lunettes, bouchons, masques FFP2/FFP3)", "Remplacer les EPI usés signalés par les chefs d'équipe", "Bouchons et masques disponibles à l'entrée des ateliers"], "Sans risque particulier.")
+AIRSEC = "Isoler et purger la partie du réseau avant d'ouvrir un raccord ; jamais d'air comprimé dirigé vers une personne ; lunettes et bouchons d'oreilles en salle des compresseurs."
+plan('PM Quotidien — Compresseurs', 'DPR-UTL-COMP', 1, 15, ["Pression du réseau — noter (bar, 7,5 attendu)", "Heures de marche des 2 compresseurs — noter", "Purger les condensats des réservoirs (si purge manuelle)", "Alarmes du compresseur et du sécheur"], AIRSEC)
+plan('PM Mensuel — Compresseurs', 'DPR-UTL-COMP', 30, 60, ["Filtre à air d'aspiration : nettoyer", "Niveau d'huile", "Purgeurs automatiques : essai", "Alterner le compresseur en marche et celui en secours", "Température de refoulement"], AIRSEC)
+plan('PM Annuel — Réservoirs d\'air (appareils à pression)', 'DPR-UTL-COMP', 365, 120, ["Soupapes de sûreté : essai et plombage", "Inspection visuelle intérieure / extérieure (corrosion)", "Manomètres : étalonnage", "Classer le rapport de contrôle réglementaire"], AIRSEC)
+plan('PM Mensuel — Réseau d\'air et points A1 à A13', 'DPR-UTL-AIR', 30, 90, ["Recherche de fuites sur la boucle 2\"1/2 et aux 13 points (machine en marche, à l'écoute ou à l'eau savonneuse)", "Filtres-régulateurs des points : cartouches, purge", "Pression à chaque point — noter les points sous 6 bar", "Flexibles et raccords rapides : état"], AIRSEC)
 for p in P:
     assert p[1] in tags, p
 
@@ -293,6 +315,14 @@ PI = [
     ['Lunettes de protection', 'EN 166', 'DPR-HSE-EPI', 'pièce', 0, 20],
     ['Casque de chantier', 'EN 397', 'DPR-HSE-EPI', 'pièce', 0, 10],
     ['Gilet haute visibilité', 'EN ISO 20471', 'DPR-HSE-EPI', 'pièce', 0, 10],
+    ['Filtre à air de compresseur', 'à relever', 'DPR-UTL-COMP', 'pièce', 0, 2],
+    ['Filtre à huile de compresseur', 'à relever', 'DPR-UTL-COMP', 'pièce', 0, 2],
+    ['Séparateur air/huile', 'à relever', 'DPR-UTL-COMP', 'pièce', 0, 1],
+    ['Huile de compresseur', 'selon constructeur', 'DPR-UTL-COMP', 'litre', 0, 0],
+    ['Purgeur automatique de condensats', 'à relever', 'DPR-UTL-COMP', 'pièce', 0, 1],
+    ['Cartouche de filtre de ligne (filtre-régulateur)', 'à relever', 'DPR-UTL-AIR', 'pièce', 0, 4],
+    ['Raccord rapide air comprimé', 'à relever', 'DPR-UTL-AIR', 'pièce', 0, 10],
+    ['Flexible air comprimé', 'à relever', 'DPR-UTL-AIR', 'mètre', 0, 20],
 ]
 with open(SCH / 'MS500_pieces.csv', encoding='utf-8') as f:
     for r in csv.DictReader(f, delimiter=';'):

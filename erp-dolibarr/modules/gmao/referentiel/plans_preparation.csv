@@ -181,3 +181,20 @@ Contrôle Mensuel — Garde-corps, passerelles et circulation;DPR-HSE-FOSSE;30;3
 Contrôle Mensuel — Stock d'EPI;DPR-HSE-EPI;30;30;"1. Compter les EPI en stock (casques, chaussures, gants, lunettes, bouchons, masques FFP2/FFP3)
 2. Remplacer les EPI usés signalés par les chefs d'équipe
 3. Bouchons et masques disponibles à l'entrée des ateliers";Sans risque particulier.
+PM Quotidien — Compresseurs;DPR-UTL-COMP;1;15;"1. Pression du réseau — noter (bar, 7,5 attendu)
+2. Heures de marche des 2 compresseurs — noter
+3. Purger les condensats des réservoirs (si purge manuelle)
+4. Alarmes du compresseur et du sécheur";"Isoler et purger la partie du réseau avant d'ouvrir un raccord ; jamais d'air comprimé dirigé vers une personne ; lunettes et bouchons d'oreilles en salle des compresseurs."
+PM Mensuel — Compresseurs;DPR-UTL-COMP;30;60;"1. Filtre à air d'aspiration : nettoyer
+2. Niveau d'huile
+3. Purgeurs automatiques : essai
+4. Alterner le compresseur en marche et celui en secours
+5. Température de refoulement";"Isoler et purger la partie du réseau avant d'ouvrir un raccord ; jamais d'air comprimé dirigé vers une personne ; lunettes et bouchons d'oreilles en salle des compresseurs."
+PM Annuel — Réservoirs d'air (appareils à pression);DPR-UTL-COMP;365;120;"1. Soupapes de sûreté : essai et plombage
+2. Inspection visuelle intérieure / extérieure (corrosion)
+3. Manomètres : étalonnage
+4. Classer le rapport de contrôle réglementaire";"Isoler et purger la partie du réseau avant d'ouvrir un raccord ; jamais d'air comprimé dirigé vers une personne ; lunettes et bouchons d'oreilles en salle des compresseurs."
+PM Mensuel — Réseau d'air et points A1 à A13;DPR-UTL-AIR;30;90;"1. Recherche de fuites sur la boucle 2""1/2 et aux 13 points (machine en marche, à l'écoute ou à l'eau savonneuse)
+2. Filtres-régulateurs des points : cartouches, purge
+3. Pression à chaque point — noter les points sous 6 bar
+4. Flexibles et raccords rapides : état";"Isoler et purger la partie du réseau avant d'ouvrir un raccord ; jamais d'air comprimé dirigé vers une personne ; lunettes et bouchons d'oreilles en salle des compresseurs."

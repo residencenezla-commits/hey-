@@ -40,6 +40,14 @@ Gants anti-chaleur;EN 407;DPR-HSE-EPI;paire;0;10
 Lunettes de protection;EN 166;DPR-HSE-EPI;pièce;0;20
 Casque de chantier;EN 397;DPR-HSE-EPI;pièce;0;10
 Gilet haute visibilité;EN ISO 20471;DPR-HSE-EPI;pièce;0;10
+Filtre à air de compresseur;à relever;DPR-UTL-COMP;pièce;0;2
+Filtre à huile de compresseur;à relever;DPR-UTL-COMP;pièce;0;2
+Séparateur air/huile;à relever;DPR-UTL-COMP;pièce;0;1
+Huile de compresseur;selon constructeur;DPR-UTL-COMP;litre;0;0
+Purgeur automatique de condensats;à relever;DPR-UTL-COMP;pièce;0;1
+Cartouche de filtre de ligne (filtre-régulateur);à relever;DPR-UTL-AIR;pièce;0;4
+Raccord rapide air comprimé;à relever;DPR-UTL-AIR;pièce;0;10
+Flexible air comprimé;à relever;DPR-UTL-AIR;mètre;0;20
 Couverture;M3 02001;DPR-CND-CER-01-TETE;pièce;0;0
 Plaque avant gauche;M3 02003;DPR-CND-CER-01-TETE;pièce;0;0
 Plaque postérieure gauche;M3 02004;DPR-CND-CER-01-TETE;pièce;0;0
