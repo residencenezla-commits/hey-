@@ -174,6 +174,13 @@ button.btn{font:inherit;font-weight:600;cursor:pointer;background:transparent}
 .sechoir-s{--c-t:#c4521a;--c-u:#2f78b8}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sechoir-s{--c-t:#e06a28;--c-u:#4a90cc}}
 :root[data-theme="dark"] .sechoir-s{--c-t:#e06a28;--c-u:#4a90cc}
+.equip{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:28px}
+.equip div{background:var(--carte);border:1px solid var(--ligne);border-radius:14px;padding:18px}
+.equip h3{font-size:1.05rem;margin-bottom:.3em}.equip p{font-size:.9rem;color:var(--gris)}
+.usine-note{font-size:.82rem;color:var(--gris);margin-top:14px}
+.secu-grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:16px;margin-top:36px}
+.secu-grille article{background:var(--carte);border:1px solid var(--ligne);border-left:4px solid var(--brique);border-radius:12px;padding:18px}
+.secu-grille h3{font-size:1.05rem;margin-bottom:.3em}.secu-grille p{font-size:.9rem;color:var(--gris)}
 .sech-faits{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:36px}
 .sech-faits div{background:var(--carte);border:1px solid var(--ligne);border-radius:14px;padding:18px}
 .sech-faits b{display:block;font-family:Fraunces,serif;font-size:1.9rem;color:var(--brique);line-height:1.1}
@@ -460,6 +467,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <li><a href="#fabrication">Fabrication</a></li>
       <li><a href="#sechoir">Séchoir</a></li>
       <li><a href="#four">Le four</a></li>
+      <li><a href="#securite">Sécurité</a></li>
       <li><a href="#carriere">Carrière</a></li>
       <li><a href="#produits">Produits</a></li>
       <li><a href="#energie">Énergie</a></li>
@@ -760,6 +768,39 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <figure><img src="images/usine-dessus-four.jpg" alt="Passerelle sur le dessus du four tunnel, avec les gaines de récupération de chaleur" loading="lazy" width="1400" height="1050"><figcaption><b>Sur le four</b>Les gaines qui récupèrent la chaleur du four pour le séchoir.</figcaption></figure>
       <figure><img src="images/usine-bruleurs.jpg" alt="Rampes de brûleurs au gaz naturel alignées sur la voûte du four tunnel, avec leurs ventilateurs bleus" loading="lazy" width="1400" height="1050"><figcaption><b>Les brûleurs</b>Sur la voûte du four, les rampes de brûleurs au gaz et leurs ventilateurs.</figcaption></figure>
     </div>
+    <h3 class="reveal" style="margin-top:56px;font-size:1.5rem">Capacité et équipements</h3>
+    <div class="sech-faits reveal">
+      <div><b>4</b><span>filières de façonnage : B8 à 6 sorties, B12 à 4 sorties, hourdis et blocs</span></div>
+      <div><b>24 h / 24</b><span>le four cuit sans arrêt, 364 jours par an, en 3 postes</span></div>
+      <div><b>110</b><span>points de feu au gaz naturel répartis en 10 groupes sur la voûte du four</span></div>
+      <div><b>3</b><span>robots Fanuc : empilage sur les wagons du four, puis déchargement du cuit</span></div>
+    </div>
+    <div class="equip reveal">
+      <div><h3>Préparation de l'argile</h3><p>Doseurs, laminoir dégrossisseur et finisseur, aimant et détecteur de métaux, mouillage réglé automatiquement.</p></div>
+      <div><h3>Façonnage</h3><p>Mélangeur sous vide et étireuse ; filières B8 à 6 sorties, B12 à 4 sorties, hourdis et blocs.</p></div>
+      <div><h3>Séchage et cuisson</h3><p>Séchoir rapide à deux lignes et four tunnel au gaz naturel ; la chaleur du four sèche les briques.</p></div>
+      <div><h3>Emballage</h3><p>Paquets formés par robot, cerclés à l'horizontale et à la verticale, prêts pour le chariot élévateur.</p></div>
+    </div>
+    <p class="usine-note">Équipements décrits d'après le dossier du constructeur de l'usine, Marcheluzzo Impianti.</p>
+  </div>
+</section>
+
+<!-- ============ SÉCURITÉ ============ -->
+<section id="securite">
+  <div class="wrap">
+    <div class="reveal">
+      <p class="eyebrow">Sécurité au travail</p>
+      <h2>Protéger ceux qui fabriquent</h2>
+      <p class="lead">Une briqueterie, c'est du bruit, de la poussière, de la chaleur et des machines automatiques. Chaque zone de l'usine a ses protections, vérifiées par notre service maintenance selon un calendrier.</p>
+    </div>
+    <div class="secu-grille">
+      <article class="reveal"><h3>Poussière</h3><p>Aspiration avec hottes sur les laminoirs ; masque filtrant pour les nettoyages et la préparation.</p></article>
+      <article class="reveal"><h3>Bruit</h3><p>Protections auditives obligatoires dans les ateliers de préparation et de façonnage.</p></article>
+      <article class="reveal"><h3>Machines</h3><p>Carters fermés, arrêts d'urgence et arrêts à câble le long des tapis, essayés chaque semaine. Consignation cadenassée avant toute intervention.</p></article>
+      <article class="reveal"><h3>Robots</h3><p>Cellules clôturées avec portes verrouillées : le robot s'arrête dès qu'une porte s'ouvre.</p></article>
+      <article class="reveal"><h3>Chaleur et gaz</h3><p>Vêtements et gants anti-chaleur au four ; détection du gaz et vanne de coupure générale testées chaque mois.</p></article>
+      <article class="reveal"><h3>Levage et circulation</h3><p>Pont roulant contrôlé par un organisme agréé ; circuit des camions en sens unique, gilet haute visibilité dans la cour.</p></article>
+    </div>
   </div>
 </section>
 
@@ -811,11 +852,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <div class="produits">
       <article class="produit reveal">
         <svg viewBox="0 0 200 110"><rect x="20" y="15" width="160" height="80" rx="4" fill="#b4472b"/><g fill="#7d2a17"><rect x="32" y="28" width="28" height="24" rx="2"/><rect x="69" y="28" width="28" height="24" rx="2"/><rect x="106" y="28" width="28" height="24" rx="2"/><rect x="143" y="28" width="26" height="24" rx="2"/><rect x="32" y="60" width="28" height="24" rx="2"/><rect x="69" y="60" width="28" height="24" rx="2"/><rect x="106" y="60" width="28" height="24" rx="2"/><rect x="143" y="60" width="26" height="24" rx="2"/></g></svg>
-        <h3>Brique creuse 8 trous (B8)</h3><p class="format">Format courant 30 × 20 × 10 cm · 2 rangées d'alvéoles</p><p>Cloisons intérieures et paroi intérieure des doubles murs. Légère et rapide à poser.</p>
+        <h3>Brique creuse 8 trous (B8)</h3><p class="format">Format courant 30 × 20 × 10 cm · 2 rangées d'alvéoles · ≈ 4 kg</p><p>Cloisons intérieures et paroi intérieure des doubles murs. Légère et rapide à poser.</p>
       </article>
       <article class="produit reveal">
         <svg viewBox="0 0 200 110"><rect x="20" y="10" width="160" height="90" rx="4" fill="#b4472b"/><g fill="#7d2a17"><rect x="32" y="20" width="28" height="18" rx="2"/><rect x="72" y="20" width="28" height="18" rx="2"/><rect x="112" y="20" width="28" height="18" rx="2"/><rect x="152" y="20" width="18" height="18" rx="2"/><rect x="32" y="46" width="28" height="18" rx="2"/><rect x="72" y="46" width="28" height="18" rx="2"/><rect x="112" y="46" width="28" height="18" rx="2"/><rect x="152" y="46" width="18" height="18" rx="2"/><rect x="32" y="72" width="28" height="18" rx="2"/><rect x="72" y="72" width="28" height="18" rx="2"/><rect x="112" y="72" width="28" height="18" rx="2"/><rect x="152" y="72" width="18" height="18" rx="2"/></g></svg>
-        <h3>Brique creuse 12 trous (B12)</h3><p class="format">Format courant 30 × 20 × 15 cm · 3 rangées d'alvéoles</p><p>Murs extérieurs et paroi extérieure des doubles murs : plus d'épaisseur, plus d'isolation.</p>
+        <h3>Brique creuse 12 trous (B12)</h3><p class="format">Format courant 30 × 20 × 15 cm · 3 rangées d'alvéoles · ≈ 6 kg</p><p>Murs extérieurs et paroi extérieure des doubles murs : plus d'épaisseur, plus d'isolation.</p>
       </article>
       <article class="produit reveal">
         <svg viewBox="0 0 200 110"><path d="M20 40 L180 40 L180 95 L20 95 Z" fill="#b4472b"/><path d="M10 40 L30 30 L170 30 L190 40 Z" fill="#d98b5f"/><g fill="#7d2a17"><rect x="34" y="52" width="36" height="32" rx="2"/><rect x="82" y="52" width="36" height="32" rx="2"/><rect x="130" y="52" width="36" height="32" rx="2"/></g></svg>

@@ -106,3 +106,78 @@ PM Hebdomadaire — Cercleuse MS500;DPR-CND-CER-01;7;30;"1. Nettoyer les canaux 
 3. Résistance de soudage : température
 4. Ressorts de pinces
 5. Essai de cerclage et tension";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Quotidien — Générateur de chaleur du séchoir;DPR-SEC-GEN;1;15;"1. Flamme stable, pas d'alarme sur l'armoire
+2. Pression gaz rampe — noter (mbar)
+3. Température de soufflage — noter (°C, 160 max)
+4. Odeur de gaz : contrôle au détecteur portable";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
+PM Annuel — Rampe gaz et générateur du séchoir;DPR-SEC-GEN;365;240;"1. Étanchéité de la rampe à l'eau savonneuse / détecteur
+2. Électrovannes de sécurité : essai de fermeture
+3. Pressostats gaz et air : essai
+4. Électrode et cellule de flamme : nettoyage";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
+PM Hebdomadaire — Ventilateurs du séchoir;DPR-SEC-VCEN;7;60;"1. Ventilateur principal 110 kW : vibrations, température paliers
+2. Courroies et carter de protection en place
+3. 22 ventilateurs de recirculation : bruit, arrêt d'un ventilateur
+4. 4 extracteurs d'air humide : état";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Mensuel — Capteurs du séchoir;DPR-SEC-CAPT;30;60;"1. Comparer les 22 sondes température/humidité à un appareil de référence
+2. Nettoyer les sondes encrassées
+3. Capteurs de pression : prises non bouchées";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Hebdomadaire — Pousseurs et transbordeurs du séchoir;DPR-SEC-POUS;7;60;"1. Fins de course et centrage des transbordeurs
+2. Chaînes des recherches : tension, graissage
+3. Portes : étanchéité et mécanisme
+4. Rails et roues des wagons séchoir";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Quotidien — Four (tournée);DPR-FOU-BRU;1;30;"1. Courbe de cuisson : températures des zones conformes (1 100 °C max)
+2. Points de feu : flamme présente sur chaque groupe
+3. Pression du four (contre-pression porte / voûte)
+4. Fuite gaz : contrôle au détecteur portable sur la panoplie";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
+PM Mensuel — Brûleurs en voûte;DPR-FOU-BRU;30;240;"1. Nettoyer les injecteurs des 110 points de feu
+2. Joints à siège conique : état
+3. Flexibles gaz et air : fissures, date de péremption
+4. Robinets gradués : manœuvre";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
+PM Hebdomadaire — Ventilateurs du four;DPR-FOU-VFUM;7;60;"1. Ventilateur des fumées (37 kW) : vibrations, paliers
+2. Recyclage chaud et récupération : courroies, carters
+3. Refroidissement rapide : lances et vannes pneumatiques
+4. Variateurs : codes défauts relevés";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Mensuel — Wagons four et manutention;DPR-FOU-MAN;30;240;"1. Pousseurs hydrauliques : niveau d'huile, fuites, flexibles
+2. Portes de pré-four, entrée, sortie : étanchéité
+3. Wagons : roues, réfractaire, joints de sable (relever les wagons à réparer)
+4. Treuils et câbles : usure";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Hebdomadaire — Robots Fanuc;DPR-CND-ROB2;7;45;"1. Pince mécanique : usure des doigts, vérins
+2. Câbles et faisceau du robot
+3. Batterie de sauvegarde du contrôleur (alarme)
+4. Essai des portes de cellule et des arrêts d'urgence";"Robot à l'arrêt et consigné (coffret cadenassé), porte de cellule ouverte ; jamais d'entrée en cellule en mode automatique."
+PM Semestriel — Robots Fanuc (graissage);DPR-CND-ROB1;182;180;"1. Graissage des axes selon le manuel Fanuc
+2. Remplacer les batteries du codeur si échéance
+3. Sauvegarde des programmes du robot";"Robot à l'arrêt et consigné (coffret cadenassé), porte de cellule ouverte ; jamais d'entrée en cellule en mode automatique."
+PM Mensuel — Aspiration des poussières;DPR-HSE-ASP;30;60;"1. Manches / filtres : colmatage, déchirure
+2. Dépression aux hottes du laminoir
+3. Vider la trémie à poussière (masque FFP3)
+4. Ventilateur : vibrations";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Hebdomadaire — Détecteur de métaux et aimant;DPR-PRE-DMET;7;15;"1. Essai avec la pièce test : arrêt du tapis
+2. Nettoyer l'aimant permanent
+3. Noter les objets métalliques retirés";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+Contrôle Annuel — Pont roulant 7 t (organisme agréé);DPR-HSE-PONT;365;240;"1. Visite par organisme agréé et rapport classé
+2. Câble, crochet et linguet
+3. Freins de levage et de translation
+4. Fins de course haut / bas
+5. Boîte à boutons et arrêt d'urgence";"Zone balisée sous la charge ; élingues et crochets contrôlés ; personne sous la charge ; casque et chaussures."
+PM Mensuel — Pont roulant et grue;DPR-HSE-PONT;30;30;"1. Essai à vide des mouvements et des fins de course
+2. Câble : fils cassés, écrasement
+3. Crochet et linguet
+4. Élingues : étiquette de charge, état";"Zone balisée sous la charge ; élingues et crochets contrôlés ; personne sous la charge ; casque et chaussures."
+Contrôle Mensuel — Extincteurs et RIA;DPR-HSE-EXT;30;60;"1. Chaque extincteur à sa place, accessible, plombé
+2. Manomètre dans le vert
+3. Date de la vérification annuelle
+4. RIA : dévidoir et vanne";Sans risque particulier.
+Essai Mensuel — Détection gaz et coupure;DPR-HSE-DGAZ;30;30;"1. Essai des détecteurs fixes (gaz étalon)
+2. Essai de la vanne de coupure générale
+3. Signalisation de la coupure lisible";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
+Essai Hebdomadaire — Arrêts d'urgence;DPR-HSE-AU;7;30;"1. Essai d'un arrêt à câble par tapis (rotation)
+2. Essai des coups de poing de la ligne
+3. Réarmement : la machine ne redémarre pas seule";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+Contrôle Mensuel — Garde-corps, passerelles et circulation;DPR-HSE-FOSSE;30;30;"1. Garde-corps de la fosse à argile : complets et fixés
+2. Passerelles des tapis : caillebotis, plinthes
+3. Marquage au sol et miroirs de la boucle camions
+4. Éclairage des zones de passage";Harnais si travail près du vide.
+Contrôle Mensuel — Stock d'EPI;DPR-HSE-EPI;30;30;"1. Compter les EPI en stock (casques, chaussures, gants, lunettes, bouchons, masques FFP2/FFP3)
+2. Remplacer les EPI usés signalés par les chefs d'équipe
+3. Bouchons et masques disponibles à l'entrée des ateliers";Sans risque particulier.

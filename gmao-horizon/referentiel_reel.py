@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Référentiel RÉEL de la maintenance DPR AXXAM, tiré des schémas électriques Marcheluzzo
 (E5 « Quadro 1 Lavorazione », E5A « Quadro 2 Lavorazione », E5B pupitre, E4A « Quadro mobile navetta »)
-et du catalogue Messersì MS500. Les relevés page par page sont dans schemas/*.csv et schemas/*.md.
+et du catalogue Messersì MS500, complété par l'offre Marcheluzzo 2015-063 (séchoir, four, robots, levage) et le plan
+d'implantation 86S-13-027E (moyens de protection). Les relevés page par page sont dans schemas/*.csv et schemas/*.md.
 
 Produit erp-dolibarr/modules/gmao/referentiel/{equipements,plans,pieces}_preparation.csv,
 chargés par init/40-maintenance.php au premier démarrage (ou à importer par l'onglet Import).
@@ -29,8 +30,8 @@ ATELIERS = [
     ('DPR-PRE', "Atelier Préparation de l'argile", 'Caisson doseur, laminoir, répartiteur, convoyeurs 1 à 3 (armoire Quadro 1 Lavorazione)'),
     ('DPR-FAC', 'Atelier Façonnage (étireuse)', 'Mélangeurs, étireuse, pompe à vide, convoyeurs 4 à 6 (armoire Quadro 2 Lavorazione)'),
     ('DPR-TRS', 'Transbordement des wagons (navette)', 'Navette et ses tapis / lanceurs (armoire mobile navetta)'),
-    ('DPR-SEC', 'Séchoir tunnel', 'Schémas à recevoir'),
-    ('DPR-FOU', 'Four tunnel (84 m)', 'Schémas à recevoir'),
+    ('DPR-SEC', 'Séchoir tunnel', 'Schémas à recevoir ; offre 2015-063 : séchoir rapide DT7, 2 lignes de 22 wagons, 486 t/jour, 5,3 h'),
+    ('DPR-FOU', 'Four tunnel (84 m)', 'Schémas à recevoir ; offre 2015-063 : 88,8 × 4,2 m, 26 + 1 wagons, 423 t/jour, cycle 17 h'),
     ('DPR-CND', 'Déchargement, palettisation et cerclage', 'Robot, cercleuse (schémas à recevoir)'),
     ('DPR-ELEC', 'Locaux électriques et automatismes', 'Armoires, pupitre, automates Siemens'),
 ]
@@ -117,6 +118,81 @@ ajout(tag='DPR-CND-CER-01', nom='Cercleuse des paquets de briques', type='machin
 ajout(tag='DPR-CND-CER-01-TETE', nom='Cercleuse — tête de cerclage MS500', type='organe', parent='DPR-CND-CER-01', criticite='A', fabricant='Messersì Packaging', modele='MS500',
       notes='Catalogue pièces REV.13 / 12-2013 ; 202 références dans l\'onglet Pièces, dont 20 conseillées en stock.')
 
+# ------------------------------------------------------------------ offre Marcheluzzo 2015-063 (150 000 t/an) et plan 86S-13-027E
+# Données du contrat, pas des schémas : l'usine construite diffère parfois (étireuse 315 kW installés contre 250 kW à l'offre),
+# chaque fiche porte donc la mention « à vérifier sur site ».
+OFFRE = 'Offre Marcheluzzo 2015-063 REF. {} — à vérifier sur site (plaque, nombre, puissance).'
+def offre(ref, **k):
+    k['notes'] = OFFRE.format(ref) + (' ' + k['notes'] if k.get('notes') else '')
+    k.setdefault('fabricant', 'Marcheluzzo Impianti')
+    k.setdefault('criticite', 'B')
+    ajout(**k)
+ajout(tag='DPR-HSE', nom='Moyens de protection et sécurité du site', type='atelier', parent='DPR-SITE', criticite='A',
+      notes='Aspiration des poussières, détection, levage, incendie, gaz : tout ce qui protège les personnes.')
+# préparation : levage et protection (REF. 133 à 146)
+offre('133', tag='DPR-PRE-AIM', nom="Aimant permanent sur tapis d'argile", type='machine', parent='DPR-PRE', notes='Retient la ferraille avant le laminoir.')
+offre('137', tag='DPR-PRE-DMET', nom="Détecteur de métaux sur le tapis d'argile", type='machine', parent='DPR-PRE', criticite='A', notes='Protège les cylindres du laminoir.')
+offre('136', tag='DPR-HSE-ASP', nom='Aspirateur de poussière des laminoirs (tuyauterie et hottes)', type='machine', parent='DPR-HSE', criticite='A',
+      notes='Protection respiratoire collective de l\'atelier préparation (poussière de silice).')
+offre('145', tag='DPR-HSE-PONT', nom='Pont roulant 7 t du laminoir', type='machine', parent='DPR-HSE', criticite='A',
+      notes='Plan 86S-13-023D « Carroponte » (DWG). Appareil de levage : vérification périodique obligatoire par organisme agréé.')
+offre('146', tag='DPR-HSE-GRUE', nom='Grue à flèche — montage de la filière et du gueulard', type='machine', parent='DPR-HSE', criticite='A', notes='Appareil de levage.')
+offre('105/108', tag='DPR-PRE-TOUR', nom='Tours à charioter les cylindres (rectification)', type='machine', parent='DPR-PRE', notes='Type wdh 100pa.')
+# coupe et chargement du vert (REF. 200 à 217)
+offre('200-202', tag='DPR-FAC-COUP', nom='Ligne de pré-coupe et coupeur à harpe', type='machine', parent='DPR-FAC', criticite='A', notes='Coupes de 200 et 300 mm ; vérin pneumatique d\'escamotage du tapis.')
+offre('203', tag='DPR-FAC-TRIT', nom='Triturateur mono-arbre des déchets verts', type='machine', parent='DPR-FAC')
+offre('204', tag='DPR-FAC-ASC1', nom='Ascenseur de chargement du wagon séchoir', type='machine', parent='DPR-FAC', criticite='A', notes='Zone de chute de charge : accès interdit en marche.')
+offre('205', tag='DPR-FAC-ASC2', nom='Ascenseur de déchargement du wagon séchoir', type='machine', parent='DPR-FAC', criticite='A', notes='Zone de chute de charge : accès interdit en marche.')
+offre('206', tag='DPR-FAC-POUS', nom='Pousseur de déchargement du sec', type='machine', parent='DPR-FAC')
+offre('207-208', tag='DPR-FAC-BAV', nom='Tapis de récupération et remontée des bavures', type='machine', parent='DPR-FAC', notes='Tapis 900 × 20 000 mm et tapis vertical vers le malaxeur.')
+# séchoir rapide DT7 (REF. 350 à 413)
+offre('350/354/360', tag='DPR-SEC-TRB', nom='Transbordeurs du séchoir (entrée, sortie, service)', type='machine', parent='DPR-SEC', criticite='A', notes='Pousseur à bord et dispositif de centrage.')
+offre('351/357', tag='DPR-SEC-PORT', nom='Portes d\'entrée et de sortie des 2 séchoirs', type='machine', parent='DPR-SEC')
+offre('352/353/355/359', tag='DPR-SEC-POUS', nom='Pousseurs et recherches à chaîne du séchoir', type='machine', parent='DPR-SEC', criticite='A', notes='Deux lignes de séchage, 22 + 22 wagons, 5,3 h, 90 °C max.')
+offre('400', tag='DPR-SEC-GEN', nom='Générateur de chaleur à gaz du séchoir (3 000 000 kcal/h)', type='machine', parent='DPR-SEC', criticite='A',
+      notes='Gaz naturel 300 mbar, 160 °C max, rampe gaz et armoire propres.')
+offre('401', tag='DPR-SEC-VCEN', nom='Ventilateur centrifuge principal du séchoir', type='moteur', parent='DPR-SEC', puissance_kw='110', criticite='A', notes='240 000 m³/h, 500 Pa, 150 °C.')
+offre('402', tag='DPR-SEC-VEXT', nom='Ventilateurs axiaux d\'extraction de l\'air humide (2 + 2)', type='moteur', parent='DPR-SEC', puissance_kw='74', notes='4 × 18,5 kW, 60 000 m³/h chacun.')
+offre('403', tag='DPR-SEC-VREC', nom='Ventilateurs de recirculation interne (11 + 11)', type='moteur', parent='DPR-SEC', puissance_kw='121', notes='22 × 5,5 kW, 60 000 m³/h chacun.')
+offre('405-409', tag='DPR-SEC-VAN', nom='Vannes motorisées d\'air du séchoir (récupération, expulsion, air chaud, air humide)', type='organe', parent='DPR-SEC')
+offre('410-412', tag='DPR-SEC-CAPT', nom='Capteurs du séchoir (5 pression, 22 température/humidité, 2 PT100)', type='organe', parent='DPR-SEC', criticite='A')
+offre('413', tag='DPR-ARM-SEC', nom='Armoire électrique du séchoir', type='armoire', parent='DPR-ELEC', criticite='A')
+# empileuse (REF. 500 à 504)
+offre('500-501', tag='DPR-CND-EMP', nom='Tapis de poumon et ligne de programmation de l\'empileuse', type='machine', parent='DPR-CND')
+offre('502', tag='DPR-CND-ROB1', nom='Robot Fanuc de chargement du wagon four (empileuse)', type='machine', parent='DPR-CND', criticite='A', fabricant='Fanuc',
+      notes='Cellule robot : porte de cellule à verrouillage, jamais d\'entrée robot sous tension.')
+# four tunnel (REF. 551 à 616)
+offre('551', tag='DPR-FOU-VFUM', nom='Ventilateur d\'aspiration des fumées', type='moteur', parent='DPR-FOU', puissance_kw='37', criticite='A', notes='80 000 m³/h, variateur.')
+offre('552', tag='DPR-FOU-VRCH', nom='Ventilateurs de recyclage chaud (2)', type='moteur', parent='DPR-FOU', puissance_kw='22', notes='2 × 11 kW, 300 °C.')
+offre('553', tag='DPR-FOU-VREF', nom='Ventilateurs de refroidissement rapide (2)', type='moteur', parent='DPR-FOU', puissance_kw='11', notes='2 × 5,5 kW, 6 lances par côté.')
+offre('554', tag='DPR-FOU-VREC', nom='Ventilateur de récupération haute / basse température', type='moteur', parent='DPR-FOU', puissance_kw='22.5', criticite='A', notes='60 000 m³/h vers le séchoir.')
+offre('555-556', tag='DPR-FOU-VCP', nom='Ventilateurs de contre-pression (porte et voûte, 3 + 3)', type='moteur', parent='DPR-FOU', puissance_kw='11.1', notes='3 × 1,5 kW + 3 × 2,2 kW.')
+offre('557-558', tag='DPR-FOU-BRU', nom='Brûleurs en voûte (10 groupes, 110 points de feu)', type='machine', parent='DPR-FOU', criticite='A',
+      notes='Groupe « Jolly » + 9 groupes de 11 points ; gaz naturel, 1 100 °C max, 340 kcal/kg.')
+ajout(tag='DPR-FOU-GAZ', nom='Panoplie gaz du four et poste de détente', type='organe', parent='DPR-FOU', criticite='A', notes=OFFRE.format('panoplie gaz') + ' Arrivée 0,3 bar, ≈ 890 m³/h séchoir + four.')
+offre('600-614', tag='DPR-FOU-MAN', nom='Manutention des wagons four (pousseurs hydrauliques, transbordeurs, treuils, portes)', type='machine', parent='DPR-FOU', criticite='A',
+      notes='60 wagons, 26 + 1 dans le four ; portes de pré-four, d\'entrée et de sortie.')
+offre('615-616', tag='DPR-ARM-FOU', nom='Armoires électriques du four et de la manutention', type='armoire', parent='DPR-ELEC', criticite='A')
+# déchargement et emballage (REF. 700 à 710)
+offre('700/703', tag='DPR-CND-ROB2', nom='Robots Fanuc de déchargement du cuit (2)', type='machine', parent='DPR-CND', criticite='A', fabricant='Fanuc',
+      notes='Cellule robot : porte de cellule à verrouillage, jamais d\'entrée robot sous tension.')
+offre('702/705', tag='DPR-CND-CER-02', nom='Cercleuses horizontale et verticale de la ligne de paquets', type='machine', parent='DPR-CND')
+offre('704/706/707', tag='DPR-CND-TRP', nom='Transporteurs pas-à-pas et à chaînes des paquets finis', type='machine', parent='DPR-CND')
+offre('708', tag='DPR-CND-NETW', nom='Nettoyeur des wagons four (ventilateur et filtre)', type='machine', parent='DPR-CND')
+offre('710', tag='DPR-ARM-CND', nom='Armoire électrique du déchargement', type='armoire', parent='DPR-ELEC', criticite='A')
+# moyens de protection du site (plan 86S-13-027E et analyse des risques)
+for t, n, cr, nt in (
+    ('DPR-HSE-EXT', 'Extincteurs et RIA du site', 'A', 'Poste de garde, administration, armoires électriques, four, gaz, atelier, dépôt d\'huile.'),
+    ('DPR-HSE-DGAZ', 'Détection gaz et vannes de coupure (séchoir, four, poste de détente)', 'A', 'Coupure générale du gaz repérée et accessible.'),
+    ('DPR-HSE-AU', 'Arrêts d\'urgence et arrêts à câble de la ligne', 'A', 'Coups de poing et câbles des tapis, navette, robots.'),
+    ('DPR-HSE-CEL', 'Clôtures et portes verrouillées des cellules robots', 'A', 'Empileuse et déchargement.'),
+    ('DPR-HSE-FOSSE', 'Garde-corps de la fosse à argile (−3,000 m) et passerelles des tapis', 'A', 'Passerelles latérales du tapis REF. 120.'),
+    ('DPR-HSE-CIRC', 'Circulation des camions et chariots (sens unique, marquage, miroirs)', 'B', 'Boucle de circulation du plan 86S-13-027E.'),
+    ('DPR-HSE-COMP', 'Compresseurs d\'air 7,5 bar et réservoirs', 'B', '2 compresseurs, un en marche et un en secours ; réservoirs sous pression.'),
+    ('DPR-HSE-EPI', 'Stock d\'équipements de protection individuelle', 'A', 'Casques, chaussures, gants, lunettes, bouchons, masques FFP2/FFP3, vêtements anti-chaleur.'),
+):
+    ajout(tag=t, nom=n, type='machine', parent='DPR-HSE', criticite=cr, notes=nt)
+
 tags = [l['tag'] for l in L]
 assert len(tags) == len(set(tags)), 'tag en double'
 for l in L:
@@ -147,6 +223,30 @@ for t, n in (('DPR-ARM-Q1', 'Quadro 1'), ('DPR-ARM-Q2', 'Quadro 2'), ('DPR-ARM-N
          "Électricien habilité uniquement ; armoire consignée ; vérifier l'absence de tension.")
 plan('PM Trimestriel — Sauvegarde automates', 'DPR-AUT-Q1', 91, 60, ["Sauvegarde du programme des CPU 315-2 et 314-2 (navette)", "Sauvegarde du projet de l'écran TP1200", "Vérifier la pile / carte mémoire des CPU", "Noter la version et ranger la copie hors de l'usine"], "Ne rien modifier au programme sans l'accord du responsable.")
 plan('PM Hebdomadaire — Cercleuse MS500', 'DPR-CND-CER-01', 7, 30, ["Nettoyer les canaux de feuillard", "Lame et lame de soudage : usure", "Résistance de soudage : température", "Ressorts de pinces", "Essai de cerclage et tension"])
+# séchoir, four, robots et moyens de protection (offre 2015-063)
+GAZ = "Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
+ROBOT = "Robot à l'arrêt et consigné (coffret cadenassé), porte de cellule ouverte ; jamais d'entrée en cellule en mode automatique."
+LEVAGE = "Zone balisée sous la charge ; élingues et crochets contrôlés ; personne sous la charge ; casque et chaussures."
+plan('PM Quotidien — Générateur de chaleur du séchoir', 'DPR-SEC-GEN', 1, 15, ["Flamme stable, pas d'alarme sur l'armoire", "Pression gaz rampe — noter (mbar)", "Température de soufflage — noter (°C, 160 max)", "Odeur de gaz : contrôle au détecteur portable"], GAZ)
+plan('PM Annuel — Rampe gaz et générateur du séchoir', 'DPR-SEC-GEN', 365, 240, ["Étanchéité de la rampe à l'eau savonneuse / détecteur", "Électrovannes de sécurité : essai de fermeture", "Pressostats gaz et air : essai", "Électrode et cellule de flamme : nettoyage"], GAZ)
+plan('PM Hebdomadaire — Ventilateurs du séchoir', 'DPR-SEC-VCEN', 7, 60, ["Ventilateur principal 110 kW : vibrations, température paliers", "Courroies et carter de protection en place", "22 ventilateurs de recirculation : bruit, arrêt d'un ventilateur", "4 extracteurs d'air humide : état"])
+plan('PM Mensuel — Capteurs du séchoir', 'DPR-SEC-CAPT', 30, 60, ["Comparer les 22 sondes température/humidité à un appareil de référence", "Nettoyer les sondes encrassées", "Capteurs de pression : prises non bouchées"])
+plan('PM Hebdomadaire — Pousseurs et transbordeurs du séchoir', 'DPR-SEC-POUS', 7, 60, ["Fins de course et centrage des transbordeurs", "Chaînes des recherches : tension, graissage", "Portes : étanchéité et mécanisme", "Rails et roues des wagons séchoir"])
+plan('PM Quotidien — Four (tournée)', 'DPR-FOU-BRU', 1, 30, ["Courbe de cuisson : températures des zones conformes (1 100 °C max)", "Points de feu : flamme présente sur chaque groupe", "Pression du four (contre-pression porte / voûte)", "Fuite gaz : contrôle au détecteur portable sur la panoplie"], GAZ)
+plan('PM Mensuel — Brûleurs en voûte', 'DPR-FOU-BRU', 30, 240, ["Nettoyer les injecteurs des 110 points de feu", "Joints à siège conique : état", "Flexibles gaz et air : fissures, date de péremption", "Robinets gradués : manœuvre"], GAZ)
+plan('PM Hebdomadaire — Ventilateurs du four', 'DPR-FOU-VFUM', 7, 60, ["Ventilateur des fumées (37 kW) : vibrations, paliers", "Recyclage chaud et récupération : courroies, carters", "Refroidissement rapide : lances et vannes pneumatiques", "Variateurs : codes défauts relevés"])
+plan('PM Mensuel — Wagons four et manutention', 'DPR-FOU-MAN', 30, 240, ["Pousseurs hydrauliques : niveau d'huile, fuites, flexibles", "Portes de pré-four, entrée, sortie : étanchéité", "Wagons : roues, réfractaire, joints de sable (relever les wagons à réparer)", "Treuils et câbles : usure"])
+plan('PM Hebdomadaire — Robots Fanuc', 'DPR-CND-ROB2', 7, 45, ["Pince mécanique : usure des doigts, vérins", "Câbles et faisceau du robot", "Batterie de sauvegarde du contrôleur (alarme)", "Essai des portes de cellule et des arrêts d'urgence"], ROBOT)
+plan('PM Semestriel — Robots Fanuc (graissage)', 'DPR-CND-ROB1', 182, 180, ["Graissage des axes selon le manuel Fanuc", "Remplacer les batteries du codeur si échéance", "Sauvegarde des programmes du robot"], ROBOT)
+plan('PM Mensuel — Aspiration des poussières', 'DPR-HSE-ASP', 30, 60, ["Manches / filtres : colmatage, déchirure", "Dépression aux hottes du laminoir", "Vider la trémie à poussière (masque FFP3)", "Ventilateur : vibrations"])
+plan('PM Hebdomadaire — Détecteur de métaux et aimant', 'DPR-PRE-DMET', 7, 15, ["Essai avec la pièce test : arrêt du tapis", "Nettoyer l'aimant permanent", "Noter les objets métalliques retirés"])
+plan('Contrôle Annuel — Pont roulant 7 t (organisme agréé)', 'DPR-HSE-PONT', 365, 240, ["Visite par organisme agréé et rapport classé", "Câble, crochet et linguet", "Freins de levage et de translation", "Fins de course haut / bas", "Boîte à boutons et arrêt d'urgence"], LEVAGE)
+plan('PM Mensuel — Pont roulant et grue', 'DPR-HSE-PONT', 30, 30, ["Essai à vide des mouvements et des fins de course", "Câble : fils cassés, écrasement", "Crochet et linguet", "Élingues : étiquette de charge, état"], LEVAGE)
+plan('Contrôle Mensuel — Extincteurs et RIA', 'DPR-HSE-EXT', 30, 60, ["Chaque extincteur à sa place, accessible, plombé", "Manomètre dans le vert", "Date de la vérification annuelle", "RIA : dévidoir et vanne"], "Sans risque particulier.")
+plan('Essai Mensuel — Détection gaz et coupure', 'DPR-HSE-DGAZ', 30, 30, ["Essai des détecteurs fixes (gaz étalon)", "Essai de la vanne de coupure générale", "Signalisation de la coupure lisible"], GAZ)
+plan('Essai Hebdomadaire — Arrêts d\'urgence', 'DPR-HSE-AU', 7, 30, ["Essai d'un arrêt à câble par tapis (rotation)", "Essai des coups de poing de la ligne", "Réarmement : la machine ne redémarre pas seule"])
+plan('Contrôle Mensuel — Garde-corps, passerelles et circulation', 'DPR-HSE-FOSSE', 30, 30, ["Garde-corps de la fosse à argile : complets et fixés", "Passerelles des tapis : caillebotis, plinthes", "Marquage au sol et miroirs de la boucle camions", "Éclairage des zones de passage"], "Harnais si travail près du vide.")
+plan('Contrôle Mensuel — Stock d\'EPI', 'DPR-HSE-EPI', 30, 30, ["Compter les EPI en stock (casques, chaussures, gants, lunettes, bouchons, masques FFP2/FFP3)", "Remplacer les EPI usés signalés par les chefs d'équipe", "Bouchons et masques disponibles à l'entrée des ateliers"], "Sans risque particulier.")
 for p in P:
     assert p[1] in tags, p
 
@@ -168,6 +268,31 @@ PI = [
     ['Graisse paliers EP2', '', 'DPR-PRE-LAM', 'kg', 0, 0],
     ['Fin de course de translation de la navette', 'à relever', 'DPR-NAV', 'pièce', 0, 1],
     ['Détecteur de proximité (PX) de la navette', 'à relever', 'DPR-NAV', 'pièce', 0, 2],
+    ['Courroies du ventilateur principal du séchoir', 'réf. sur courroie', 'DPR-SEC-VCEN', 'jeu', 0, 1],
+    ['Moteur 5,5 kW de ventilateur de recirculation', 'à relever', 'DPR-SEC-VREC', 'pièce', 0, 1],
+    ['Sonde température / humidité du séchoir', 'à relever', 'DPR-SEC-CAPT', 'pièce', 0, 2],
+    ['Sonde PT100', '', 'DPR-SEC-CAPT', 'pièce', 0, 1],
+    ['Injecteur de brûleur en voûte', 'à relever', 'DPR-FOU-BRU', 'pièce', 0, 5],
+    ['Flexible gaz de brûleur', 'à relever', 'DPR-FOU-BRU', 'pièce', 0, 5],
+    ['Flexible air de brûleur', 'à relever', 'DPR-FOU-BRU', 'pièce', 0, 5],
+    ['Joint à siège conique de brûleur', '', 'DPR-FOU-BRU', 'pièce', 0, 10],
+    ['Courroies du ventilateur des fumées', 'réf. sur courroie', 'DPR-FOU-VFUM', 'jeu', 0, 1],
+    ['Briques réfractaires de wagon four', 'à relever', 'DPR-FOU-MAN', 'pièce', 0, 0],
+    ['Roue de wagon four', 'à relever', 'DPR-FOU-MAN', 'pièce', 0, 4],
+    ['Huile hydraulique des pousseurs', 'HM 46 (à confirmer)', 'DPR-FOU-MAN', 'litre', 0, 0],
+    ['Batteries du contrôleur Fanuc', 'à relever', 'DPR-CND-ROB2', 'jeu', 0, 1],
+    ['Doigts de pince de robot', 'à relever', 'DPR-CND-ROB2', 'jeu', 0, 1],
+    ['Manches filtrantes de l\'aspiration des poussières', 'à relever', 'DPR-HSE-ASP', 'pièce', 0, 0],
+    ['Pièce test du détecteur de métaux', '', 'DPR-PRE-DMET', 'pièce', 0, 1],
+    ['Élingue textile avec étiquette de charge', '', 'DPR-HSE-PONT', 'pièce', 0, 2],
+    ['Extincteur poudre 6 kg (rechange)', '', 'DPR-HSE-EXT', 'pièce', 0, 2],
+    ['Extincteur CO₂ 5 kg (armoires électriques)', '', 'DPR-HSE-EXT', 'pièce', 0, 1],
+    ['Bouchons d\'oreilles', 'SNR ≥ 30 dB', 'DPR-HSE-EPI', 'paire', 0, 200],
+    ['Masque FFP3 (poussière de silice)', 'EN 149', 'DPR-HSE-EPI', 'pièce', 0, 100],
+    ['Gants anti-chaleur', 'EN 407', 'DPR-HSE-EPI', 'paire', 0, 10],
+    ['Lunettes de protection', 'EN 166', 'DPR-HSE-EPI', 'pièce', 0, 20],
+    ['Casque de chantier', 'EN 397', 'DPR-HSE-EPI', 'pièce', 0, 10],
+    ['Gilet haute visibilité', 'EN ISO 20471', 'DPR-HSE-EPI', 'pièce', 0, 10],
 ]
 with open(SCH / 'MS500_pieces.csv', encoding='utf-8') as f:
     for r in csv.DictReader(f, delimiter=';'):

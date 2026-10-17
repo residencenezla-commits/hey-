@@ -3,8 +3,8 @@ DPR-SITE;Briqueterie DPR AXXAM — ZAC Helouane;site;;;;;;;B;;;Ighzer Amokrane (
 DPR-PRE;Atelier Préparation de l'argile;atelier;DPR-SITE;;;;;;B;;;Caisson doseur, laminoir, répartiteur, convoyeurs 1 à 3 (armoire Quadro 1 Lavorazione)
 DPR-FAC;Atelier Façonnage (étireuse);atelier;DPR-SITE;;;;;;B;;;Mélangeurs, étireuse, pompe à vide, convoyeurs 4 à 6 (armoire Quadro 2 Lavorazione)
 DPR-TRS;Transbordement des wagons (navette);atelier;DPR-SITE;;;;;;B;;;Navette et ses tapis / lanceurs (armoire mobile navetta)
-DPR-SEC;Séchoir tunnel;atelier;DPR-SITE;;;;;;B;;;Schémas à recevoir
-DPR-FOU;Four tunnel (84 m);atelier;DPR-SITE;;;;;;B;;;Schémas à recevoir
+DPR-SEC;Séchoir tunnel;atelier;DPR-SITE;;;;;;B;;;"Schémas à recevoir ; offre 2015-063 : séchoir rapide DT7, 2 lignes de 22 wagons, 486 t/jour, 5,3 h"
+DPR-FOU;Four tunnel (84 m);atelier;DPR-SITE;;;;;;B;;;"Schémas à recevoir ; offre 2015-063 : 88,8 × 4,2 m, 26 + 1 wagons, 423 t/jour, cycle 17 h"
 DPR-CND;Déchargement, palettisation et cerclage;atelier;DPR-SITE;;;;;;B;;;Robot, cercleuse (schémas à recevoir)
 DPR-ELEC;Locaux électriques et automatismes;atelier;DPR-SITE;;;;;;B;;;Armoires, pupitre, automates Siemens
 DPR-ARM-Q1;Armoire Quadro 1 Lavorazione — préparation;armoire;DPR-ELEC;Quadro 1 Lavorazione (E5);;;;300-375;A;Marcheluzzo Impianti;;Commande 1361_100, schéma E5 VS.1 du 16/01/2014, 3×400 V 50 Hz. Automate Siemens S7-300 CPU 315-2 PN/DP (6ES7 315-2EH14-0AB0), folio 340.
@@ -90,3 +90,50 @@ DPR-NAV-215SZ4;Navette — sectionneur local lanceur 11 droit;organe;DPR-NAV;Arm
 DPR-NAV-11S2;Navette — arrêt d'urgence (coup de poing);organe;DPR-NAV;Armoire mobile navette (E4A);11S2 211K1 210K1;;;211;A;;;fungo emergenza 11S2 (repère d'un autre schéma, bornes 211.4/211.5 « EMERGENZE ESTERNE ») → relais 211K1 24Vdc → 210K1 Siemens 3RT2023-1AL20 (coupure auxiliaires 220V) | retour API I20.5
 DPR-CND-CER-01;Cercleuse des paquets de briques;machine;DPR-CND;;;;;;A;Messersì Packaging;;"Tête de cerclage MS500 ; schéma électrique à recevoir"
 DPR-CND-CER-01-TETE;Cercleuse — tête de cerclage MS500;organe;DPR-CND-CER-01;;;;;;A;Messersì Packaging;MS500;"Catalogue pièces REV.13 / 12-2013 ; 202 références dans l'onglet Pièces, dont 20 conseillées en stock."
+DPR-HSE;Moyens de protection et sécurité du site;atelier;DPR-SITE;;;;;;A;;;Aspiration des poussières, détection, levage, incendie, gaz : tout ce qui protège les personnes.
+DPR-PRE-AIM;Aimant permanent sur tapis d'argile;machine;DPR-PRE;;;;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 133 — à vérifier sur site (plaque, nombre, puissance). Retient la ferraille avant le laminoir.
+DPR-PRE-DMET;Détecteur de métaux sur le tapis d'argile;machine;DPR-PRE;;;;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 137 — à vérifier sur site (plaque, nombre, puissance). Protège les cylindres du laminoir.
+DPR-HSE-ASP;Aspirateur de poussière des laminoirs (tuyauterie et hottes);machine;DPR-HSE;;;;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 136 — à vérifier sur site (plaque, nombre, puissance). Protection respiratoire collective de l'atelier préparation (poussière de silice).
+DPR-HSE-PONT;Pont roulant 7 t du laminoir;machine;DPR-HSE;;;;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 145 — à vérifier sur site (plaque, nombre, puissance). Plan 86S-13-023D « Carroponte » (DWG). Appareil de levage : vérification périodique obligatoire par organisme agréé.
+DPR-HSE-GRUE;Grue à flèche — montage de la filière et du gueulard;machine;DPR-HSE;;;;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 146 — à vérifier sur site (plaque, nombre, puissance). Appareil de levage.
+DPR-PRE-TOUR;Tours à charioter les cylindres (rectification);machine;DPR-PRE;;;;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 105/108 — à vérifier sur site (plaque, nombre, puissance). Type wdh 100pa.
+DPR-FAC-COUP;Ligne de pré-coupe et coupeur à harpe;machine;DPR-FAC;;;;;;A;Marcheluzzo Impianti;;"Offre Marcheluzzo 2015-063 REF. 200-202 — à vérifier sur site (plaque, nombre, puissance). Coupes de 200 et 300 mm ; vérin pneumatique d'escamotage du tapis."
+DPR-FAC-TRIT;Triturateur mono-arbre des déchets verts;machine;DPR-FAC;;;;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 203 — à vérifier sur site (plaque, nombre, puissance).
+DPR-FAC-ASC1;Ascenseur de chargement du wagon séchoir;machine;DPR-FAC;;;;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 204 — à vérifier sur site (plaque, nombre, puissance). Zone de chute de charge : accès interdit en marche.
+DPR-FAC-ASC2;Ascenseur de déchargement du wagon séchoir;machine;DPR-FAC;;;;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 205 — à vérifier sur site (plaque, nombre, puissance). Zone de chute de charge : accès interdit en marche.
+DPR-FAC-POUS;Pousseur de déchargement du sec;machine;DPR-FAC;;;;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 206 — à vérifier sur site (plaque, nombre, puissance).
+DPR-FAC-BAV;Tapis de récupération et remontée des bavures;machine;DPR-FAC;;;;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 207-208 — à vérifier sur site (plaque, nombre, puissance). Tapis 900 × 20 000 mm et tapis vertical vers le malaxeur.
+DPR-SEC-TRB;Transbordeurs du séchoir (entrée, sortie, service);machine;DPR-SEC;;;;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 350/354/360 — à vérifier sur site (plaque, nombre, puissance). Pousseur à bord et dispositif de centrage.
+DPR-SEC-PORT;Portes d'entrée et de sortie des 2 séchoirs;machine;DPR-SEC;;;;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 351/357 — à vérifier sur site (plaque, nombre, puissance).
+DPR-SEC-POUS;Pousseurs et recherches à chaîne du séchoir;machine;DPR-SEC;;;;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 352/353/355/359 — à vérifier sur site (plaque, nombre, puissance). Deux lignes de séchage, 22 + 22 wagons, 5,3 h, 90 °C max.
+DPR-SEC-GEN;Générateur de chaleur à gaz du séchoir (3 000 000 kcal/h);machine;DPR-SEC;;;;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 400 — à vérifier sur site (plaque, nombre, puissance). Gaz naturel 300 mbar, 160 °C max, rampe gaz et armoire propres.
+DPR-SEC-VCEN;Ventilateur centrifuge principal du séchoir;moteur;DPR-SEC;;;110;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 401 — à vérifier sur site (plaque, nombre, puissance). 240 000 m³/h, 500 Pa, 150 °C.
+DPR-SEC-VEXT;Ventilateurs axiaux d'extraction de l'air humide (2 + 2);moteur;DPR-SEC;;;74;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 402 — à vérifier sur site (plaque, nombre, puissance). 4 × 18,5 kW, 60 000 m³/h chacun.
+DPR-SEC-VREC;Ventilateurs de recirculation interne (11 + 11);moteur;DPR-SEC;;;121;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 403 — à vérifier sur site (plaque, nombre, puissance). 22 × 5,5 kW, 60 000 m³/h chacun.
+DPR-SEC-VAN;Vannes motorisées d'air du séchoir (récupération, expulsion, air chaud, air humide);organe;DPR-SEC;;;;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 405-409 — à vérifier sur site (plaque, nombre, puissance).
+DPR-SEC-CAPT;Capteurs du séchoir (5 pression, 22 température/humidité, 2 PT100);organe;DPR-SEC;;;;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 410-412 — à vérifier sur site (plaque, nombre, puissance).
+DPR-ARM-SEC;Armoire électrique du séchoir;armoire;DPR-ELEC;;;;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 413 — à vérifier sur site (plaque, nombre, puissance).
+DPR-CND-EMP;Tapis de poumon et ligne de programmation de l'empileuse;machine;DPR-CND;;;;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 500-501 — à vérifier sur site (plaque, nombre, puissance).
+DPR-CND-ROB1;Robot Fanuc de chargement du wagon four (empileuse);machine;DPR-CND;;;;;;A;Fanuc;;Offre Marcheluzzo 2015-063 REF. 502 — à vérifier sur site (plaque, nombre, puissance). Cellule robot : porte de cellule à verrouillage, jamais d'entrée robot sous tension.
+DPR-FOU-VFUM;Ventilateur d'aspiration des fumées;moteur;DPR-FOU;;;37;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 551 — à vérifier sur site (plaque, nombre, puissance). 80 000 m³/h, variateur.
+DPR-FOU-VRCH;Ventilateurs de recyclage chaud (2);moteur;DPR-FOU;;;22;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 552 — à vérifier sur site (plaque, nombre, puissance). 2 × 11 kW, 300 °C.
+DPR-FOU-VREF;Ventilateurs de refroidissement rapide (2);moteur;DPR-FOU;;;11;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 553 — à vérifier sur site (plaque, nombre, puissance). 2 × 5,5 kW, 6 lances par côté.
+DPR-FOU-VREC;Ventilateur de récupération haute / basse température;moteur;DPR-FOU;;;22.5;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 554 — à vérifier sur site (plaque, nombre, puissance). 60 000 m³/h vers le séchoir.
+DPR-FOU-VCP;Ventilateurs de contre-pression (porte et voûte, 3 + 3);moteur;DPR-FOU;;;11.1;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 555-556 — à vérifier sur site (plaque, nombre, puissance). 3 × 1,5 kW + 3 × 2,2 kW.
+DPR-FOU-BRU;Brûleurs en voûte (10 groupes, 110 points de feu);machine;DPR-FOU;;;;;;A;Marcheluzzo Impianti;;"Offre Marcheluzzo 2015-063 REF. 557-558 — à vérifier sur site (plaque, nombre, puissance). Groupe « Jolly » + 9 groupes de 11 points ; gaz naturel, 1 100 °C max, 340 kcal/kg."
+DPR-FOU-GAZ;Panoplie gaz du four et poste de détente;organe;DPR-FOU;;;;;;A;;;Offre Marcheluzzo 2015-063 REF. panoplie gaz — à vérifier sur site (plaque, nombre, puissance). Arrivée 0,3 bar, ≈ 890 m³/h séchoir + four.
+DPR-FOU-MAN;Manutention des wagons four (pousseurs hydrauliques, transbordeurs, treuils, portes);machine;DPR-FOU;;;;;;A;Marcheluzzo Impianti;;"Offre Marcheluzzo 2015-063 REF. 600-614 — à vérifier sur site (plaque, nombre, puissance). 60 wagons, 26 + 1 dans le four ; portes de pré-four, d'entrée et de sortie."
+DPR-ARM-FOU;Armoires électriques du four et de la manutention;armoire;DPR-ELEC;;;;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 615-616 — à vérifier sur site (plaque, nombre, puissance).
+DPR-CND-ROB2;Robots Fanuc de déchargement du cuit (2);machine;DPR-CND;;;;;;A;Fanuc;;Offre Marcheluzzo 2015-063 REF. 700/703 — à vérifier sur site (plaque, nombre, puissance). Cellule robot : porte de cellule à verrouillage, jamais d'entrée robot sous tension.
+DPR-CND-CER-02;Cercleuses horizontale et verticale de la ligne de paquets;machine;DPR-CND;;;;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 702/705 — à vérifier sur site (plaque, nombre, puissance).
+DPR-CND-TRP;Transporteurs pas-à-pas et à chaînes des paquets finis;machine;DPR-CND;;;;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 704/706/707 — à vérifier sur site (plaque, nombre, puissance).
+DPR-CND-NETW;Nettoyeur des wagons four (ventilateur et filtre);machine;DPR-CND;;;;;;B;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 708 — à vérifier sur site (plaque, nombre, puissance).
+DPR-ARM-CND;Armoire électrique du déchargement;armoire;DPR-ELEC;;;;;;A;Marcheluzzo Impianti;;Offre Marcheluzzo 2015-063 REF. 710 — à vérifier sur site (plaque, nombre, puissance).
+DPR-HSE-EXT;Extincteurs et RIA du site;machine;DPR-HSE;;;;;;A;;;Poste de garde, administration, armoires électriques, four, gaz, atelier, dépôt d'huile.
+DPR-HSE-DGAZ;Détection gaz et vannes de coupure (séchoir, four, poste de détente);machine;DPR-HSE;;;;;;A;;;Coupure générale du gaz repérée et accessible.
+DPR-HSE-AU;Arrêts d'urgence et arrêts à câble de la ligne;machine;DPR-HSE;;;;;;A;;;Coups de poing et câbles des tapis, navette, robots.
+DPR-HSE-CEL;Clôtures et portes verrouillées des cellules robots;machine;DPR-HSE;;;;;;A;;;Empileuse et déchargement.
+DPR-HSE-FOSSE;Garde-corps de la fosse à argile (−3,000 m) et passerelles des tapis;machine;DPR-HSE;;;;;;A;;;Passerelles latérales du tapis REF. 120.
+DPR-HSE-CIRC;Circulation des camions et chariots (sens unique, marquage, miroirs);machine;DPR-HSE;;;;;;B;;;Boucle de circulation du plan 86S-13-027E.
+DPR-HSE-COMP;Compresseurs d'air 7,5 bar et réservoirs;machine;DPR-HSE;;;;;;B;;;"2 compresseurs, un en marche et un en secours ; réservoirs sous pression."
+DPR-HSE-EPI;Stock d'équipements de protection individuelle;machine;DPR-HSE;;;;;;A;;;Casques, chaussures, gants, lunettes, bouchons, masques FFP2/FFP3, vêtements anti-chaleur.

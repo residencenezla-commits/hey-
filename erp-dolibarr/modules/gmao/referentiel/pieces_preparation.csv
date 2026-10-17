@@ -15,6 +15,31 @@ Huile réducteurs (grade selon plaque);ISO VG 220/320;DPR-PRE-LAM;litre;0;0
 Graisse paliers EP2;;DPR-PRE-LAM;kg;0;0
 Fin de course de translation de la navette;à relever;DPR-NAV;pièce;0;1
 Détecteur de proximité (PX) de la navette;à relever;DPR-NAV;pièce;0;2
+Courroies du ventilateur principal du séchoir;réf. sur courroie;DPR-SEC-VCEN;jeu;0;1
+Moteur 5,5 kW de ventilateur de recirculation;à relever;DPR-SEC-VREC;pièce;0;1
+Sonde température / humidité du séchoir;à relever;DPR-SEC-CAPT;pièce;0;2
+Sonde PT100;;DPR-SEC-CAPT;pièce;0;1
+Injecteur de brûleur en voûte;à relever;DPR-FOU-BRU;pièce;0;5
+Flexible gaz de brûleur;à relever;DPR-FOU-BRU;pièce;0;5
+Flexible air de brûleur;à relever;DPR-FOU-BRU;pièce;0;5
+Joint à siège conique de brûleur;;DPR-FOU-BRU;pièce;0;10
+Courroies du ventilateur des fumées;réf. sur courroie;DPR-FOU-VFUM;jeu;0;1
+Briques réfractaires de wagon four;à relever;DPR-FOU-MAN;pièce;0;0
+Roue de wagon four;à relever;DPR-FOU-MAN;pièce;0;4
+Huile hydraulique des pousseurs;HM 46 (à confirmer);DPR-FOU-MAN;litre;0;0
+Batteries du contrôleur Fanuc;à relever;DPR-CND-ROB2;jeu;0;1
+Doigts de pince de robot;à relever;DPR-CND-ROB2;jeu;0;1
+Manches filtrantes de l'aspiration des poussières;à relever;DPR-HSE-ASP;pièce;0;0
+Pièce test du détecteur de métaux;;DPR-PRE-DMET;pièce;0;1
+Élingue textile avec étiquette de charge;;DPR-HSE-PONT;pièce;0;2
+Extincteur poudre 6 kg (rechange);;DPR-HSE-EXT;pièce;0;2
+Extincteur CO₂ 5 kg (armoires électriques);;DPR-HSE-EXT;pièce;0;1
+Bouchons d'oreilles;SNR ≥ 30 dB;DPR-HSE-EPI;paire;0;200
+Masque FFP3 (poussière de silice);EN 149;DPR-HSE-EPI;pièce;0;100
+Gants anti-chaleur;EN 407;DPR-HSE-EPI;paire;0;10
+Lunettes de protection;EN 166;DPR-HSE-EPI;pièce;0;20
+Casque de chantier;EN 397;DPR-HSE-EPI;pièce;0;10
+Gilet haute visibilité;EN ISO 20471;DPR-HSE-EPI;pièce;0;10
 Couverture;M3 02001;DPR-CND-CER-01-TETE;pièce;0;0
 Plaque avant gauche;M3 02003;DPR-CND-CER-01-TETE;pièce;0;0
 Plaque postérieure gauche;M3 02004;DPR-CND-CER-01-TETE;pièce;0;0
