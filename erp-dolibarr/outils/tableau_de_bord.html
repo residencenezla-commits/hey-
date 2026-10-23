@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tableau de bord DPR AXXAM</title>
+<style>
+:root{--fond:#f7f2ec;--carte:#fff;--texte:#2a1d17;--doux:#6b5a51;--ligne:#e7d8c9;--grille:#efe4d8;
+  --brique:#b4472b;--bleu:#3d74b0;--neutre:#9a8b82;--entete:#2a1d17;--ok:#2e7d4f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--fond:#1b1411;--carte:#261c18;--texte:#f3e6d8;--doux:#c9b3a5;--ligne:#3b2d27;--grille:#33261f;--brique:#d0613f;--bleu:#5b93cf;--neutre:#8a7d76;--entete:#120c0a}}
+:root[data-theme="dark"]{--fond:#1b1411;--carte:#261c18;--texte:#f3e6d8;--doux:#c9b3a5;--ligne:#3b2d27;--grille:#33261f;--brique:#d0613f;--bleu:#5b93cf;--neutre:#8a7d76;--entete:#120c0a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;background:var(--fond);color:var(--texte);font-size:14px;line-height:1.45}
+header{background:var(--entete);color:#fff;padding:22px 20px}
+header .wrap{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+header h1{font-size:22px;font-weight:800;overflow-wrap:anywhere}
+header p{opacity:.75;font-size:13px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+main .wrap{padding-top:20px;padding-bottom:40px;display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+.tuiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:12px}
+.tuile{min-width:0;background:var(--carte);border:1px solid var(--ligne);border-radius:12px;padding:14px}
+.tuile small{display:block;color:var(--doux);font-size:12px}
+.tuile b{display:block;font-size:clamp(17px,4.6vw,22px);white-space:nowrap;font-weight:800;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.tuile span{font-size:11.5px;color:var(--doux)}
+.carte{min-width:0;background:var(--carte);border:1px solid var(--ligne);border-radius:12px;padding:16px}
+.carte h2{font-size:15px;font-weight:800}
+.carte .sous{color:var(--doux);font-size:12px;margin:2px 0 10px}
+.deux{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.legende{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--doux);margin-bottom:6px}
+.legende i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{fill:var(--doux);font-size:11px}
+.bulle{position:fixed;pointer-events:none;background:var(--entete);color:#fff;padding:7px 9px;border-radius:7px;font-size:12px;opacity:0;transition:opacity .12s;z-index:9;max-width:260px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{text-align:left;color:var(--doux);font-weight:600;border-bottom:1px solid var(--ligne);padding:6px 6px}
+td{border-bottom:1px solid var(--grille);padding:6px 6px;vertical-align:middle}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.barre{height:7px;border-radius:0 4px 4px 0;background:var(--brique);min-width:2px}
+.alerte{border-left:3px solid var(--brique);background:var(--carte);border-radius:0 8px 8px 0;padding:10px 12px;font-size:12.5px}
+.voir{background:none;border:1px solid var(--ligne);color:var(--doux);border-radius:7px;padding:3px 9px;font-size:12px;cursor:pointer;float:right}
+.cache{display:none}
+.defile{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.defile table{min-width:420px}
+footer{color:var(--doux);font-size:11.5px;text-align:center;padding:16px}
+@media (max-width:820px){.deux{grid-template-columns:minmax(0,1fr)}}
+@media print{body{background:#fff}.voir{display:none}.carte,.tuile{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div><h1 id="titre">Tableau de bord</h1><p id="periode"></p></div>
+  <p id="genere"></p>
+</div></header>
+<main><div class="wrap">
+  <div class="tuiles" id="tuiles"></div>
+  <div class="alerte" id="alerte" hidden></div>
+
+  <section class="carte">
+    <button class="voir" data-cible="tabCa">Tableau</button>
+    <h2>Chiffre d'affaires par mois</h2>
+    <p class="sous">Ventes hors taxes (comptes 70), par compte de vente, en dinars</p>
+    <div class="legende" id="legCa"></div>
+    <div id="graphCa"></div>
+    <div class="cache defile" id="tabCa"></div>
+  </section>
+
+  <div class="deux">
+    <section class="carte">
+      <h2>Trésorerie par compte</h2>
+      <p class="sous">Solde comptable à ce jour (débiteur = disponible, créditeur = découvert)</p>
+      <div class="legende"><span><i style="background:var(--bleu)"></i>Solde débiteur</span><span><i style="background:var(--brique)"></i>Solde créditeur</span></div>
+      <div id="graphTreso"></div>
+    </section>
+    <section class="carte">
+      <h2>TVA et droit de timbre par mois</h2>
+      <p class="sous">TVA collectée et timbre (44720) des journaux de vente ; TVA déductible brute (comptes 4456)</p>
+      <div class="defile" id="tabTaxes"></div>
+    </section>
+  </div>
+
+  <div class="deux">
+    <section class="carte">
+      <h2>Principaux clients — ventes briqueterie</h2>
+      <p class="sous">Montant facturé TTC au journal 073, avec le code tiers de PC Compta</p>
+      <div class="defile" id="tabClients"></div>
+    </section>
+    <section class="carte">
+      <h2>Principales charges</h2>
+      <p class="sous">Comptes de classe 6, hors réouverture</p>
+      <div class="defile" id="tabCharges"></div>
+    </section>
+  </div>
+
+  <section class="carte">
+    <h2>Fraîcheur des données</h2>
+    <p class="sous">Dernière écriture de chaque journal : un mois récent peut être incomplet</p>
+    <div class="defile" id="tabJournaux"></div>
+  </section>
+</div></main>
+<footer id="pied"></footer>
+<div class="bulle" id="bulle"></div>
+
+<script>
+const D=/*DONNEES*/null;
+const $=id=>document.getElementById(id);
+const nf=new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0});
+const da=v=>nf.format(Math.round(v))+' DA';
+const court=v=>{const a=Math.abs(v);return (a>=1e9?(v/1e9).toFixed(2).replace('.',',')+' Md':a>=1e6?(v/1e6).toFixed(1).replace('.',',')+' M':a>=1e3?nf.format(v/1e3)+' k':nf.format(v))+' DA'};
+const MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+const nomMois=m=>MOIS[+m.slice(5,7)-1]+' '+m.slice(2,4);
+const dateFr=d=>d?d.slice(8,10)+'/'+d.slice(5,7)+'/'+d.slice(0,4):'';
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const bulle=$('bulle');
+function montrer(e,t){bulle.innerHTML=t;bulle.style.opacity=1;bulle.style.left=Math.min(e.clientX+12,innerWidth-270)+'px';bulle.style.top=(e.clientY+12)+'px'}
+function cacher(){bulle.style.opacity=0}
+const NS='http://www.w3.org/2000/svg';
+const el=(t,a,p)=>{const x=document.createElementNS(NS,t);for(const k in a)x.setAttribute(k,a[k]);p&&p.appendChild(x);return x};
+const echelle=max=>{const p=Math.pow(10,Math.floor(Math.log10(max||1)));const pas=[1,2,2.5,5,10].map(k=>k*p).find(s=>max/s<=5);return {pas,haut:Math.ceil(max/pas)*pas}};
+
+$('titre').textContent=`Tableau de bord ${D.societe} — exercice ${D.exercice}`;
+$('periode').textContent=`Du ${dateFr(D.du)} au ${dateFr(D.au)} · grand livre de l'ERP`;
+$('genere').textContent=`Généré le ${D.genere}`;
+$('pied').textContent=`Source : grand livre de l'ERP — ${nf.format(D.lignes_pcc)} lignes reprises de PC Compta, ${nf.format(D.lignes_erp)} lignes saisies dans l'ERP. Montants en dinars algériens.`;
+
+// ---------- Tuiles
+const caCompte={};D.ca.forEach(r=>{caCompte[r.compte]=(caCompte[r.compte]||0)+ +r.montant});
+const caTotal=Object.values(caCompte).reduce((a,b)=>a+b,0);
+const treso=D.treso.reduce((a,r)=>a+ +r.solde,0);
+const s=D.soldes, resultat=s.produits-s.charges;
+[['Chiffre d\'affaires (70)',court(caTotal),'ventes HT de l\'exercice'],
+ ['dont ventes briqueterie',court(caCompte['70110']||0),'compte 70110'],
+ ['Créances clients',court(+s.clients),'solde des comptes 411'],
+ ['Dettes fournisseurs',court(+s.fournisseurs),'solde des comptes 401, 404, 408'],
+ ['Trésorerie nette',court(treso),'banques et caisses, découverts déduits'],
+ ['Produits − charges',court(resultat),'classes 7 et 6, avant écritures de clôture']
+].forEach(([t,v,c])=>{const d=document.createElement('div');d.className='tuile';d.innerHTML=`<small>${t}</small><b>${v}</b><span>${c}</span>`;$('tuiles').appendChild(d)});
+
+// ---------- Alerte mois incomplet
+const moisCa=[...new Set(D.ca.map(r=>r.mois))].sort();
+const vente073=D.derniers.find(j=>j.code==='073');
+if(vente073){const dernierMois=vente073.derniere.slice(0,7), dernierGlobal=moisCa[moisCa.length-1];
+  if(dernierGlobal&&dernierMois<dernierGlobal){$('alerte').hidden=false;$('alerte').textContent=`Ventes briqueterie (journal 073) saisies jusqu'au ${dateFr(vente073.derniere)} : les mois suivants sont incomplets dans ce tableau.`}}
+
+// ---------- Graphique CA (barres groupées, 2 comptes principaux + autres)
+(function(){
+  // La couleur suit le compte : ventes briqueterie (70110) toujours en brique, l'autre grand compte en bleu
+  const comptes=Object.entries(caCompte).filter(([c,v])=>v>0).sort((a,b)=>b[1]-a[1]).map(([c])=>c);
+  const autre=comptes.find(c=>c!=='70110');
+  const principaux=[...(caCompte['70110']>0?['70110']:[]),...(autre?[autre]:[])].slice(0,2);
+  const couleurs=principaux.map(c=>c==='70110'?'--brique':'--bleu');
+  const lib={};D.ca.forEach(r=>lib[r.compte]=r.libelle);
+  const series=principaux.map((c,i)=>({nom:c+' · '+(lib[c]||''),couleur:couleurs[i],val:m=>D.ca.filter(r=>r.mois===m&&r.compte===c).reduce((a,r)=>a+ +r.montant,0)}));
+  const autres=m=>D.ca.filter(r=>r.mois===m&&!principaux.includes(r.compte)).reduce((a,r)=>a+ +r.montant,0);
+  if(moisCa.some(m=>Math.abs(autres(m))>=1))series.push({nom:'Autres comptes 70 (remises déduites)',couleur:'--neutre',val:autres});
+  series.forEach(se=>{const x=document.createElement('span');x.innerHTML=`<i style="background:var(${se.couleur})"></i>${se.nom}`;$('legCa').appendChild(x)});
+  const W=1100,H=300,g=64,b=26,h=12, max=Math.max(1,...moisCa.flatMap(m=>series.map(se=>se.val(m))));
+  const {pas,haut}=echelle(max);
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Chiffre d\'affaires mensuel par compte'},$('graphCa'));
+  for(let v=0;v<=haut;v+=pas){const y=H-b-(H-b-h)*v/haut;el('line',{x1:g,x2:W,y1:y,y2:y,stroke:css('--grille')},svg);el('text',{x:g-8,y:y+4,'text-anchor':'end'},svg).textContent=court(v).replace(' DA','')}
+  const pasM=(W-g)/moisCa.length, lb=Math.min(34,(pasM-16)/series.length);
+  moisCa.forEach((m,i)=>{
+    const x0=g+i*pasM+(pasM-lb*series.length-2*(series.length-1))/2;
+    el('text',{x:g+i*pasM+pasM/2,y:H-8,'text-anchor':'middle'},svg).textContent=nomMois(m);
+    series.forEach((se,k)=>{const v=se.val(m);if(v<=0)return;const hh=(H-b-h)*v/haut;
+      const r=el('path',{d:`M${x0+k*(lb+2)},${H-b} v${-hh+4} q0,-4 4,-4 h${lb-8} q4,0 4,4 v${hh-4} z`,fill:css(se.couleur)},svg);
+      const zone=el('rect',{x:x0+k*(lb+2)-1,y:h,width:lb+2,height:H-b-h,fill:'transparent'},svg);
+      zone.addEventListener('mousemove',e=>montrer(e,`<b>${nomMois(m)}</b><br>${se.nom}<br>${da(v)}`));zone.addEventListener('mouseleave',cacher)});
+  });
+  let t='<table><tr><th>Mois</th>'+series.map(se=>`<th class="n">${se.nom}</th>`).join('')+'<th class="n">Total</th></tr>';
+  moisCa.forEach(m=>{const vs=series.map(se=>se.val(m));t+=`<tr><td>${nomMois(m)}</td>${vs.map(v=>`<td class="n">${da(v)}</td>`).join('')}<td class="n"><b>${da(vs.reduce((a,b)=>a+b,0))}</b></td></tr>`});
+  $('tabCa').innerHTML=t+'</table>';
+})();
+
+// ---------- Trésorerie (barres horizontales autour de zéro)
+(function(){
+  const L=D.treso.map(r=>({c:r.compte,l:r.libelle,v:+r.solde}));
+  const W=520,lig=26,H=L.length*lig+8,gx=190,max=Math.max(1,...L.map(r=>Math.abs(r.v)));
+  const min=Math.min(0,...L.map(r=>r.v)),mx=Math.max(0,...L.map(r=>r.v)),plage=mx-min||1;
+  const x=v=>gx+(W-gx-70)*(v-min)/plage;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'Trésorerie par compte'},$('graphTreso'));
+  el('line',{x1:x(0),x2:x(0),y1:0,y2:H,stroke:css('--neutre')},svg);
+  L.forEach((r,i)=>{const y=i*lig+6;
+    el('text',{x:0,y:y+13},svg).textContent=(r.c+' '+(r.l||'')).slice(0,30);
+    const a=x(Math.min(0,r.v)),w=Math.max(2,Math.abs(x(r.v)-x(0)));
+    el('rect',{x:a,y:y+3,width:w,height:14,rx:3,fill:css(r.v>=0?'--bleu':'--brique')},svg);
+    // montant toujours à droite de l'axe zéro, du côté où la ligne n'a pas de barre
+    const t=el('text',{x:r.v>=0?a+w+5:x(0)+5,y:y+14,'text-anchor':'start'},svg);t.textContent=court(r.v);
+    const z=el('rect',{x:0,y:y,width:W,height:lig,fill:'transparent'},svg);
+    z.addEventListener('mousemove',e=>montrer(e,`<b>${r.c} ${r.l||''}</b><br>${da(r.v)}`));z.addEventListener('mouseleave',cacher)});
+})();
+
+// ---------- Tableaux
+$('tabTaxes').innerHTML='<table><tr><th>Mois</th><th class="n">TVA collectée</th><th class="n">TVA déductible</th><th class="n">Timbre</th></tr>'
+  +D.taxes.map(r=>`<tr><td>${nomMois(r.mois)}</td><td class="n">${da(+r.tva_collectee)}</td><td class="n">${da(+r.tva_deductible)}</td><td class="n">${da(+r.timbre)}</td></tr>`).join('')
+  +(()=>{const t=k=>D.taxes.reduce((a,r)=>a+ +r[k],0);return `<tr><th>Total</th><th class="n">${da(t('tva_collectee'))}</th><th class="n">${da(t('tva_deductible'))}</th><th class="n">${da(t('timbre'))}</th></tr>`})()+'</table>';
+const maxCl=Math.max(1,...D.clients.map(c=>+c.facture));
+$('tabClients').innerHTML='<table><tr><th>Code</th><th>Client</th><th class="n">Factures</th><th class="n">Facturé TTC</th><th style="width:22%"></th></tr>'
+  +D.clients.map(c=>`<tr><td>${c.code}</td><td>${c.nom||''}</td><td class="n">${c.factures}</td><td class="n">${da(+c.facture)}</td><td><div class="barre" style="width:${100*c.facture/maxCl}%"></div></td></tr>`).join('')+'</table>';
+const maxCh=Math.max(1,...D.charges.map(c=>+c.montant));
+$('tabCharges').innerHTML='<table><tr><th>Compte</th><th>Libellé</th><th class="n">Montant</th><th style="width:22%"></th></tr>'
+  +D.charges.map(c=>`<tr><td>${c.compte}</td><td>${c.libelle||''}</td><td class="n">${da(+c.montant)}</td><td><div class="barre" style="width:${100*c.montant/maxCh}%;background:var(--neutre)"></div></td></tr>`).join('')+'</table>';
+$('tabJournaux').innerHTML='<table><tr><th>Journal</th><th>Libellé</th><th class="n">Lignes</th><th class="n">Dernière écriture</th></tr>'
+  +D.derniers.map(j=>`<tr><td>${j.code}</td><td>${j.libelle||''}</td><td class="n">${nf.format(j.lignes)}</td><td class="n">${dateFr(j.derniere)}</td></tr>`).join('')+'</table>';
+document.querySelectorAll('.voir').forEach(b=>b.onclick=()=>{const c=$(b.dataset.cible);c.classList.toggle('cache');b.textContent=c.classList.contains('cache')?'Tableau':'Masquer'});
+</script>
+</body>
+</html>
