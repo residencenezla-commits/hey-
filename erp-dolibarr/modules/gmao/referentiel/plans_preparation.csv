@@ -121,6 +121,11 @@ PM Hebdomadaire — Ventilateurs du séchoir;DPR-SEC-VCEN;7;60;"1. Ventilateur p
 PM Mensuel — Capteurs du séchoir;DPR-SEC-CAPT;30;60;"1. Comparer les 22 sondes température/humidité à un appareil de référence
 2. Nettoyer les sondes encrassées
 3. Capteurs de pression : prises non bouchées";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+Mesure Mensuelle — Rendement du séchoir;DPR-SEC-CAPT;30;30;"1. Température et humidité de l'air ambiant à la prise d'air (appareil vérifié)
+2. Température et humidité de l'air à l'évacuation des extracteurs, au point de sortie
+3. Tonnage sec du jour et humidité des briques à l'entrée et à la sortie (pesée / étuve)
+4. Saisir dans le classeur « Consommation du séchoir » : kcal / kg d'eau (repère : 920 à l'offre, ≈ 835 relevé du 10/10/2026)
+5. Si l'air sort sous 60 % d'humidité : revoir le réglage extraction / recirculation";"Sans risque particulier ; casque et chaussures dans la halle."
 PM Hebdomadaire — Pousseurs et transbordeurs du séchoir;DPR-SEC-POUS;7;60;"1. Fins de course et centrage des transbordeurs
 2. Chaînes des recherches : tension, graissage
 3. Portes : étanchéité et mécanisme
