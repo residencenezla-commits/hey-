@@ -110,10 +110,17 @@ PM Quotidien — Générateur de chaleur du séchoir;DPR-SEC-GEN;1;15;"1. Flamme
 2. Pression gaz rampe — noter (mbar)
 3. Température de soufflage — noter (°C, 160 max)
 4. Odeur de gaz : contrôle au détecteur portable";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
+PM Mensuel — Brûleur et rampe gaz du séchoir;DPR-SEC-GEN;30;60;"1. Filtre à gaz : perte de charge (manomètres amont / aval), cartouche à changer si encrassée
+2. Pression après régulateur — noter (mbar)
+3. Électrode d'allumage : écartement, propreté
+4. Cellule UV / sonde d'ionisation : nettoyer la lentille, signal de flamme — noter
+5. Essai d'arrêt pour défaillance de flamme : la remise en marche doit exiger un réarmement manuel
+6. Noter chaque mise en sécurité du mois et sa cause";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
 PM Annuel — Rampe gaz et générateur du séchoir;DPR-SEC-GEN;365;240;"1. Étanchéité de la rampe à l'eau savonneuse / détecteur
-2. Électrovannes de sécurité : essai de fermeture
-3. Pressostats gaz et air : essai
-4. Électrode et cellule de flamme : nettoyage";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
+2. Électrovannes de sécurité : essai de fermeture et du contrôle d'étanchéité
+3. Régulateur : essai du blocage de surpression (OPSO)
+4. Pressostats gaz et air : essai de déclenchement
+5. Électrode et cellule de flamme : nettoyage";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
 PM Hebdomadaire — Ventilateurs du séchoir;DPR-SEC-VCEN;7;60;"1. Ventilateur principal 110 kW : vibrations, température paliers
 2. Courroies et carter de protection en place
 3. 22 ventilateurs de recirculation : bruit, arrêt d'un ventilateur

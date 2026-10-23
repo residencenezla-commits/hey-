@@ -15,6 +15,10 @@ Huile réducteurs (grade selon plaque);ISO VG 220/320;DPR-PRE-LAM;litre;0;0
 Graisse paliers EP2;;DPR-PRE-LAM;kg;0;0
 Fin de course de translation de la navette;à relever;DPR-NAV;pièce;0;1
 Détecteur de proximité (PX) de la navette;à relever;DPR-NAV;pièce;0;2
+Électrode d'allumage du brûleur du séchoir;à relever;DPR-SEC-GEN-ALL;pièce;0;1
+Cellule UV / sonde d'ionisation du brûleur;à relever;DPR-SEC-GEN-FLAM;pièce;0;1
+Cartouche du filtre à gaz;à relever;DPR-SEC-GEN-FIL;pièce;0;1
+Transformateur d'allumage;à relever;DPR-SEC-GEN-ALL;pièce;0;1
 Courroies du ventilateur principal du séchoir;réf. sur courroie;DPR-SEC-VCEN;jeu;0;1
 Moteur 5,5 kW de ventilateur de recirculation;à relever;DPR-SEC-VREC;pièce;0;1
 Sonde température / humidité du séchoir;à relever;DPR-SEC-CAPT;pièce;0;2

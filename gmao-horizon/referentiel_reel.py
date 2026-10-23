@@ -151,6 +151,17 @@ offre('351/357', tag='DPR-SEC-PORT', nom='Portes d\'entrée et de sortie des 2 s
 offre('352/353/355/359', tag='DPR-SEC-POUS', nom='Pousseurs et recherches à chaîne du séchoir', type='machine', parent='DPR-SEC', criticite='A', notes='Deux lignes de séchage, 22 + 22 wagons, 5,3 h, 90 °C max.')
 offre('400', tag='DPR-SEC-GEN', nom='Générateur de chaleur à gaz du séchoir (3 000 000 kcal/h)', type='machine', parent='DPR-SEC', criticite='A',
       notes='Gaz naturel 300 mbar, 160 °C max, rampe gaz et armoire propres.')
+# rampe gaz et brûleur du générateur, composition type d'après Beralmar (Notes sur le séchage, § 1.12.3, normes EN 676 et EN 298)
+BER = "Composition type Beralmar § 1.12.3 (EN 676 / EN 298) : repère, marque et réglage à relever sur la rampe réelle."
+for n, (t, nom, cr) in enumerate([
+        ('VAN', 'vanne de sectionnement à sphère (coupure manuelle)', 'A'), ('FIL', 'filtre à gaz', 'B'), ('MANO', 'manomètre à cadran', 'B'),
+        ('REG', 'régulateur de pression avec sécurité de surpression (OPSO)', 'A'), ('DECH', 'vanne de décharge', 'B'),
+        ('EV', 'électrovanne double de sécurité classe A, normalement fermée', 'A'), ('VREG', 'vanne de régulation (modulation du débit)', 'A'),
+        ('CTF', 'contrôle d\'étanchéité des électrovannes', 'A'), ('PRG', 'pressostats gaz mini / maxi', 'A'),
+        ('VCOMB', 'ventilateur d\'air de combustion', 'A'), ('ALL', 'électrode et transformateur d\'allumage', 'B'),
+        ('FLAM', 'détection de flamme (cellule UV ou sonde d\'ionisation) et relais de flamme', 'A'),
+    ], 1):
+    ajout(tag=f'DPR-SEC-GEN-{t}', nom=f'Générateur du séchoir — {nom}', type='organe', parent='DPR-SEC-GEN', repere=str(n), criticite=cr, notes=BER)
 offre('401', tag='DPR-SEC-VCEN', nom='Ventilateur centrifuge principal du séchoir', type='moteur', parent='DPR-SEC', puissance_kw='110', criticite='A', notes='240 000 m³/h, 500 Pa, 150 °C.')
 offre('402', tag='DPR-SEC-VEXT', nom='Ventilateurs axiaux d\'extraction de l\'air humide (2 + 2)', type='moteur', parent='DPR-SEC', puissance_kw='74', notes='4 × 18,5 kW, 60 000 m³/h chacun.')
 offre('403', tag='DPR-SEC-VREC', nom='Ventilateurs de recirculation interne (11 + 11)', type='moteur', parent='DPR-SEC', puissance_kw='121', notes='22 × 5,5 kW, 60 000 m³/h chacun.')
@@ -245,7 +256,8 @@ GAZ = "Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue pr�
 ROBOT = "Robot à l'arrêt et consigné (coffret cadenassé), porte de cellule ouverte ; jamais d'entrée en cellule en mode automatique."
 LEVAGE = "Zone balisée sous la charge ; élingues et crochets contrôlés ; personne sous la charge ; casque et chaussures."
 plan('PM Quotidien — Générateur de chaleur du séchoir', 'DPR-SEC-GEN', 1, 15, ["Flamme stable, pas d'alarme sur l'armoire", "Pression gaz rampe — noter (mbar)", "Température de soufflage — noter (°C, 160 max)", "Odeur de gaz : contrôle au détecteur portable"], GAZ)
-plan('PM Annuel — Rampe gaz et générateur du séchoir', 'DPR-SEC-GEN', 365, 240, ["Étanchéité de la rampe à l'eau savonneuse / détecteur", "Électrovannes de sécurité : essai de fermeture", "Pressostats gaz et air : essai", "Électrode et cellule de flamme : nettoyage"], GAZ)
+plan('PM Mensuel — Brûleur et rampe gaz du séchoir', 'DPR-SEC-GEN', 30, 60, ["Filtre à gaz : perte de charge (manomètres amont / aval), cartouche à changer si encrassée", "Pression après régulateur — noter (mbar)", "Électrode d'allumage : écartement, propreté", "Cellule UV / sonde d'ionisation : nettoyer la lentille, signal de flamme — noter", "Essai d'arrêt pour défaillance de flamme : la remise en marche doit exiger un réarmement manuel", "Noter chaque mise en sécurité du mois et sa cause"], GAZ)
+plan('PM Annuel — Rampe gaz et générateur du séchoir', 'DPR-SEC-GEN', 365, 240, ["Étanchéité de la rampe à l'eau savonneuse / détecteur", "Électrovannes de sécurité : essai de fermeture et du contrôle d'étanchéité", "Régulateur : essai du blocage de surpression (OPSO)", "Pressostats gaz et air : essai de déclenchement", "Électrode et cellule de flamme : nettoyage"], GAZ)
 plan('PM Hebdomadaire — Ventilateurs du séchoir', 'DPR-SEC-VCEN', 7, 60, ["Ventilateur principal 110 kW : vibrations, température paliers", "Courroies et carter de protection en place", "22 ventilateurs de recirculation : bruit, arrêt d'un ventilateur", "4 extracteurs d'air humide : état"])
 plan('PM Mensuel — Capteurs du séchoir', 'DPR-SEC-CAPT', 30, 60, ["Comparer les 22 sondes température/humidité à un appareil de référence", "Nettoyer les sondes encrassées", "Capteurs de pression : prises non bouchées"])
 plan('Mesure Mensuelle — Rendement du séchoir', 'DPR-SEC-CAPT', 30, 30, ["Température et humidité de l'air ambiant à la prise d'air (appareil vérifié)", "Température et humidité de l'air à l'évacuation des extracteurs, au point de sortie", "Tonnage sec du jour et humidité des briques à l'entrée et à la sortie (pesée / étuve)", "Saisir dans le classeur « Consommation du séchoir » : kcal / kg d'eau (repère : 920 à l'offre, ≈ 835 relevé du 10/10/2026)", "Si l'air sort sous 60 % d'humidité : revoir le réglage extraction / recirculation"], "Sans risque particulier ; casque et chaussures dans la halle.")
@@ -291,6 +303,10 @@ PI = [
     ['Graisse paliers EP2', '', 'DPR-PRE-LAM', 'kg', 0, 0],
     ['Fin de course de translation de la navette', 'à relever', 'DPR-NAV', 'pièce', 0, 1],
     ['Détecteur de proximité (PX) de la navette', 'à relever', 'DPR-NAV', 'pièce', 0, 2],
+    ['Électrode d\'allumage du brûleur du séchoir', 'à relever', 'DPR-SEC-GEN-ALL', 'pièce', 0, 1],
+    ['Cellule UV / sonde d\'ionisation du brûleur', 'à relever', 'DPR-SEC-GEN-FLAM', 'pièce', 0, 1],
+    ['Cartouche du filtre à gaz', 'à relever', 'DPR-SEC-GEN-FIL', 'pièce', 0, 1],
+    ['Transformateur d\'allumage', 'à relever', 'DPR-SEC-GEN-ALL', 'pièce', 0, 1],
     ['Courroies du ventilateur principal du séchoir', 'réf. sur courroie', 'DPR-SEC-VCEN', 'jeu', 0, 1],
     ['Moteur 5,5 kW de ventilateur de recirculation', 'à relever', 'DPR-SEC-VREC', 'pièce', 0, 1],
     ['Sonde température / humidité du séchoir', 'à relever', 'DPR-SEC-CAPT', 'pièce', 0, 2],
