@@ -123,7 +123,11 @@ if (NP && process.env.TOUS === '1' && pre.client) {
   enfants.push(champ('Client :', pre.client));
   enfants.push(champ('Adresse / téléphone :', pre.adresse));
   enfants.push(champ('Produit :', pre.produit ? ({ B8: 'Brique creuse 8 trous (B8)', B12: 'Brique creuse 12 trous (B12)', HOURDIS: 'Hourdis (entrevous) 16' }[pre.produit] || pre.produit) : ''));
-  enfants.push(champ('Date de remise des bons :'));
+  enfants.push(champ('Date de remise des bons :', pre.date));
+  if (pre.quantite) {
+    const q = Number(pre.quantite), f = v => v.toLocaleString('fr-FR').replace(/[\u202f\u00a0]/g, ' ');
+    enfants.push(champ('Quantité par bon :', `${f(q)} pièces — total des ${nombre} bons : ${f(q * nombre)} pièces`));
+  }
   const W = [600, 1300, 1400, 1300, 1700, 1500, 1866, 800];
   const ent = ['N°', 'Réf. du bon', 'N° BL', 'Date', 'Quantité chargée (pièces)', 'Banque', 'N° chèque / réf. bancaire', 'Visa'];
   const c = (x, w, o = {}) => cellule([para(t(x, { mono: !!o.mono, bold: !!o.bold, size: o.size || 16 }), { align: AlignmentType.CENTER, after: 0 })], w, { fond: o.fond });
