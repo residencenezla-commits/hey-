@@ -3,6 +3,8 @@
 //         Variables facultatives pour pré-remplir le premier bon (TOUS=1 : tous les bons),
 //         PRIX=20.50 : prix TTC unitaire, imprimé seulement sur le bordereau de remise :
 //         CLIENT="KERDJA BILEL" ADRESSE="..." TEL="..." PAYE="10/10/2026" PRODUIT=B8 QUANTITE=7040
+//         NONPAYE=1 : bons « NON PAYÉ » numérotés NP, sans aucun prix ; avec TOUS=1, bordereau de réception
+//         où l'on inscrit à la main le N° de BL, la date, la quantité, la banque et la référence bancaire
 const fs = require('fs');
 const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, BorderStyle,
   AlignmentType, ShadingType, PageBreak, TabStopType, ImageRun, HorizontalPositionRelativeFrom, VerticalPositionRelativeFrom, TextWrappingType } = require('docx');
@@ -15,6 +17,7 @@ const DENSITE = process.env.DENSITE === 'moyen' ? 'moyen' : 'fort';
 const DIAGONALE = process.env.DIAGONALE === '1';
 const FILIGRANE = ['force', 'bien'].includes(process.env.FILIGRANE) ? fs.readFileSync(path.join(__dirname, '..', 'modules', 'timbredz', 'img', `filigrane-${process.env.FILIGRANE}-${DENSITE}${DIAGONALE ? '-diagonale' : ''}.png`)) : null;
 const MM = 36000; // EMU par millimètre
+const NP = process.env.NONPAYE === '1';
 
 const premier = parseInt(process.argv[2] || '1', 10);
 const nombre = parseInt(process.argv[3] || '10', 10);
@@ -34,7 +37,7 @@ const cellule = (enfants, w, o = {}) => new TableCell({ children: enfants, width
 const champ = (lib, val) => para([t(lib, { size: 18 }), t(val ? '  ' + val : '  ' + '.'.repeat(Math.max(10, 64 - lib.length)), { mono: true, size: 18, bold: !!val })], { after: 80 });
 
 function bon(n, rempli) {
-  const no = String(n).padStart(4, '0');
+  const no = (NP ? 'NP ' : '') + String(n).padStart(4, '0');
   const enTete = new Table({
     width: { size: LARGEUR, type: WidthType.DXA }, columnWidths: [5200, 5266],
     rows: [new TableRow({ children: [
@@ -48,8 +51,8 @@ function bon(n, rempli) {
   const titre = new Table({
     width: { size: LARGEUR, type: WidthType.DXA }, columnWidths: [7466, 3000],
     rows: [new TableRow({ children: [
-      cellule([para(t("BON D'ENLÈVEMENT PAYÉ", { mono: true, bold: true, italics: true, size: 28 }), { after: 0 }),
-               para(t('Marchandise réglée d\'avance — à présenter au chargement', { size: 15, italics: true }), { after: 0 })], 7466, { borders: sans }),
+      cellule([para(t(NP ? "BON D'ENLÈVEMENT NON PAYÉ" : "BON D'ENLÈVEMENT PAYÉ", { mono: true, bold: true, italics: true, size: 28 }), { after: 0 }),
+               para(t(NP ? 'Marchandise livrée à crédit — à régulariser en fin de mois' : 'Marchandise réglée d\'avance — à présenter au chargement', { size: 15, italics: true }), { after: 0 })], 7466, { borders: sans }),
       cellule([para(t('N° ' + no, { mono: true, bold: true, size: 30 }), { align: AlignmentType.CENTER, after: 0 }),
                para(t('Date : ' + (rempli.date || '..../..../........'), { mono: true, size: 18, bold: !!rempli.date }), { align: AlignmentType.CENTER, before: 40, after: 0 })], 3000, { va: 'center' }),
     ] })],
@@ -87,14 +90,14 @@ function bon(n, rempli) {
     para(t(''), { after: 60 }),
     champ('Client :', rempli.client),
     champ('Adresse / téléphone :', rempli.adresse),
-    champ('Payé le :', rempli.paye),
+    NP ? champ('Règlement :', 'NON PAYÉ — à régulariser en fin de mois') : champ('Payé le :', rempli.paye),
     produits,
     para(t(''), { after: 40 }),
     champ("Date d'enlèvement :"),
     champ('Chauffeur (nom et pièce d\'identité) :'),
     champ('Matricule du camion :'),
     bas,
-    para(t('Bon au porteur : le chauffeur qui présente ce bon est chargé de la quantité indiquée, une seule fois. Le bon est gardé par l\'usine après le chargement, marqué SERVI, et classé en comptabilité. Tout bon raturé, sans cachet ou sans signature du Responsable commercial est nul.', { size: 13, italics: true }), { before: 60, after: 0 }),
+    para(t('Bon au porteur : le chauffeur qui présente ce bon est chargé de la quantité indiquée, une seule fois. Le bon est gardé par l\'usine après le chargement, marqué SERVI, et classé en comptabilité.' + (NP ? ' Quantité à régulariser en fin de mois.' : '') + ' Tout bon raturé, sans cachet ou sans signature du Responsable commercial est nul.', { size: 13, italics: true }), { before: 60, after: 0 }),
   ];
 }
 
@@ -106,7 +109,34 @@ for (let i = 0; i < nombre; i++) {
   else if (i > 0) enfants.push(new Paragraph({ children: [new PageBreak()] }));
   enfants.push(...bon(n, rempli));
 }
-if (process.env.TOUS === '1' && pre.client) {
+if (NP && process.env.TOUS === '1' && pre.client) {
+  // bordereau de réception des bons non payés, sans prix : une ligne par bon, à compléter à la main
+  const n1 = 'NP ' + String(premier).padStart(4, '0'), n2 = 'NP ' + String(premier + nombre - 1).padStart(4, '0');
+  enfants.push(new Paragraph({ children: [new PageBreak()] }));
+  enfants.push(new Table({ width: { size: LARGEUR, type: WidthType.DXA }, columnWidths: [5200, 5266], rows: [new TableRow({ children: [
+    cellule([para(new ImageRun({ type: 'png', data: LOGO, transformation: { width: 128, height: 62 }, altText: { title: 'DPR AXXAM', description: 'Logo DPR AXXAM', name: 'logo' } }), { after: 0 })], 5200, { borders: sans }),
+    cellule([para(t('SARL DPR AXXAM · ZAC Helouane, Ighzer Amokrane (Béjaïa)', { size: 14 }), { align: AlignmentType.RIGHT, after: 0 }), para(t('RC 08B0185858-06/00 · NIF 000806018585831', { size: 14 }), { align: AlignmentType.RIGHT, after: 0 })], 5266, { borders: sans, va: 'bottom' }),
+  ] })] }));
+  enfants.push(para(t(''), { border: { bottom: { style: BorderStyle.SINGLE, size: 10, color: '222222', space: 1 } }, after: 160 }));
+  enfants.push(para(t("BORDEREAU DE RÉCEPTION DE BONS D'ENLÈVEMENT NON PAYÉS", { mono: true, bold: true, italics: true, size: 24 }), { align: AlignmentType.CENTER, after: 60 }));
+  enfants.push(para(t(`N° ${n1} à N° ${n2} — ${nombre} bons`, { mono: true, bold: true, size: 21 }), { align: AlignmentType.CENTER, after: 160 }));
+  enfants.push(champ('Client :', pre.client));
+  enfants.push(champ('Adresse / téléphone :', pre.adresse));
+  enfants.push(champ('Produit :', pre.produit ? ({ B8: 'Brique creuse 8 trous (B8)', B12: 'Brique creuse 12 trous (B12)', HOURDIS: 'Hourdis (entrevous) 16' }[pre.produit] || pre.produit) : ''));
+  enfants.push(champ('Date de remise des bons :'));
+  const W = [600, 1300, 1400, 1300, 1700, 1500, 1866, 800];
+  const ent = ['N°', 'Réf. du bon', 'N° BL', 'Date', 'Quantité chargée (pièces)', 'Banque', 'N° chèque / réf. bancaire', 'Visa'];
+  const c = (x, w, o = {}) => cellule([para(t(x, { mono: !!o.mono, bold: !!o.bold, size: o.size || 16 }), { align: AlignmentType.CENTER, after: 0 })], w, { fond: o.fond });
+  enfants.push(new Table({ width: { size: LARGEUR, type: WidthType.DXA }, columnWidths: W, rows: [
+    new TableRow({ tableHeader: true, children: ent.map((h, i) => c(h, W[i], { fond: 'F0F0F0', bold: true, size: 14 })) }),
+    ...Array.from({ length: nombre }, (_, k) => new TableRow({ height: { value: 400, rule: 'atLeast' }, children: W.map((w, i) =>
+      i === 0 ? c(String(k + 1), w) : i === 1 ? c('NP ' + String(premier + k).padStart(4, '0'), w, { mono: true, bold: true, size: 17 }) : i === 3 ? c('..../..../......', w, { size: 14 }) : c('', w)) })),
+    new TableRow({ height: { value: 400, rule: 'atLeast' }, children: W.map((w, i) => i === 3 ? c('TOTAL', w, { bold: true }) : c('', w)) }),
+  ] }));
+  enfants.push(para(t(`Le client reconnaît avoir reçu les ${nombre} bons d'enlèvement non payés N° ${n1} à N° ${n2}. Chaque bon donne droit à un seul enlèvement de la quantité indiquée, à l'usine de la ZAC Helouane. Le N° de BL, la date, la quantité, la banque et la référence bancaire sont inscrits à la main au fur et à mesure des enlèvements et du règlement. Les bons servis sont gardés par l'usine, marqués SERVI et classés en comptabilité avec ce bordereau.`, { size: 16 }), { before: 160, after: 160 }));
+  enfants.push(new Table({ width: { size: LARGEUR, type: WidthType.DXA }, columnWidths: [3489, 3489, 3488], rows: [new TableRow({ children: ['Cachet de la société et signature du Responsable commercial', 'Le client (reçu les bons ci-dessus)', 'Comptabilité (visa)'].map(h =>
+    cellule([para(t(h, { size: 15, italics: true }), { align: AlignmentType.CENTER, after: 0 }), para(t(' '), { after: 900 })], 3489, { borders: cadre(pointille) })) })] }));
+} else if (process.env.TOUS === '1' && pre.client) {
   const qte = Number(pre.quantite || 0), prix = Number(process.env.PRIX || 0);
   const fmt = (v, d = 0) => v.toLocaleString('fr-FR', { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/[\u202f\u00a0]/g, ' ');
   const n1 = String(premier).padStart(4, '0'), n2 = String(premier + nombre - 1).padStart(4, '0');
@@ -140,7 +170,7 @@ if (process.env.TOUS === '1' && pre.client) {
 }
 
 const doc = new Document({
-  creator: 'SARL DPR AXXAM', title: "Bons d'enlèvement payés",
+  creator: 'SARL DPR AXXAM', title: NP ? "Bons d'enlèvement non payés" : "Bons d'enlèvement payés",
   styles: { default: { document: { run: { font: SANS, size: 19 } } } },
   sections: [{ properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 560, bottom: 400, left: 720, right: 720 } } }, children: enfants }],
 });
