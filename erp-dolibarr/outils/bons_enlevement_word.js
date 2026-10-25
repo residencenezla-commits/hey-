@@ -73,8 +73,9 @@ function bon(n, rempli) {
     rows: [
       new TableRow({ children: ['Cachet de la société et signature du Responsable commercial', 'Visa du magasinier au chargement', 'SERVI — cadre réservé à l\'usine'].map((h, i) =>
         cellule([para(t(h, { size: 15, italics: true, bold: i === 2, color: i === 2 ? BRIQUE : undefined }), { align: AlignmentType.CENTER, after: 0 }),
-                 ...(i === 2 ? [para(t('Servi le ..../..../........', { size: 15, mono: true }), { before: 330, align: AlignmentType.CENTER, after: 0 }),
-                                para(t('Classé en comptabilité ☐', { size: 15 }), { before: 200, align: AlignmentType.CENTER, after: 0 })]
+                 ...(i === 2 ? [para(t('Servi le ..../..../........', { size: 15, mono: true }), { before: 200, align: AlignmentType.CENTER, after: 0 }),
+                                para(t('BL N° ......... du ..../..../....', { size: 14, mono: true }), { before: 140, align: AlignmentType.CENTER, after: 0 }),
+                                para(t('Classé en comptabilité ☐', { size: 15 }), { before: 140, align: AlignmentType.CENTER, after: 0 })]
                              : [para(t(' '), { after: 1000 })])], [3489, 3489, 3488][i], { borders: cadre(i === 2 ? { style: BorderStyle.DOUBLE, size: 6, color: BRIQUE } : pointille) })) }),
     ],
   });
