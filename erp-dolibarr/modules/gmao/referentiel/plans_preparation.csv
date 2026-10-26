@@ -106,6 +106,11 @@ PM Hebdomadaire — Cercleuse MS500;DPR-CND-CER-01;7;30;"1. Nettoyer les canaux 
 3. Résistance de soudage : température
 4. Ressorts de pinces
 5. Essai de cerclage et tension";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Hebdomadaire — Cadre et lame de chargement;DPR-FAC-CADRE;7;30;"1. Lame de chargement : déformation, frottement sur les étages du wagon
+2. Ressorts pneumatiques (torpress) : pression d'air, fuites
+3. Roues, guides et chaîne / réducteur du wagon de translation : jeu, graissage
+4. Fins de course et détecteurs de position de la lame
+5. Variateur INM212 : historique des alarmes relevé, ventilation propre";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
 PM Quotidien — Générateur de chaleur du séchoir;DPR-SEC-GEN;1;15;"1. Flamme stable, pas d'alarme sur l'armoire
 2. Pression gaz rampe — noter (mbar)
 3. Température de soufflage — noter (°C, 160 max)

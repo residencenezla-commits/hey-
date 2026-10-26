@@ -140,6 +140,10 @@ offre('146', tag='DPR-HSE-GRUE', nom='Grue à flèche — montage de la filière
 offre('105/108', tag='DPR-PRE-TOUR', nom='Tours à charioter les cylindres (rectification)', type='machine', parent='DPR-PRE', notes='Type wdh 100pa.')
 # coupe et chargement du vert (REF. 200 à 217)
 offre('200-202', tag='DPR-FAC-COUP', nom='Ligne de pré-coupe et coupeur à harpe', type='machine', parent='DPR-FAC', criticite='A', notes='Coupes de 200 et 300 mm ; vérin pneumatique d\'escamotage du tapis.')
+offre('202', tag='DPR-FAC-CADRE', nom='Cadre de chargement du wagon séchoir avec lame de chargement articulée', type='machine', parent='DPR-FAC', criticite='A',
+      notes='Wagon de translation + lame articulée réglée par ressorts pneumatiques (torpress) qui dépose le module de briques crues sur l\'étage du wagon. Écran « Manuels ligne de chargement ».')
+ajout(tag='DPR-FAC-CADRE-INM212', nom='Variateur INM212 — lame de chargement', type='organe', parent='DPR-FAC-CADRE', repere='INM212', criticite='A',
+      notes='Repère lu sur l\'alarme de l\'écran Siemens (26/10/2026). Marque et modèle à relever (probablement Mitsubishi comme les autres variateurs Marcheluzzo) ; schéma de la ligne de chargement à recevoir.')
 offre('203', tag='DPR-FAC-TRIT', nom='Triturateur mono-arbre des déchets verts', type='machine', parent='DPR-FAC')
 offre('204', tag='DPR-FAC-ASC1', nom='Ascenseur de chargement du wagon séchoir', type='machine', parent='DPR-FAC', criticite='A', notes='Zone de chute de charge : accès interdit en marche.')
 offre('205', tag='DPR-FAC-ASC2', nom='Ascenseur de déchargement du wagon séchoir', type='machine', parent='DPR-FAC', criticite='A', notes='Zone de chute de charge : accès interdit en marche.')
@@ -251,6 +255,7 @@ for t, n in (('DPR-ARM-Q1', 'Quadro 1'), ('DPR-ARM-Q2', 'Quadro 2'), ('DPR-ARM-N
          "Électricien habilité uniquement ; armoire consignée ; vérifier l'absence de tension.")
 plan('PM Trimestriel — Sauvegarde automates', 'DPR-AUT-Q1', 91, 60, ["Sauvegarde du programme des CPU 315-2 et 314-2 (navette)", "Sauvegarde du projet de l'écran TP1200", "Vérifier la pile / carte mémoire des CPU", "Noter la version et ranger la copie hors de l'usine"], "Ne rien modifier au programme sans l'accord du responsable.")
 plan('PM Hebdomadaire — Cercleuse MS500', 'DPR-CND-CER-01', 7, 30, ["Nettoyer les canaux de feuillard", "Lame et lame de soudage : usure", "Résistance de soudage : température", "Ressorts de pinces", "Essai de cerclage et tension"])
+plan('PM Hebdomadaire — Cadre et lame de chargement', 'DPR-FAC-CADRE', 7, 30, ["Lame de chargement : déformation, frottement sur les étages du wagon", "Ressorts pneumatiques (torpress) : pression d'air, fuites", "Roues, guides et chaîne / réducteur du wagon de translation : jeu, graissage", "Fins de course et détecteurs de position de la lame", "Variateur INM212 : historique des alarmes relevé, ventilation propre"])
 # séchoir, four, robots et moyens de protection (offre 2015-063)
 GAZ = "Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
 ROBOT = "Robot à l'arrêt et consigné (coffret cadenassé), porte de cellule ouverte ; jamais d'entrée en cellule en mode automatique."
@@ -353,6 +358,15 @@ with open(SCH / 'MS500_pieces.csv', encoding='utf-8') as f:
 for p in PI:
     assert p[2] in tags, p
 
+# ------------------------------------------------------------------ alarmes automate relevées sur les écrans
+AL = [
+    ['INM212', "ALARME VARIATEUR INM212 LAME DE CHARGEMENT", 'DPR-FAC-CADRE-INM212',
+     "Défaut du variateur qui entraîne la lame de chargement : 1) lame bloquée ou freinée (étage du wagon mal positionné par l'ascenseur, brique ou bavure coincée, lame tordue) → surcharge ou surintensité ; "
+     "2) ressorts pneumatiques (torpress) sans air : la tête du cadre ne se soulève pas ; 3) moteur ou câble : isolement, phase coupée ; 4) frein du motoréducteur qui ne se libère pas ; "
+     "5) liaison Profibus avec l'automate coupée ; 6) variateur trop chaud (ventilation, poussière) ; 7) tension réseau basse ou coupure.",
+     "Lire et noter le code affiché sur le variateur (ex. E.OC, E.THM, E.OLT, E.OP) avant de réarmer. Consigner, vérifier que la lame et le wagon sont libres et alignés, pression d'air des torpress, "
+     "frein et moteur (isolement), ventilation du variateur. Réarmer, essai en manuel à vitesse réduite. Si l'alarme revient : électricien, relever l'historique des défauts du variateur, ouvrir une intervention."],
+]
 SORTIE.mkdir(parents=True, exist_ok=True)
 def ecrire(nom, entetes, rows):
     with open(SORTIE / nom, 'w', newline='', encoding='utf-8') as f:
@@ -360,6 +374,9 @@ def ecrire(nom, entetes, rows):
 ecrire('equipements_preparation.csv', ENT, [[l[c] for c in ENT] for l in L])
 ecrire('plans_preparation.csv', ['nom', 'tag', 'frequence_j', 'duree_min', 'checklist', 'securite'], P)
 ecrire('pieces_preparation.csv', ['nom', 'reference', 'tag', 'unite', 'stock', 'seuil_conseille'], PI)
+for a in AL:
+    assert a[2] in tags, a
+ecrire('alarmes_preparation.csv', ['code', 'texte', 'tag', 'causes', 'remede'], AL)
 mot = [l for l in L if l['type'] == 'moteur']
 kw = sum(float(l['puissance_kw'] or 0) for l in mot)
 print(f"{len(L)} équipements ({sum(l['type'] == 'machine' for l in L)} machines, {len(mot)} moteurs = {kw:.1f} kW, "

@@ -48,3 +48,7 @@ foreach (gmao_lire_csv(file_get_contents($dir.'pieces_preparation.csv')) as $l) 
 	$n++;
 }
 etape("$n pièces de rechange chargées (stock à saisir après inventaire)");
+if (is_file($dir.'alarmes_preparation.csv')) {
+	$r = gmao_importer_alarmes($db, file_get_contents($dir.'alarmes_preparation.csv'), $E);
+	etape("{$r['crees']} alarmes automate chargées (causes et remèdes)".($r['erreurs'] ? ' ; '.implode(' ; ', $r['erreurs']) : ''));
+}
