@@ -143,7 +143,8 @@ offre('200-202', tag='DPR-FAC-COUP', nom='Ligne de pré-coupe et coupeur à harp
 offre('202', tag='DPR-FAC-CADRE', nom='Cadre de chargement du wagon séchoir avec lame de chargement articulée', type='machine', parent='DPR-FAC', criticite='A',
       notes='Wagon de translation + lame articulée réglée par ressorts pneumatiques (torpress) qui dépose le module de briques crues sur l\'étage du wagon. Écran « Manuels ligne de chargement ».')
 ajout(tag='DPR-FAC-CADRE-INM212', nom='Variateur INM212 — lame de chargement', type='organe', parent='DPR-FAC-CADRE', repere='INM212', criticite='A',
-      notes='Repère lu sur l\'alarme de l\'écran Siemens (26/10/2026). Marque et modèle à relever (probablement Mitsubishi comme les autres variateurs Marcheluzzo) ; schéma de la ligne de chargement à recevoir.')
+      fabricant='Mitsubishi Electric', modele='série FR-E700 (plaque à relever)',
+      notes='Étiquette « M212 / P54 » sur la façade (P54 : probablement le n° de nœud Profibus). Défaut relevé le 26/10/2026 : E.THT (surcharge du variateur). Variateur très empoussiéré. Schéma de la ligne de chargement à recevoir.')
 offre('203', tag='DPR-FAC-TRIT', nom='Triturateur mono-arbre des déchets verts', type='machine', parent='DPR-FAC')
 offre('204', tag='DPR-FAC-ASC1', nom='Ascenseur de chargement du wagon séchoir', type='machine', parent='DPR-FAC', criticite='A', notes='Zone de chute de charge : accès interdit en marche.')
 offre('205', tag='DPR-FAC-ASC2', nom='Ascenseur de déchargement du wagon séchoir', type='machine', parent='DPR-FAC', criticite='A', notes='Zone de chute de charge : accès interdit en marche.')
@@ -360,6 +361,11 @@ for p in PI:
 
 # ------------------------------------------------------------------ alarmes automate relevées sur les écrans
 AL = [
+    ['INM212-E.THT', "Variateur INM212 lame de chargement : E.THT surcharge du variateur (relais thermique électronique)", 'DPR-FAC-CADRE-INM212',
+     "Le courant de sortie est resté au-dessus du courant nominal du variateur assez longtemps pour faire chauffer ses transistors (tenue : 150 % pendant 60 s). Causes : lame qui force (étage mal positionné, brique coincée, lame tordue, guides ou chaîne durs, frein qui ne se libère pas) ; "
+     "torpress sans air ; temps d'accélération ou de décélération trop courts ; boost de couple mal réglé ; variateur encrassé ou ventilateur arrêté, armoire trop chaude ; variateur trop petit pour la charge.",
+     "Ne pas réarmer à répétition : laisser refroidir quelques minutes. Consigner et faire tourner la lame à la main : elle doit aller librement. Nettoyer le variateur (aspiration, pas d'air comprimé sur les cartes), vérifier son ventilateur et la température de l'armoire. "
+     "Mesurer le courant moteur en marche (moniteur du variateur) et le comparer à la plaque. Si la mécanique est libre et le courant reste haut : allonger les temps d'accélération / décélération (Pr.7, Pr.8) et revoir le boost de couple (Pr.0) avec l'automaticien, après avoir noté les valeurs d'origine."],
     ['INM212', "ALARME VARIATEUR INM212 LAME DE CHARGEMENT", 'DPR-FAC-CADRE-INM212',
      "Défaut du variateur qui entraîne la lame de chargement : 1) lame bloquée ou freinée (étage du wagon mal positionné par l'ascenseur, brique ou bavure coincée, lame tordue) → surcharge ou surintensité ; "
      "2) ressorts pneumatiques (torpress) sans air : la tête du cadre ne se soulève pas ; 3) moteur ou câble : isolement, phase coupée ; 4) frein du motoréducteur qui ne se libère pas ; "
