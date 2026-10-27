@@ -140,6 +140,11 @@ offre('146', tag='DPR-HSE-GRUE', nom='Grue à flèche — montage de la filière
 offre('105/108', tag='DPR-PRE-TOUR', nom='Tours à charioter les cylindres (rectification)', type='machine', parent='DPR-PRE', notes='Type wdh 100pa.')
 # coupe et chargement du vert (REF. 200 à 217)
 offre('200-202', tag='DPR-FAC-COUP', nom='Ligne de pré-coupe et coupeur à harpe', type='machine', parent='DPR-FAC', criticite='A', notes='Coupes de 200 et 300 mm ; vérin pneumatique d\'escamotage du tapis.')
+offre('202', tag='DPR-FAC-CADRE', nom='Cadre de chargement du wagon séchoir avec lame de chargement articulée', type='machine', parent='DPR-FAC', criticite='A',
+      notes='Wagon de translation + lame articulée réglée par ressorts pneumatiques (torpress) qui dépose le module de briques crues sur l\'étage du wagon. Écran « Manuels ligne de chargement ».')
+ajout(tag='DPR-FAC-CADRE-INM212', nom='Variateur INM212 — lame de chargement', type='organe', parent='DPR-FAC-CADRE', repere='INM212', criticite='A',
+      fabricant='Mitsubishi Electric', modele='série FR-E700 (plaque à relever)',
+      notes='Étiquette « M212 / P54 » sur la façade (P54 : probablement le n° de nœud Profibus). Défaut relevé le 26/10/2026 : E.THT (surcharge du variateur). Variateur très empoussiéré. Schéma de la ligne de chargement à recevoir.')
 offre('203', tag='DPR-FAC-TRIT', nom='Triturateur mono-arbre des déchets verts', type='machine', parent='DPR-FAC')
 offre('204', tag='DPR-FAC-ASC1', nom='Ascenseur de chargement du wagon séchoir', type='machine', parent='DPR-FAC', criticite='A', notes='Zone de chute de charge : accès interdit en marche.')
 offre('205', tag='DPR-FAC-ASC2', nom='Ascenseur de déchargement du wagon séchoir', type='machine', parent='DPR-FAC', criticite='A', notes='Zone de chute de charge : accès interdit en marche.')
@@ -151,6 +156,17 @@ offre('351/357', tag='DPR-SEC-PORT', nom='Portes d\'entrée et de sortie des 2 s
 offre('352/353/355/359', tag='DPR-SEC-POUS', nom='Pousseurs et recherches à chaîne du séchoir', type='machine', parent='DPR-SEC', criticite='A', notes='Deux lignes de séchage, 22 + 22 wagons, 5,3 h, 90 °C max.')
 offre('400', tag='DPR-SEC-GEN', nom='Générateur de chaleur à gaz du séchoir (3 000 000 kcal/h)', type='machine', parent='DPR-SEC', criticite='A',
       notes='Gaz naturel 300 mbar, 160 °C max, rampe gaz et armoire propres.')
+# rampe gaz et brûleur du générateur, composition type d'après Beralmar (Notes sur le séchage, § 1.12.3, normes EN 676 et EN 298)
+BER = "Composition type Beralmar § 1.12.3 (EN 676 / EN 298) : repère, marque et réglage à relever sur la rampe réelle."
+for n, (t, nom, cr) in enumerate([
+        ('VAN', 'vanne de sectionnement à sphère (coupure manuelle)', 'A'), ('FIL', 'filtre à gaz', 'B'), ('MANO', 'manomètre à cadran', 'B'),
+        ('REG', 'régulateur de pression avec sécurité de surpression (OPSO)', 'A'), ('DECH', 'vanne de décharge', 'B'),
+        ('EV', 'électrovanne double de sécurité classe A, normalement fermée', 'A'), ('VREG', 'vanne de régulation (modulation du débit)', 'A'),
+        ('CTF', 'contrôle d\'étanchéité des électrovannes', 'A'), ('PRG', 'pressostats gaz mini / maxi', 'A'),
+        ('VCOMB', 'ventilateur d\'air de combustion', 'A'), ('ALL', 'électrode et transformateur d\'allumage', 'B'),
+        ('FLAM', 'détection de flamme (cellule UV ou sonde d\'ionisation) et relais de flamme', 'A'),
+    ], 1):
+    ajout(tag=f'DPR-SEC-GEN-{t}', nom=f'Générateur du séchoir — {nom}', type='organe', parent='DPR-SEC-GEN', repere=str(n), criticite=cr, notes=BER)
 offre('401', tag='DPR-SEC-VCEN', nom='Ventilateur centrifuge principal du séchoir', type='moteur', parent='DPR-SEC', puissance_kw='110', criticite='A', notes='240 000 m³/h, 500 Pa, 150 °C.')
 offre('402', tag='DPR-SEC-VEXT', nom='Ventilateurs axiaux d\'extraction de l\'air humide (2 + 2)', type='moteur', parent='DPR-SEC', puissance_kw='74', notes='4 × 18,5 kW, 60 000 m³/h chacun.')
 offre('403', tag='DPR-SEC-VREC', nom='Ventilateurs de recirculation interne (11 + 11)', type='moteur', parent='DPR-SEC', puissance_kw='121', notes='22 × 5,5 kW, 60 000 m³/h chacun.')
@@ -240,14 +256,17 @@ for t, n in (('DPR-ARM-Q1', 'Quadro 1'), ('DPR-ARM-Q2', 'Quadro 2'), ('DPR-ARM-N
          "Électricien habilité uniquement ; armoire consignée ; vérifier l'absence de tension.")
 plan('PM Trimestriel — Sauvegarde automates', 'DPR-AUT-Q1', 91, 60, ["Sauvegarde du programme des CPU 315-2 et 314-2 (navette)", "Sauvegarde du projet de l'écran TP1200", "Vérifier la pile / carte mémoire des CPU", "Noter la version et ranger la copie hors de l'usine"], "Ne rien modifier au programme sans l'accord du responsable.")
 plan('PM Hebdomadaire — Cercleuse MS500', 'DPR-CND-CER-01', 7, 30, ["Nettoyer les canaux de feuillard", "Lame et lame de soudage : usure", "Résistance de soudage : température", "Ressorts de pinces", "Essai de cerclage et tension"])
+plan('PM Hebdomadaire — Cadre et lame de chargement', 'DPR-FAC-CADRE', 7, 30, ["Lame de chargement : déformation, frottement sur les étages du wagon", "Ressorts pneumatiques (torpress) : pression d'air, fuites", "Roues, guides et chaîne / réducteur du wagon de translation : jeu, graissage", "Fins de course et détecteurs de position de la lame", "Variateur INM212 : historique des alarmes relevé, ventilation propre"])
 # séchoir, four, robots et moyens de protection (offre 2015-063)
 GAZ = "Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
 ROBOT = "Robot à l'arrêt et consigné (coffret cadenassé), porte de cellule ouverte ; jamais d'entrée en cellule en mode automatique."
 LEVAGE = "Zone balisée sous la charge ; élingues et crochets contrôlés ; personne sous la charge ; casque et chaussures."
 plan('PM Quotidien — Générateur de chaleur du séchoir', 'DPR-SEC-GEN', 1, 15, ["Flamme stable, pas d'alarme sur l'armoire", "Pression gaz rampe — noter (mbar)", "Température de soufflage — noter (°C, 160 max)", "Odeur de gaz : contrôle au détecteur portable"], GAZ)
-plan('PM Annuel — Rampe gaz et générateur du séchoir', 'DPR-SEC-GEN', 365, 240, ["Étanchéité de la rampe à l'eau savonneuse / détecteur", "Électrovannes de sécurité : essai de fermeture", "Pressostats gaz et air : essai", "Électrode et cellule de flamme : nettoyage"], GAZ)
+plan('PM Mensuel — Brûleur et rampe gaz du séchoir', 'DPR-SEC-GEN', 30, 60, ["Filtre à gaz : perte de charge (manomètres amont / aval), cartouche à changer si encrassée", "Pression après régulateur — noter (mbar)", "Électrode d'allumage : écartement, propreté", "Cellule UV / sonde d'ionisation : nettoyer la lentille, signal de flamme — noter", "Essai d'arrêt pour défaillance de flamme : la remise en marche doit exiger un réarmement manuel", "Noter chaque mise en sécurité du mois et sa cause"], GAZ)
+plan('PM Annuel — Rampe gaz et générateur du séchoir', 'DPR-SEC-GEN', 365, 240, ["Étanchéité de la rampe à l'eau savonneuse / détecteur", "Électrovannes de sécurité : essai de fermeture et du contrôle d'étanchéité", "Régulateur : essai du blocage de surpression (OPSO)", "Pressostats gaz et air : essai de déclenchement", "Électrode et cellule de flamme : nettoyage"], GAZ)
 plan('PM Hebdomadaire — Ventilateurs du séchoir', 'DPR-SEC-VCEN', 7, 60, ["Ventilateur principal 110 kW : vibrations, température paliers", "Courroies et carter de protection en place", "22 ventilateurs de recirculation : bruit, arrêt d'un ventilateur", "4 extracteurs d'air humide : état"])
 plan('PM Mensuel — Capteurs du séchoir', 'DPR-SEC-CAPT', 30, 60, ["Comparer les 22 sondes température/humidité à un appareil de référence", "Nettoyer les sondes encrassées", "Capteurs de pression : prises non bouchées"])
+plan('Mesure Mensuelle — Rendement du séchoir', 'DPR-SEC-CAPT', 30, 30, ["Température et humidité de l'air ambiant à la prise d'air (appareil vérifié)", "Température et humidité de l'air à l'évacuation des extracteurs, au point de sortie", "Tonnage sec du jour et humidité des briques à l'entrée et à la sortie (pesée / étuve)", "Saisir dans le classeur « Consommation du séchoir » : kcal / kg d'eau (repère : 920 à l'offre, ≈ 835 relevé du 10/10/2026)", "Si l'air sort sous 60 % d'humidité : revoir le réglage extraction / recirculation"], "Sans risque particulier ; casque et chaussures dans la halle.")
 plan('PM Hebdomadaire — Pousseurs et transbordeurs du séchoir', 'DPR-SEC-POUS', 7, 60, ["Fins de course et centrage des transbordeurs", "Chaînes des recherches : tension, graissage", "Portes : étanchéité et mécanisme", "Rails et roues des wagons séchoir"])
 plan('PM Quotidien — Four (tournée)', 'DPR-FOU-BRU', 1, 30, ["Courbe de cuisson : températures des zones conformes (1 100 °C max)", "Points de feu : flamme présente sur chaque groupe", "Pression du four (contre-pression porte / voûte)", "Fuite gaz : contrôle au détecteur portable sur la panoplie"], GAZ)
 plan('PM Mensuel — Brûleurs en voûte', 'DPR-FOU-BRU', 30, 240, ["Nettoyer les injecteurs des 110 points de feu", "Joints à siège conique : état", "Flexibles gaz et air : fissures, date de péremption", "Robinets gradués : manœuvre"], GAZ)
@@ -269,6 +288,12 @@ plan('PM Quotidien — Compresseurs', 'DPR-UTL-COMP', 1, 15, ["Pression du rése
 plan('PM Mensuel — Compresseurs', 'DPR-UTL-COMP', 30, 60, ["Filtre à air d'aspiration : nettoyer", "Niveau d'huile", "Purgeurs automatiques : essai", "Alterner le compresseur en marche et celui en secours", "Température de refoulement"], AIRSEC)
 plan('PM Annuel — Réservoirs d\'air (appareils à pression)', 'DPR-UTL-COMP', 365, 120, ["Soupapes de sûreté : essai et plombage", "Inspection visuelle intérieure / extérieure (corrosion)", "Manomètres : étalonnage", "Classer le rapport de contrôle réglementaire"], AIRSEC)
 plan('PM Mensuel — Réseau d\'air et points A1 à A13', 'DPR-UTL-AIR', 30, 90, ["Recherche de fuites sur la boucle 2\"1/2 et aux 13 points (machine en marche, à l'écoute ou à l'eau savonneuse)", "Filtres-régulateurs des points : cartouches, purge", "Pression à chaque point — noter les points sous 6 bar", "Flexibles et raccords rapides : état"], AIRSEC)
+# repères du traité Beralmar (séchage ch. 1.7-1.16, cuisson ch. 2.4-2.15) : mesures périodiques
+plan('Mesure Trimestrielle — Vitesse et répartition de l\'air du séchoir', 'DPR-SEC-VREC', 91, 120, ["Anémomètre : vitesse de l'air entre les wagons, en haut et en bas, dans chaque secteur — repère 8 à 12 m/s, au moins 7 m/s", "Écart de température haut / bas de charge — repère 3 à 4 °C", "Pression dans la gaine de soufflage et dans le tunnel : légère surpression", "Portes et contre-portes d'entrée : joints, entrées d'air parasite"], "Ventilateurs en marche : rester sur les passerelles, ne pas entrer dans le tunnel.")
+plan('Mesure Mensuelle — Analyse des fumées du four', 'DPR-FOU-BRU', 30, 60, ["Analyseur : O₂, CO₂, CO près de la zone de feu et à la cheminée", "Excès d'air λ = 1 + 0,8979 × O₂ / (21 − O₂) — noter", "O₂ anormalement haut : chercher une fuite (rigoles, joints, portes) ; O₂ et CO hauts ensemble : répartition du gaz entre les points de feu", "Température des fumées au ventilateur de tirage : au-dessus de 60 °C (point de rosée)"], GAZ)
+plan('PM Mensuel — Étanchéité du four (air parasite)', 'DPR-FOU-MAN', 30, 120, ["Rigoles à sable : niveau, sable non calcaire 1 à 7 mm, circulation du sable", "Joints entre wagons (fibre céramique) et tôles sous châssis", "Portes d'entrée et de sortie : étanchéité", "Pression de la fosse et du canal : équilibrées ; point neutre après le dernier groupe de feu"], GAZ)
+plan('Essai Trimestriel — Arrêt du tirage coupe les brûleurs', 'DPR-FOU-VFUM', 91, 30, ["Avec le chef de four, simuler l'arrêt du ventilateur de tirage", "Vérifier la coupure de tous les groupes de brûleurs et l'alarme", "Noter le résultat et le temps de réaction"], GAZ)
+plan('Mesure Semestrielle — Bilan thermique du four', 'DPR-FOU-VFUM', 182, 240, ["Débit et température du tirage et de la récupération (tube de Pitot, thermocouple)", "Températures haut / bas de charge au préchauffage (wagon instrumenté)", "Peser un wagon vide (revêtement + châssis) — repère : revêtement ≤ 0,5 kg par kg de produit", "Consommation de gaz du four seul — repère offre 340 kcal/kg cuit"], GAZ)
 for p in P:
     assert p[1] in tags, p
 
@@ -290,6 +315,10 @@ PI = [
     ['Graisse paliers EP2', '', 'DPR-PRE-LAM', 'kg', 0, 0],
     ['Fin de course de translation de la navette', 'à relever', 'DPR-NAV', 'pièce', 0, 1],
     ['Détecteur de proximité (PX) de la navette', 'à relever', 'DPR-NAV', 'pièce', 0, 2],
+    ['Électrode d\'allumage du brûleur du séchoir', 'à relever', 'DPR-SEC-GEN-ALL', 'pièce', 0, 1],
+    ['Cellule UV / sonde d\'ionisation du brûleur', 'à relever', 'DPR-SEC-GEN-FLAM', 'pièce', 0, 1],
+    ['Cartouche du filtre à gaz', 'à relever', 'DPR-SEC-GEN-FIL', 'pièce', 0, 1],
+    ['Transformateur d\'allumage', 'à relever', 'DPR-SEC-GEN-ALL', 'pièce', 0, 1],
     ['Courroies du ventilateur principal du séchoir', 'réf. sur courroie', 'DPR-SEC-VCEN', 'jeu', 0, 1],
     ['Moteur 5,5 kW de ventilateur de recirculation', 'à relever', 'DPR-SEC-VREC', 'pièce', 0, 1],
     ['Sonde température / humidité du séchoir', 'à relever', 'DPR-SEC-CAPT', 'pièce', 0, 2],
@@ -330,6 +359,20 @@ with open(SCH / 'MS500_pieces.csv', encoding='utf-8') as f:
 for p in PI:
     assert p[2] in tags, p
 
+# ------------------------------------------------------------------ alarmes automate relevées sur les écrans
+AL = [
+    ['INM212-E.THT', "Variateur INM212 lame de chargement : E.THT surcharge du variateur (relais thermique électronique)", 'DPR-FAC-CADRE-INM212',
+     "Le courant de sortie est resté au-dessus du courant nominal du variateur assez longtemps pour faire chauffer ses transistors (tenue : 150 % pendant 60 s). Causes : lame qui force (étage mal positionné, brique coincée, lame tordue, guides ou chaîne durs, frein qui ne se libère pas) ; "
+     "torpress sans air ; temps d'accélération ou de décélération trop courts ; boost de couple mal réglé ; variateur encrassé ou ventilateur arrêté, armoire trop chaude ; variateur trop petit pour la charge.",
+     "Ne pas réarmer à répétition : laisser refroidir quelques minutes. Consigner et faire tourner la lame à la main : elle doit aller librement. Nettoyer le variateur (aspiration, pas d'air comprimé sur les cartes), vérifier son ventilateur et la température de l'armoire. "
+     "Mesurer le courant moteur en marche (moniteur du variateur) et le comparer à la plaque. Si la mécanique est libre et le courant reste haut : allonger les temps d'accélération / décélération (Pr.7, Pr.8) et revoir le boost de couple (Pr.0) avec l'automaticien, après avoir noté les valeurs d'origine."],
+    ['INM212', "ALARME VARIATEUR INM212 LAME DE CHARGEMENT", 'DPR-FAC-CADRE-INM212',
+     "Défaut du variateur qui entraîne la lame de chargement : 1) lame bloquée ou freinée (étage du wagon mal positionné par l'ascenseur, brique ou bavure coincée, lame tordue) → surcharge ou surintensité ; "
+     "2) ressorts pneumatiques (torpress) sans air : la tête du cadre ne se soulève pas ; 3) moteur ou câble : isolement, phase coupée ; 4) frein du motoréducteur qui ne se libère pas ; "
+     "5) liaison Profibus avec l'automate coupée ; 6) variateur trop chaud (ventilation, poussière) ; 7) tension réseau basse ou coupure.",
+     "Lire et noter le code affiché sur le variateur (ex. E.OC, E.THM, E.OLT, E.OP) avant de réarmer. Consigner, vérifier que la lame et le wagon sont libres et alignés, pression d'air des torpress, "
+     "frein et moteur (isolement), ventilation du variateur. Réarmer, essai en manuel à vitesse réduite. Si l'alarme revient : électricien, relever l'historique des défauts du variateur, ouvrir une intervention."],
+]
 SORTIE.mkdir(parents=True, exist_ok=True)
 def ecrire(nom, entetes, rows):
     with open(SORTIE / nom, 'w', newline='', encoding='utf-8') as f:
@@ -337,6 +380,9 @@ def ecrire(nom, entetes, rows):
 ecrire('equipements_preparation.csv', ENT, [[l[c] for c in ENT] for l in L])
 ecrire('plans_preparation.csv', ['nom', 'tag', 'frequence_j', 'duree_min', 'checklist', 'securite'], P)
 ecrire('pieces_preparation.csv', ['nom', 'reference', 'tag', 'unite', 'stock', 'seuil_conseille'], PI)
+for a in AL:
+    assert a[2] in tags, a
+ecrire('alarmes_preparation.csv', ['code', 'texte', 'tag', 'causes', 'remede'], AL)
 mot = [l for l in L if l['type'] == 'moteur']
 kw = sum(float(l['puissance_kw'] or 0) for l in mot)
 print(f"{len(L)} équipements ({sum(l['type'] == 'machine' for l in L)} machines, {len(mot)} moteurs = {kw:.1f} kW, "

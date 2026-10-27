@@ -106,14 +106,26 @@ PM Hebdomadaire — Cercleuse MS500;DPR-CND-CER-01;7;30;"1. Nettoyer les canaux 
 3. Résistance de soudage : température
 4. Ressorts de pinces
 5. Essai de cerclage et tension";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+PM Hebdomadaire — Cadre et lame de chargement;DPR-FAC-CADRE;7;30;"1. Lame de chargement : déformation, frottement sur les étages du wagon
+2. Ressorts pneumatiques (torpress) : pression d'air, fuites
+3. Roues, guides et chaîne / réducteur du wagon de translation : jeu, graissage
+4. Fins de course et détecteurs de position de la lame
+5. Variateur INM212 : historique des alarmes relevé, ventilation propre";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
 PM Quotidien — Générateur de chaleur du séchoir;DPR-SEC-GEN;1;15;"1. Flamme stable, pas d'alarme sur l'armoire
 2. Pression gaz rampe — noter (mbar)
 3. Température de soufflage — noter (°C, 160 max)
 4. Odeur de gaz : contrôle au détecteur portable";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
+PM Mensuel — Brûleur et rampe gaz du séchoir;DPR-SEC-GEN;30;60;"1. Filtre à gaz : perte de charge (manomètres amont / aval), cartouche à changer si encrassée
+2. Pression après régulateur — noter (mbar)
+3. Électrode d'allumage : écartement, propreté
+4. Cellule UV / sonde d'ionisation : nettoyer la lentille, signal de flamme — noter
+5. Essai d'arrêt pour défaillance de flamme : la remise en marche doit exiger un réarmement manuel
+6. Noter chaque mise en sécurité du mois et sa cause";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
 PM Annuel — Rampe gaz et générateur du séchoir;DPR-SEC-GEN;365;240;"1. Étanchéité de la rampe à l'eau savonneuse / détecteur
-2. Électrovannes de sécurité : essai de fermeture
-3. Pressostats gaz et air : essai
-4. Électrode et cellule de flamme : nettoyage";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
+2. Électrovannes de sécurité : essai de fermeture et du contrôle d'étanchéité
+3. Régulateur : essai du blocage de surpression (OPSO)
+4. Pressostats gaz et air : essai de déclenchement
+5. Électrode et cellule de flamme : nettoyage";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
 PM Hebdomadaire — Ventilateurs du séchoir;DPR-SEC-VCEN;7;60;"1. Ventilateur principal 110 kW : vibrations, température paliers
 2. Courroies et carter de protection en place
 3. 22 ventilateurs de recirculation : bruit, arrêt d'un ventilateur
@@ -121,6 +133,11 @@ PM Hebdomadaire — Ventilateurs du séchoir;DPR-SEC-VCEN;7;60;"1. Ventilateur p
 PM Mensuel — Capteurs du séchoir;DPR-SEC-CAPT;30;60;"1. Comparer les 22 sondes température/humidité à un appareil de référence
 2. Nettoyer les sondes encrassées
 3. Capteurs de pression : prises non bouchées";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
+Mesure Mensuelle — Rendement du séchoir;DPR-SEC-CAPT;30;30;"1. Température et humidité de l'air ambiant à la prise d'air (appareil vérifié)
+2. Température et humidité de l'air à l'évacuation des extracteurs, au point de sortie
+3. Tonnage sec du jour et humidité des briques à l'entrée et à la sortie (pesée / étuve)
+4. Saisir dans le classeur « Consommation du séchoir » : kcal / kg d'eau (repère : 920 à l'offre, ≈ 835 relevé du 10/10/2026)
+5. Si l'air sort sous 60 % d'humidité : revoir le réglage extraction / recirculation";"Sans risque particulier ; casque et chaussures dans la halle."
 PM Hebdomadaire — Pousseurs et transbordeurs du séchoir;DPR-SEC-POUS;7;60;"1. Fins de course et centrage des transbordeurs
 2. Chaînes des recherches : tension, graissage
 3. Portes : étanchéité et mécanisme
@@ -198,3 +215,22 @@ PM Mensuel — Réseau d'air et points A1 à A13;DPR-UTL-AIR;30;90;"1. Recherche
 2. Filtres-régulateurs des points : cartouches, purge
 3. Pression à chaque point — noter les points sous 6 bar
 4. Flexibles et raccords rapides : état";"Isoler et purger la partie du réseau avant d'ouvrir un raccord ; jamais d'air comprimé dirigé vers une personne ; lunettes et bouchons d'oreilles en salle des compresseurs."
+Mesure Trimestrielle — Vitesse et répartition de l'air du séchoir;DPR-SEC-VREC;91;120;"1. Anémomètre : vitesse de l'air entre les wagons, en haut et en bas, dans chaque secteur — repère 8 à 12 m/s, au moins 7 m/s
+2. Écart de température haut / bas de charge — repère 3 à 4 °C
+3. Pression dans la gaine de soufflage et dans le tunnel : légère surpression
+4. Portes et contre-portes d'entrée : joints, entrées d'air parasite";Ventilateurs en marche : rester sur les passerelles, ne pas entrer dans le tunnel.
+Mesure Mensuelle — Analyse des fumées du four;DPR-FOU-BRU;30;60;"1. Analyseur : O₂, CO₂, CO près de la zone de feu et à la cheminée
+2. Excès d'air λ = 1 + 0,8979 × O₂ / (21 − O₂) — noter
+3. O₂ anormalement haut : chercher une fuite (rigoles, joints, portes) ; O₂ et CO hauts ensemble : répartition du gaz entre les points de feu
+4. Température des fumées au ventilateur de tirage : au-dessus de 60 °C (point de rosée)";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
+PM Mensuel — Étanchéité du four (air parasite);DPR-FOU-MAN;30;120;"1. Rigoles à sable : niveau, sable non calcaire 1 à 7 mm, circulation du sable
+2. Joints entre wagons (fibre céramique) et tôles sous châssis
+3. Portes d'entrée et de sortie : étanchéité
+4. Pression de la fosse et du canal : équilibrées ; point neutre après le dernier groupe de feu";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
+Essai Trimestriel — Arrêt du tirage coupe les brûleurs;DPR-FOU-VFUM;91;30;"1. Avec le chef de four, simuler l'arrêt du ventilateur de tirage
+2. Vérifier la coupure de tous les groupes de brûleurs et l'alarme
+3. Noter le résultat et le temps de réaction";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
+Mesure Semestrielle — Bilan thermique du four;DPR-FOU-VFUM;182;240;"1. Débit et température du tirage et de la récupération (tube de Pitot, thermocouple)
+2. Températures haut / bas de charge au préchauffage (wagon instrumenté)
+3. Peser un wagon vide (revêtement + châssis) — repère : revêtement ≤ 0,5 kg par kg de produit
+4. Consommation de gaz du four seul — repère offre 340 kcal/kg cuit";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
