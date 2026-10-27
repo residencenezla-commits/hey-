@@ -9,7 +9,7 @@ PM Quotidien — Laminoir;DPR-PRE-LAM;1;20;"1. Graisser les paliers des cylindre
 4. Huileur (M139) : niveau d'huile et débit
 5. Démarreurs progressifs 316A1 / 317A1 : pas de défaut";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
 PM Hebdomadaire — Laminoir;DPR-PRE-LAM;7;60;"1. Courroies et poulies des 2 moteurs 110 kW : tension, usure
-2. Usure / ovalisation des cylindres — noter
+2. Usure / ovalisation des cylindres — noter ; étagement : écartement du dégrossisseur au plus 2,5 fois celui du finisseur (formation PME 2013, diap. 46)
 3. Outils de rectification (M149 / M150) : course et état
 4. Serrage bâti et paliers
 5. Niveau d'huile des réducteurs";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
@@ -227,6 +227,10 @@ PM Mensuel — Étanchéité du four (air parasite);DPR-FOU-MAN;30;120;"1. Rigol
 2. Joints entre wagons (fibre céramique) et tôles sous châssis
 3. Portes d'entrée et de sortie : étanchéité
 4. Pression de la fosse et du canal : équilibrées ; point neutre après le dernier groupe de feu";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
+Mesure Mensuelle — Température réelle de cuisson (anneaux Buller);DPR-FOU-BRU;30;60;"1. Placer anneaux Buller ou montres fusibles au cœur et en haut / bas de la charge d'un wagon
+2. Relever à la sortie la température atteinte — cible 900 °C (CETIM 1108/14), mesure actuelle de supervision 810-820 °C
+3. Examiner les cassures de 10 briques : cœur noir, grains de chaux, cassure brillante (fêle à 573 °C)
+4. Noter le rebut à la sortie du four";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
 Essai Trimestriel — Arrêt du tirage coupe les brûleurs;DPR-FOU-VFUM;91;30;"1. Avec le chef de four, simuler l'arrêt du ventilateur de tirage
 2. Vérifier la coupure de tous les groupes de brûleurs et l'alarme
 3. Noter le résultat et le temps de réaction";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
