@@ -4,7 +4,7 @@ PM Quotidien — Caisson doseur;DPR-PRE-DOS1;1;15;"1. Absence de blocs / corps �
 3. Piocheur (M138) : dents, bruit
 4. Variateurs 313I1 / 314I1 : pas de défaut affiché";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
 PM Quotidien — Laminoir;DPR-PRE-LAM;1;20;"1. Graisser les paliers des cylindres
-2. Écartement des cylindres à la jauge — noter en mm
+2. Écartement des cylindres à la jauge — noter en mm (finisseur : broyage sous 1,5 mm, avis CETIM 1108/14 contre les grains de chaux)
 3. Températures paliers (infrarouge) — noter °C
 4. Huileur (M139) : niveau d'huile et débit
 5. Démarreurs progressifs 316A1 / 317A1 : pas de défaut";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
@@ -142,7 +142,7 @@ PM Hebdomadaire — Pousseurs et transbordeurs du séchoir;DPR-SEC-POUS;7;60;"1.
 2. Chaînes des recherches : tension, graissage
 3. Portes : étanchéité et mécanisme
 4. Rails et roues des wagons séchoir";"Consignation de l'armoire (sectionneur local SZ cadenassé) avant toute intervention ; EPI : casque, gants, chaussures, lunettes ; jamais d'intervention sur bande ou cylindre en mouvement."
-PM Quotidien — Four (tournée);DPR-FOU-BRU;1;30;"1. Courbe de cuisson : températures des zones conformes (1 100 °C max)
+PM Quotidien — Four (tournée);DPR-FOU-BRU;1;30;"1. Courbe de cuisson : températures des zones conformes — cuisson visée 900 °C (CETIM 1108/14), 1 100 °C max
 2. Points de feu : flamme présente sur chaque groupe
 3. Pression du four (contre-pression porte / voûte)
 4. Fuite gaz : contrôle au détecteur portable sur la panoplie";"Gaz : permis de feu, détecteur de gaz portable, jamais de flamme nue près de la rampe ; EPI anti-chaleur, gants, lunettes ; consignation électrique."
