@@ -6,3 +6,18 @@ v*_results*/
 *.log
 !erp-dolibarr/modules/gmao/referentiel/*.csv
 personnel_primes_*.txt
+
+# DONNÉES DE L'ENTREPRISE : JAMAIS DANS LE DÉPÔT
+# (comptabilité, paie, chèques, banques, clients, fournisseurs, personnel)
+# Elles se rangent dans donnees-privees/ (local) et dans l'archive privée remise à la direction.
+/donnees-privees/
+erp-dolibarr/init/compta/
+erp-dolibarr/init/tiers-*.csv
+/*.xlsx
+/*.xls
+/*.xlsm
+/*.pdf
+/*.docx
+erp-dolibarr/outils/*.docx
+erp-dolibarr/exports/
+livraison/captures/erp-*.jpg

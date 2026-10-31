@@ -116,8 +116,6 @@ ol,ul{margin:0 0 6pt;padding-left:15pt}li{margin:2pt 0}
 <tr><td>Documents</td><td>Factures FA2610-0001, avoirs AV…, acomptes AC… ; identifiants fiscaux du client et mentions légales de DPR AXXAM imprimés</td></tr>
 </table>
 <div class="deux">
-  <div><img class="capture" src="captures/erp-fournisseurs.jpg" alt=""><div class="legende">Les fournisseurs repris de la comptabilité, avec leur code PC Compta.</div></div>
-  <div><img class="capture" src="captures/erp-facture.jpg" alt=""><div class="legende">Facture de test : RC, NIF et AI du client, montants en dinars algériens.</div></div>
 </div>
 
 </section>
@@ -160,8 +158,6 @@ ol,ul{margin:0 0 6pt;padding-left:15pt}li{margin:2pt 0}
 <h2>3. La comptabilité, comme dans PC Compta</h2>
 <p>L'ERP reprend <b>votre comptabilité 2026 de PC Compta</b> : les 347 comptes SCF, les 31 journaux avec les mêmes codes (073 ventes briqueterie, 03 caisse briqueterie, 02 CPA El Kseur…), les banques reliées à leur compte 512xx et les <b>8 748 lignes d'écritures</b> jusqu'au 04/10/2026, verrouillées. À chaque chargement, la balance est comparée compte par compte à celle de PC Compta : identique.</p>
 <div class="deux">
-  <div><img class="capture" src="captures/erp-facture-timbre.jpg" alt=""><div class="legende">Facture payée en espèces : timbre de 893 DA calculé automatiquement (1,5 % du TTC).</div></div>
-  <div><img class="capture" src="captures/erp-grand-livre-41100.jpg" alt=""><div class="legende">Grand livre du compte 41100 avec les codes auxiliaires de PC Compta.</div></div>
 </div>
 <h3>Le droit de timbre</h3>
 <p>À la validation d'une facture payée en <b>espèces</b> : 1 % du TTC jusqu'à 30 000 DA, 1,5 % jusqu'à 100 000 DA, 2 % au-delà, arrondi au dinar supérieur, au compte 44720. Ce barème redonne exactement le timbre de vos 471 factures en espèces de 2026.</p>
@@ -176,7 +172,7 @@ ol,ul{margin:0 0 6pt;padding-left:15pt}li{margin:2pt 0}
 <h3>Le tableau de bord</h3>
 <p>Double-clic sur <b>tableau_de_bord.bat</b> : une page s'ouvre (sans Internet) avec le chiffre d'affaires par mois, la trésorerie par banque, la TVA et le timbre, les principaux clients de la briqueterie et les principales charges, calculés sur le grand livre. Chiffres contrôlés contre l'export de PC Compta.</p>
 <h3>Le dossier comptable</h3>
-<p>Double-clic sur <b>dossier_comptable.bat</b> : un classeur Excel <code>exports\DOSSIER_COMPTABLE_2026_….xlsx</code> (bilan actif et passif, <b>TCR</b> au format SCF, balance générale, balance des tiers, grand livre, <b>préparation G50</b> mois par mois, contrôles) et une page imprimable des états financiers (Ctrl+P → PDF). Arrêté à une date : <code>dossier_comptable.bat --au=2026-09-30</code>. Au 04/10/2026 : total du bilan 2 403 173 420,04 DA, résultat <b>provisoire</b> 174 013 933,55 DA (avant écritures d'inventaire : stocks, amortissements de l'année, provisions, IBS). La feuille G50 est une aide : vérifiez-la avant la déclaration.</p>
+<p>Double-clic sur <b>dossier_comptable.bat</b> : un classeur Excel <code>exports\DOSSIER_COMPTABLE_2026_….xlsx</code> (bilan actif et passif, <b>TCR</b> au format SCF, balance générale, balance des tiers, grand livre, <b>préparation G50</b> mois par mois, contrôles) et une page imprimable des états financiers (Ctrl+P → PDF). Arrêté à une date : <code>dossier_comptable.bat --au=2026-09-30</code>. Les montants du dossier comptable restent dans les fichiers privés de la société. Le résultat est provisoire avant les écritures d'inventaire (stocks, amortissements de l'année, provisions, IBS). La feuille G50 est une aide : vérifiez-la avant la déclaration.</p>
 <p>Factures et bons de livraison s'impriment au <b>format DLG</b>, comme ceux de PC Compta : numéro souligné, client avec RC / NIF / AI, tableau Référence / Désignation / Un / TVA % / Remise % / Quantité / Prix HT / Montant HT, récapitulatif de TVA, timbre, net à payer et montant en lettres en majuscules ; le bon de livraison a les cases de signature magasinier, chauffeur et client.</p>
 <p>Factures et devis portent en bas la mention « Arrêtée la présente facture à la somme de : soixante mille trois cent quatre-vingt-treize dinars algériens, toutes taxes comprises. »</p>
 <p>Exemple testé : 2 000 B8 à 25 DA HT en espèces → <b>073</b> : 41100/C023 débit 60 393 ; 70110 crédit 50 000 ; 44570 crédit 9 500 ; 44720 crédit 893 — puis <b>03</b> : 53000 débit / 41100 crédit 60 393. Exportées en pièces 073/000216 et 03/000114, à la suite de PC Compta.</p>

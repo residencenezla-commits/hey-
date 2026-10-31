@@ -1,5 +1,10 @@
 # ERP Dolibarr — Briqueterie SARL DPR Axxam
 
+> **Données de l'entreprise : jamais dans le dépôt.** Les fichiers de tiers (`init/tiers-dpr-axxam.csv`),
+> de comptabilité et de banques (`init/compta/*.csv`), la paie, les chèques et les états clients / fournisseurs
+> sont dans l'archive privée remise à la direction (`DONNEES_PRIVEES_DPR.zip`). Pour une installation,
+> copier ces fichiers à leur place avant `docker compose up` ; sans eux, l'ERP démarre vide.
+
 Dolibarr est un logiciel de gestion (ERP) **open source et gratuit**, en français.
 Ce dossier l'installe déjà paramétré pour la briqueterie : ventes, achats, stocks,
 caisse et fabrication.
@@ -161,7 +166,7 @@ comptabilité) :
 
 ```bash
 node outils/bons_enlevement_word.js 1 10 BONS_ENLEVEMENT.docx        # bons 0001 à 0010
-CLIENT="KERDJA BILEL" PRODUIT=B8 QUANTITE=7040 node outils/bons_enlevement_word.js 1 10
+CLIENT="NOM DU CLIENT" PRODUIT=B8 QUANTITE=7040 node outils/bons_enlevement_word.js 1 10
 # 50 bons au même client, tous pré-remplis, + bordereau de remise avec le montant réglé :
 TOUS=1 PRIX=20.50 CLIENT="..." PAYE="10/10/2026" PRODUIT=B8 QUANTITE=7040 node outils/bons_enlevement_word.js 1 50
 # slogan en filigrane derrière chaque bon : FILIGRANE=force (« La force de la terre ») ou FILIGRANE=bien (« Le bien-être dans l'habitat »), DENSITE=moyen ou fort (défaut), DIAGONALE=1 pour la grande diagonale ; images : python3 outils/filigranes.py

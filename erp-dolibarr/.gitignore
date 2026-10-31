@@ -2,7 +2,7 @@
 /donnees/
 sauvegardes/*.sql
 exports/
-# Fichiers à importer (le dépôt ignore les .csv par défaut)
-!init/tiers-dpr-axxam.csv
-!init/compta/*.csv
+# Données de l'entreprise (tiers, écritures, banques) : fichiers privés, jamais dans le dépôt
+init/tiers-*.csv
+init/compta/
 __pycache__/

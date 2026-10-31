@@ -2,7 +2,7 @@
 // Usage : node bons_enlevement_word.js [premier=1] [nombre=10] [fichier.docx]
 //         Variables facultatives pour pré-remplir le premier bon (TOUS=1 : tous les bons),
 //         PRIX=20.50 : prix TTC unitaire, imprimé seulement sur le bordereau de remise :
-//         CLIENT="KERDJA BILEL" ADRESSE="..." TEL="..." PAYE="10/10/2026" PRODUIT=B8 QUANTITE=7040
+//         CLIENT="NOM DU CLIENT" ADRESSE="..." TEL="..." PAYE="10/10/2026" PRODUIT=B8 QUANTITE=7040
 //         NONPAYE=1 : bons « NON PAYÉ » numérotés NP, sans aucun prix ; avec TOUS=1, bordereau de réception
 //         où l'on inscrit à la main le N° de BL, la date, la quantité, la banque et la référence bancaire
 const fs = require('fs');

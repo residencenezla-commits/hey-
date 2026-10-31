@@ -167,17 +167,24 @@ if (!$db->fetch_object($res)) {
 etape('comptes par défaut : clients 41100, fournisseurs 40101, ventes 70110, TVA 44570 / 44563, timbre 44720');
 
 // ------------------------------------------------------------ 6. Banques et caisses
+// Les libellés avec n° de compte sont dans init/compta/banques.csv (fichier privé, hors dépôt) ;
+// sans ce fichier, les comptes sont créés avec un libellé sans numéro.
 $banques = array(
 	// réf => [libellé, compte, journal, type (1 courant, 2 caisse), banque]
 	'CAISSE'   => array('Caisse briqueterie', '53000', '03', Account::TYPE_CASH, ''),
 	'CAISSE-C' => array('Caisse carrosserie', '53000', '18', Account::TYPE_CASH, ''),
-	'CPA-4083' => array('CPA El Kseur 004-00370-4000004083-77', '51201', '02', Account::TYPE_CURRENT, 'CPA'),
-	'CPA-6599' => array('CPA 004-00370-4000006599-95', '51211', '11', Account::TYPE_CURRENT, 'CPA'),
-	'CPA-6216' => array('CPA 004-00370-4000262163-91', '51202', '23', Account::TYPE_CURRENT, 'CPA'),
-	'BNA'      => array('BNA 0300000961-18', '51230', '13', Account::TYPE_CURRENT, 'BNA'),
+	'CPA-4083' => array('CPA El Kseur', '51201', '02', Account::TYPE_CURRENT, 'CPA'),
+	'CPA-6599' => array('CPA', '51211', '11', Account::TYPE_CURRENT, 'CPA'),
+	'CPA-6216' => array('CPA', '51202', '23', Account::TYPE_CURRENT, 'CPA'),
+	'BNA'      => array('BNA', '51230', '13', Account::TYPE_CURRENT, 'BNA'),
 	'BARAKA'   => array('Al Baraka Banque', '51240', '17', Account::TYPE_CURRENT, 'Al Baraka'),
-	'SGA'      => array('Société Générale Algérie 1130075061-09', '51250', '24', Account::TYPE_CURRENT, 'Société Générale Algérie'),
+	'SGA'      => array('Société Générale Algérie', '51250', '24', Account::TYPE_CURRENT, 'Société Générale Algérie'),
 );
+if (is_readable("$DOSSIER/banques.csv")) {
+	foreach (lire("$DOSSIER/banques.csv") as $b) {
+		$banques[$b['ref']] = array($b['libelle'], $b['compte'], $b['journal'], $b['type'] === 'caisse' ? Account::TYPE_CASH : Account::TYPE_CURRENT, $b['banque']);
+	}
+}
 foreach ($banques as $ref => $b) {
 	if (!isset($journal[$b[2]])) continue;
 	$a = new Account($db);
